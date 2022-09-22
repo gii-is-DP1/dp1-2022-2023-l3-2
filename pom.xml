@@ -40,11 +40,6 @@
             <roles>
                 <role>developer</role>
             </roles>
-            <properties>
-                <picUrl>
-                    https://pbs.twimg.com/media/FBGHLR_WYAIE2Ri?format=jpg&name=large
-                </picUrl>
-            </properties>
         </developer>
         <developer>
             <id>alegarsan11</id>
@@ -54,12 +49,15 @@
             <roles>
                 <role>developer</role>
             </roles>
-            <properties>
-            <picUrl>
-                https://pbs.twimg.com/media/Eh4n9GhUMAAdO8x?format=jpg&name
-                =large
-            </picUrl>
-            </properties>
+        </developer>
+        <developer>
+            <id>rafgargal</id>
+            <name>Rafael David García Galocha</name>
+            <email>rafgargal@alum.us.es</email>
+            <url>https://github.com/rafgargal</url>
+            <roles>
+                <role>developer</role>
+            </roles>
         </developer>
     </developers>
     <dependencies>
