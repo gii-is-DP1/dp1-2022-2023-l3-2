@@ -46,6 +46,21 @@
                 </picUrl>
             </properties>
         </developer>
+        <developer>
+            <id>alegarsan11</id>
+            <name>Alejandro Garcia Sanchez-Hermosilla</name>
+            <email>alegarsan11@alum.us.es</email>
+            <url>https://github.com/alegarsan11</url>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <properties>
+            <picUrl>
+                https://pbs.twimg.com/media/Eh4n9GhUMAAdO8x?format=jpg&name
+                =large
+            </picUrl>
+            </properties>
+        </developer>
     </developers>
     <dependencies>
         <!-- Spring and Spring Boot dependencies -->
