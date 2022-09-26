@@ -59,6 +59,15 @@
                 <role>developer</role>
             </roles>
         </developer>
+        <developer>
+            <id>marescram3</id>
+            <name>María Escalante Ramos</name>
+            <email>marescram3@alum.us.es</email>
+            <url>https://github.com/mariaescalante</url>
+            <roles>
+                <role>developer</role>
+            </roles>
+        </developer>
     </developers>
     <dependencies>
         <!-- Spring and Spring Boot dependencies -->
