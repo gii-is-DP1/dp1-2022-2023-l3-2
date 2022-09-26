@@ -34,9 +34,14 @@ public class WelcomeController {
         person.setLastName("Escalante Ramos");
         persons.add(person);
 
+        person = new Person();
+        person.setFirstName("Rafael David");
+        person.setLastName("García Galocha");
+        persons.add(person);
+
         model.put("persons", persons);
         model.put("group", "DP1-2022-2023-l3-2");
-        model.put("title", "Idus martii");
+        model.put("title", "DWARF");
 
         return "welcome";
     }
