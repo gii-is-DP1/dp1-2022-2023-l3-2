@@ -68,6 +68,15 @@
                 <role>developer</role>
             </roles>
         </developer>
+        <developer>
+            <id>dandiasua</id>
+            <name>Daniel Diañez Suarez</name>
+            <email>dandiasua@alum.us.es</email>
+            <url>https://github.com/dandiasua02</url>
+            <roles>
+                <role>developer</role>
+            </roles>
+        </developer>
     </developers>
     <dependencies>
         <!-- Spring and Spring Boot dependencies -->
