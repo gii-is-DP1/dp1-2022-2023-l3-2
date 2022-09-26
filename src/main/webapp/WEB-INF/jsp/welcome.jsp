@@ -4,7 +4,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
 
-<!-- %@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %-->  
+<!-- %@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %-->
 
 <petclinic:layout pageName="home">
     <h2><fmt:message key="welcome"/></h2>
@@ -17,8 +17,6 @@
     </c:forEach>
     </ul></p>
         <div class="col-md-12">
-            <spring:url value="/resources/images/pets.png" htmlEscape="true" var="petsImage"/>
-            <img class="img-responsive" src="${petsImage}"/>
             <spring:url value="/resources/images/dwarf.jpg" htmlEscape="true" var="dwarf"/>
             <img class="img-responsive" src="${dwarf}" height="160" width="160"/>
         </div>
