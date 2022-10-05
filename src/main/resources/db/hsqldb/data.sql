@@ -8,6 +8,7 @@ INSERT INTO users(username,password,enabled) VALUES ('jualeomad', '1234',TRUE);
 INSERT INTO users(username,password,enabled) VALUES ('marescram3', '1234',TRUE);
 INSERT INTO users(username,password,enabled) VALUES ('dandiasua', '1234',TRUE);
 INSERT INTO users(username,password,enabled) VALUES ('ernsaqrio', '7896',TRUE);
+INSERT INTO users(username,password,enabled) VALUES ('rafgargal', '1234',TRUE);
 INSERT INTO authorities(id,username,authority) VALUES (2,'owner1','owner');
 INSERT INTO authorities(id,username,authority) VALUES (4,'alegarsan11','owner');
 INSERT INTO authorities(id,username,authority) VALUES (5,'jualeomad','owner');
