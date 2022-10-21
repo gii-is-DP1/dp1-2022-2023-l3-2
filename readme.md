@@ -1,18 +1,23 @@
 # PROYECTO DWARF
 
 [![Vídeo youtube](https://img.youtube.com/vi/RtRY8jwWo7k/0.jpg)](https://www.youtube.com/watch?v=RtRY8jwWo7k)
+
+[DOCUMENTACION](https://drive.google.com/file/d/1tKV2j8fkkUNnrU8E8CPQRxqUPIhIB8UU/view?usp=sharing)
+
 # Spring PetClinic Sample Application
 
 This is a fork of https://github.com/spring-projects/spring-petclinic to be used for the DP1 course. The main changes that have been performed were:
+
 - Trimming several parts of the application to keep the example low
 - Reorganize some parts of the code according to best practices introduced in the course
 
 ## Understanding the Spring Petclinic application with a few diagrams
+
 <a href="https://speakerdeck.com/michaelisvy/spring-petclinic-sample-application">See the presentation here</a>
 
 ## Running petclinic locally
-Petclinic is a [Spring Boot](https://spring.io/guides/gs/spring-boot) application built using [Maven](https://spring.io/guides/gs/maven/). You can build a jar file and run it from the command line:
 
+Petclinic is a [Spring Boot](https://spring.io/guides/gs/spring-boot) application built using [Maven](https://spring.io/guides/gs/maven/). You can build a jar file and run it from the command line:
 
 ```
 git clone https://github.com/gii-is-DP1/spring-petclinic.git
@@ -32,8 +37,8 @@ Or you can run it from Maven directly using the Spring Boot Maven plugin. If you
 ```
 
 ## In case you find a bug/suggested improvement for Spring Petclinic
-Our issue tracker is available here: https://github.com/gii-is-DP1/spring-petclinic/issues
 
+Our issue tracker is available here: https://github.com/gii-is-DP1/spring-petclinic/issues
 
 ## Database configuration
 
@@ -43,30 +48,35 @@ gets populated at startup with data.
 ## Working with Petclinic in your IDE
 
 ### Prerequisites
+
 The following items should be installed in your system:
-* Java 8 or newer.
-* git command line tool (https://help.github.com/articles/set-up-git)
-* Your preferred IDE
-  * Eclipse with the m2e plugin. Note: when m2e is available, there is an m2 icon in `Help -> About` dialog. If m2e is
-  not there, just follow the install process here: https://www.eclipse.org/m2e/
-  * [Spring Tools Suite](https://spring.io/tools) (STS)
-  * IntelliJ IDEA
-  * [VS Code](https://code.visualstudio.com)
+
+- Java 8 or newer.
+- git command line tool (https://help.github.com/articles/set-up-git)
+- Your preferred IDE
+  - Eclipse with the m2e plugin. Note: when m2e is available, there is an m2 icon in `Help -> About` dialog. If m2e is
+    not there, just follow the install process here: https://www.eclipse.org/m2e/
+  - [Spring Tools Suite](https://spring.io/tools) (STS)
+  - IntelliJ IDEA
+  - [VS Code](https://code.visualstudio.com)
 
 ### Steps:
 
-1) On the command line
+1. On the command line
+
 ```
 git clone https://github.com/gii-is-DP1/spring-petclinic.git
 ```
-2) Inside Eclipse or STS
+
+2. Inside Eclipse or STS
+
 ```
 File -> Import -> Maven -> Existing Maven project
 ```
 
 Then either build on the command line `./mvnw generate-resources` or using the Eclipse launcher (right click on project and `Run As -> Maven install`) to generate the css. Run the application main method by right clicking on it and choosing `Run As -> Java Application`.
 
-3) Inside IntelliJ IDEA
+3. Inside IntelliJ IDEA
 
 In the main menu, choose `File -> Open` and select the Petclinic [pom.xml](pom.xml). Click on the `Open` button.
 
@@ -77,19 +87,17 @@ A run configuration named `DwarfApplication` should have been created for you if
 version. Otherwise, run the application by right clicking on the `DwarfApplication` main class and choosing
 `Run 'DwarfApplication'`.
 
-4) Navigate to Petclinic
+4. Navigate to Petclinic
 
 Visit [http://localhost:8080](http://localhost:8080) in your browser.
 
-
 ## Looking for something in particular?
 
-|Spring Boot Configuration | Class or Java property files  |
-|--------------------------|---|
-|The Main Class | [DwarfApplication](https://github.com/gii-is-DP1/spring-petclinic/blob/master/src/main/java/org/springframework/samples/petclinic/DwarfApplication.java) |
-|Properties Files | [application.properties](https://github.com/gii-is-DP1/spring-petclinic/blob/master/src/main/resources) |
-|Caching | [CacheConfiguration](https://github.com/gii-is-DP1/spring-petclinic/blob/master/src/main/java/org/springframework/samples/petclinic/system/CacheConfiguration.java) |
-
+| Spring Boot Configuration | Class or Java property files                                                                                                                                        |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| The Main Class            | [PetClinicApplication](https://github.com/gii-is-DP1/spring-petclinic/blob/master/src/main/java/org/springframework/samples/petclinic/PetClinicApplication.java)    |
+| Properties Files          | [application.properties](https://github.com/gii-is-DP1/spring-petclinic/blob/master/src/main/resources)                                                             |
+| Caching                   | [CacheConfiguration](https://github.com/gii-is-DP1/spring-petclinic/blob/master/src/main/java/org/springframework/samples/petclinic/system/CacheConfiguration.java) |
 ## Interesting Spring Petclinic branches and forks
 
 The Spring Petclinic master branch in the main [spring-projects](https://github.com/spring-projects/spring-petclinic)
