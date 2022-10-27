@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.springframework.samples.dwarf.owner;
+package org.springframework.samples.dwarf.jugador;
 
 import java.util.Collection;
 
@@ -31,9 +31,9 @@ import org.springframework.transaction.annotation.Transactional;
  * @author Michael Isvy
  */
 @Service
-public class OwnerService {
+public class JugadorService {
 
-	private OwnerRepository ownerRepository;	
+	private JugadorRepository ownerRepository;	
 	
 	@Autowired
 	private UserService userService;
@@ -42,22 +42,22 @@ public class OwnerService {
 	private AuthoritiesService authoritiesService;
 
 	@Autowired
-	public OwnerService(OwnerRepository ownerRepository) {
+	public JugadorService(JugadorRepository ownerRepository) {
 		this.ownerRepository = ownerRepository;
 	}	
 
 	@Transactional(readOnly = true)
-	public Owner findOwnerById(int id) throws DataAccessException {
+	public Jugador findOwnerById(int id) throws DataAccessException {
 		return ownerRepository.findById(id);
 	}
 
 	@Transactional(readOnly = true)
-	public Collection<Owner> findOwnerByLastName(String lastName) throws DataAccessException {
+	public Collection<Jugador> findOwnerByLastName(String lastName) throws DataAccessException {
 		return ownerRepository.findByLastName(lastName);
 	}
 
 	@Transactional
-	public void saveOwner(Owner owner) throws DataAccessException {
+	public void saveOwner(Jugador owner) throws DataAccessException {
 		//creating owner
 		ownerRepository.save(owner);		
 		//creating user

@@ -20,8 +20,8 @@ import java.util.Map;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.samples.dwarf.owner.Owner;
-import org.springframework.samples.dwarf.owner.OwnerService;
+import org.springframework.samples.dwarf.jugador.Jugador;
+import org.springframework.samples.dwarf.jugador.JugadorService;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
@@ -40,10 +40,10 @@ public class UserController {
 
 	private static final String VIEWS_OWNER_CREATE_FORM = "users/createOwnerForm";
 
-	private final OwnerService ownerService;
+	private final JugadorService ownerService;
 
 	@Autowired
-	public UserController(OwnerService clinicService) {
+	public UserController(JugadorService clinicService) {
 		this.ownerService = clinicService;
 	}
 
@@ -54,13 +54,13 @@ public class UserController {
 
 	@GetMapping(value = "/users/new")
 	public String initCreationForm(Map<String, Object> model) {
-		Owner owner = new Owner();
+		Jugador owner = new Jugador();
 		model.put("owner", owner);
 		return VIEWS_OWNER_CREATE_FORM;
 	}
 
 	@PostMapping(value = "/users/new")
-	public String processCreationForm(@Valid Owner owner, BindingResult result) {
+	public String processCreationForm(@Valid Jugador owner, BindingResult result) {
 		if (result.hasErrors()) {
 			return VIEWS_OWNER_CREATE_FORM;
 		}

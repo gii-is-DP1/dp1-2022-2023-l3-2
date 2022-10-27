@@ -8,38 +8,32 @@
 <petclinic:layout pageName="owners">
     <h2>Owners</h2>
 
-    <table id="ownersTable" class="table table-striped">
+    <table id="jugadoresTable" class="table table-striped">
         <thead>
         <tr>
             <th style="width: 150px;">Name</th>
             <th style="width: 200px;">Address</th>
             <th>City</th>
             <th style="width: 120px">Telephone</th>
-            <th>Pets</th>
         </tr>
         </thead>
         <tbody>
-        <c:forEach items="${selections}" var="owner">
+        <c:forEach items="${selections}" var="jugador">
             <tr>
                 <td>
-                    <spring:url value="/owners/{ownerId}" var="ownerUrl">
-                        <spring:param name="ownerId" value="${owner.id}"/>
+                    <spring:url value="/jugador/{ownerId}" var="ownerUrl">
+                        <spring:param name="ownerId" value="${jugador.id}"/>
                     </spring:url>
-                    <a href="${fn:escapeXml(ownerUrl)}"><c:out value="${owner.firstName} ${owner.lastName}"/></a>
+                    <a href="${fn:escapeXml(ownerUrl)}"><c:out value="${jugador.firstName} ${jugador.lastName}"/></a>
                 </td>
                 <td>
-                    <c:out value="${owner.address}"/>
+                    <c:out value="${jugador.address}"/>
                 </td>
                 <td>
-                    <c:out value="${owner.city}"/>
+                    <c:out value="${jugador.city}"/>
                 </td>
                 <td>
-                    <c:out value="${owner.telephone}"/>
-                </td>
-                <td>
-                    <c:forEach var="pet" items="${owner.pets}">
-                        <c:out value="${pet.name} "/>
-                    </c:forEach>
+                    <c:out value="${jugador.telephone}"/>
                 </td>
                 
       

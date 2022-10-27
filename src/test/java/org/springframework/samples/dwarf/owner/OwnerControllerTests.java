@@ -19,9 +19,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.samples.dwarf.configuration.SecurityConfiguration;
-import org.springframework.samples.dwarf.owner.Owner;
-import org.springframework.samples.dwarf.owner.OwnerController;
-import org.springframework.samples.dwarf.owner.OwnerService;
+import org.springframework.samples.dwarf.jugador.Jugador;
+import org.springframework.samples.dwarf.jugador.JugadorController;
+import org.springframework.samples.dwarf.jugador.JugadorService;
 import org.springframework.samples.dwarf.user.AuthoritiesService;
 import org.springframework.samples.dwarf.user.UserService;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
@@ -29,21 +29,21 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 /**
- * Test class for {@link OwnerController}
+ * Test class for {@link JugadorController}
  *
  * @author Colin But
  */
 
-@WebMvcTest(controllers = OwnerController.class, excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class), excludeAutoConfiguration = SecurityConfiguration.class)
+@WebMvcTest(controllers = JugadorController.class, excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class), excludeAutoConfiguration = SecurityConfiguration.class)
 class OwnerControllerTests {
 
 	private static final int TEST_OWNER_ID = 1;
 
 	@Autowired
-	private OwnerController ownerController;
+	private JugadorController ownerController;
 
 	@MockBean
-	private OwnerService clinicService;
+	private JugadorService clinicService;
 
 	@MockBean
 	private UserService userService;
@@ -54,12 +54,12 @@ class OwnerControllerTests {
 	@Autowired
 	private MockMvc mockMvc;
 
-	private Owner george;
+	private Jugador george;
 
 	@BeforeEach
 	void setup() {
 
-		george = new Owner();
+		george = new Jugador();
 		george.setId(TEST_OWNER_ID);
 		george.setFirstName("George");
 		george.setLastName("Franklin");
@@ -105,7 +105,7 @@ class OwnerControllerTests {
 	@WithMockUser(value = "spring")
 	@Test
 	void testProcessFindFormSuccess() throws Exception {
-		given(this.clinicService.findOwnerByLastName("")).willReturn(Lists.newArrayList(george, new Owner()));
+		given(this.clinicService.findOwnerByLastName("")).willReturn(Lists.newArrayList(george, new Jugador()));
 
 		mockMvc.perform(get("/owners")).andExpect(status().isOk()).andExpect(view().name("owners/ownersList"));
 	}

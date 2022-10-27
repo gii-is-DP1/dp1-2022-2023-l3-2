@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.springframework.samples.dwarf.owner;
+package org.springframework.samples.dwarf.jugador;
 
 import java.util.Collection;
 import java.util.Map;
@@ -31,6 +31,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
@@ -40,14 +41,15 @@ import org.springframework.web.servlet.ModelAndView;
  * @author Michael Isvy
  */
 @Controller
-public class OwnerController {
+@RequestMapping("/jugador")
+public class JugadorController {
 
-	private static final String VIEWS_OWNER_CREATE_OR_UPDATE_FORM = "owners/createOrUpdateOwnerForm";
+	private static final String VIEWS_OWNER_CREATE_OR_UPDATE_FORM = "jugadores/createOrUpdateOwnerForm";
 
-	private final OwnerService ownerService;
+	private final JugadorService ownerService;
 
 	@Autowired
-	public OwnerController(OwnerService ownerService, UserService userService, AuthoritiesService authoritiesService) {
+	public JugadorController(JugadorService ownerService, UserService userService, AuthoritiesService authoritiesService) {
 		this.ownerService = ownerService;
 	}
 
@@ -56,15 +58,15 @@ public class OwnerController {
 		dataBinder.setDisallowedFields("id");
 	}
 
-	@GetMapping(value = "/owners/new")
+	@GetMapping(value = "/new")
 	public String initCreationForm(Map<String, Object> model) {
-		Owner owner = new Owner();
-		model.put("owner", owner);
+		Jugador owner = new Jugador();
+		model.put("jugador", owner);
 		return VIEWS_OWNER_CREATE_OR_UPDATE_FORM;
 	}
 
-	@PostMapping(value = "/owners/new")
-	public String processCreationForm(@Valid Owner owner, BindingResult result) {
+	@PostMapping(value = "/new")
+	public String processCreationForm(@Valid Jugador owner, BindingResult result) {
 		if (result.hasErrors()) {
 			return VIEWS_OWNER_CREATE_OR_UPDATE_FORM;
 		}
@@ -72,18 +74,18 @@ public class OwnerController {
 			//creating owner, user and authorities
 			this.ownerService.saveOwner(owner);
 			
-			return "redirect:/owners/" + owner.getId();
+			return "redirect:/jugador/" + owner.getId();
 		}
 	}
 
-	@GetMapping(value = "/owners/find")
+	@GetMapping(value = "/find")
 	public String initFindForm(Map<String, Object> model) {
-		model.put("owner", new Owner());
-		return "owners/findOwners";
+		model.put("jugador", new Jugador());
+		return "jugadores/findOwners";
 	}
 
-	@GetMapping(value = "/owners")
-	public String processFindForm(Owner owner, BindingResult result, Map<String, Object> model) {
+	@GetMapping(value = "")
+	public String processFindForm(Jugador owner, BindingResult result, Map<String, Object> model) {
 
 		// allow parameterless GET request for /owners to return all records
 		if (owner.getLastName() == null) {
@@ -91,33 +93,33 @@ public class OwnerController {
 		}
 
 		// find owners by last name
-		Collection<Owner> results = this.ownerService.findOwnerByLastName(owner.getLastName());
+		Collection<Jugador> results = this.ownerService.findOwnerByLastName(owner.getLastName());
 		if (results.isEmpty()) {
 			// no owners found
 			result.rejectValue("lastName", "notFound", "not found");
-			return "owners/findOwners";
+			return "jugadores/findOwners";
 		}
 		else if (results.size() == 1) {
 			// 1 owner found
 			owner = results.iterator().next();
-			return "redirect:/owners/" + owner.getId();
+			return "redirect:/jugador/" + owner.getId();
 		}
 		else {
 			// multiple owners found
 			model.put("selections", results);
-			return "owners/ownersList";
+			return "jugadores/ownersList";
 		}
 	}
 
-	@GetMapping(value = "/owners/{ownerId}/edit")
+	@GetMapping(value = "/{ownerId}/edit")
 	public String initUpdateOwnerForm(@PathVariable("ownerId") int ownerId, Model model) {
-		Owner owner = this.ownerService.findOwnerById(ownerId);
+		Jugador owner = this.ownerService.findOwnerById(ownerId);
 		model.addAttribute(owner);
 		return VIEWS_OWNER_CREATE_OR_UPDATE_FORM;
 	}
 
-	@PostMapping(value = "/owners/{ownerId}/edit")
-	public String processUpdateOwnerForm(@Valid Owner owner, BindingResult result,
+	@PostMapping(value = "/{ownerId}/edit")
+	public String processUpdateOwnerForm(@Valid Jugador owner, BindingResult result,
 			@PathVariable("ownerId") int ownerId) {
 		if (result.hasErrors()) {
 			return VIEWS_OWNER_CREATE_OR_UPDATE_FORM;
@@ -125,7 +127,7 @@ public class OwnerController {
 		else {
 			owner.setId(ownerId);
 			this.ownerService.saveOwner(owner);
-			return "redirect:/owners/{ownerId}";
+			return "redirect:/jugador/{ownerId}";
 		}
 	}
 
@@ -134,9 +136,9 @@ public class OwnerController {
 	 * @param ownerId the ID of the owner to display
 	 * @return a ModelMap with the model attributes for the view
 	 */
-	@GetMapping("/owners/{ownerId}")
+	@GetMapping("/{ownerId}")
 	public ModelAndView showOwner(@PathVariable("ownerId") int ownerId) {
-		ModelAndView mav = new ModelAndView("owners/ownerDetails");
+		ModelAndView mav = new ModelAndView("jugadores/ownerDetails");
 		mav.addObject(this.ownerService.findOwnerById(ownerId));
 		return mav;
 	}
