@@ -50,7 +50,7 @@ public class TableroController {
             for (int i = 1; i < 13; i++) {
                 Mazo res = new Mazo();
                 res.setPosicion(
-                        String.format("/resources/images/Dimensionadas/000-ReversoCartasInicialesYMontaña.png"));
+                        String.format("/resources/images/Dimensionadas/000.png"));
                 posicion.add(res);
             }
             tabla.setMazos(posicion);
