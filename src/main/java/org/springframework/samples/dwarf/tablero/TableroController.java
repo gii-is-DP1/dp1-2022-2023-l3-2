@@ -29,50 +29,50 @@ public class TableroController {
 
     @Autowired
     public TableroController(TableroService service) {
-        this.taservice=service;
+        this.taservice = service;
     }
 
-
-
-
     @Transactional
-    @GetMapping("/")
-    public String showTablero(Map<String, Object> model){
+    @GetMapping("")
+    public String showTablero(Map<String, Object> model) {
         Tablero tabla = new Tablero();
-		model.put("tablero", tabla);
+        model.put("tablero", tabla);
         return tablero;
     }
 
     @Transactional
-    @PostMapping("/")
+    @PostMapping("")
     public String processTablero(@Valid Tablero tabla, BindingResult result) {
-        if(result.hasErrors()) {
+        if (result.hasErrors()) {
             return tablero;
-        }
-        else {
+        } else {
             List<Mazo> posicion = new ArrayList<>();
-            for(int i =1 ; i<10 ; i++){
+            for (int i = 1; i < 13; i++) {
                 Mazo res = new Mazo();
-                res.setPosicion(String.format("/resources/images/Dimensionadas/000-ReversoCartasInicialesYMontaña.png"));
+                res.setPosicion(
+                        String.format("/resources/images/Dimensionadas/000-ReversoCartasInicialesYMontaña.png"));
                 posicion.add(res);
             }
             tabla.setMazos(posicion);
             taservice.saveTablero(tabla);
             return "redirect:/partida/" + String.format("%d", tabla.getId());
+        }
     }
-    }
+
     @Transactional
     @GetMapping("/{partidaId}")
-    public String showTablero(@PathVariable("partidaId") Integer id ,Model model){
+    public String showTablero(@PathVariable("partidaId") Integer id, Model model) {
         Tablero table = taservice.findById(id);
         List<Mazo> mazo = table.getMazos();
         List<Mazo> mazo1 = mazo.subList(0, 3);
         List<Mazo> mazo2 = mazo.subList(3, 6);
         List<Mazo> mazo3 = mazo.subList(6, 9);
+        List<Mazo> mazo4 = mazo.subList(9, 12);
 
         model.addAttribute("tablero1", mazo1);
         model.addAttribute("tablero2", mazo2);
         model.addAttribute("tablero3", mazo3);
+        model.addAttribute("tablero4", mazo4);
         return tablero1;
     }
 
