@@ -62,3 +62,8 @@ INSERT INTO tipo_carta(id, name) VALUES
 (1, 'extraccion'),
 (2, 'ayuda'),
 (3, 'forja');
+
+INSERT INTO tipo_logro(id, name) VALUES
+(0, 'partidas_ganadas'),
+(1, 'recursos_conseguidos'),
+(2, 'puntaje_mas_alto');
