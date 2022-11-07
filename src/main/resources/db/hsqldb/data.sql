@@ -57,3 +57,8 @@ INSERT INTO jugadores VALUES (14, 'Daniel', 'Diañez', '9 Emiliano St.', 'Waunak
 INSERT INTO jugadores VALUES (15, 'Rafael David', 'Garcia', '10 Leo Messi St.', 'Buenos Aires', '722258951', 'rafgargal');
 INSERT INTO jugadores VALUES (16, 'Ernesto', 'Saquete Rios', 'New Delhi 1', 'Sevilla', '618961461', 'ernsaqrio');
 
+INSERT INTO tipo_carta(id, name) VALUES
+(0, 'defensa'),
+(1, 'extraccion'),
+(2, 'ayuda'),
+(3, 'forja');
