@@ -2,7 +2,9 @@ package org.springframework.samples.dwarf.tablero;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.OneToMany;
 
 import org.springframework.samples.dwarf.model.NamedEntity;
 
@@ -14,8 +16,15 @@ import java.util.*;
 @Getter
 @Setter
 
-public class Mazo extends NamedEntity{
+public class Mazo extends NamedEntity {
 
     private String posicion;
-    
+
+    @OneToMany
+    @JoinTable(name = "cartas_mazo", joinColumns = @JoinColumn(name = "carta_id"))
+    private List<Carta> cartas;
+
+    public Carta getFirstCarta() {
+        return cartas.get(0);
+    }
 }

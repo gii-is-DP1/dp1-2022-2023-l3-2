@@ -46,16 +46,19 @@ public class TableroController {
         if (result.hasErrors()) {
             return tablero;
         } else {
-            List<Mazo> posicion = new ArrayList<>();
-            for (int i = 1; i < 13; i++) {
-                Mazo res = new Mazo();
-                res.setPosicion(
-                        String.format("/resources/images/Dimensionadas/000.png"));
-                posicion.add(res);
+            List<Mazo> mazos = new ArrayList<>();
+
+            for (int i = 1; i < 10; i++) {
+                Carta carta = taservice.findCartaById(i);
+                List<Carta> cartas = new ArrayList<>();
+                Mazo mazo = new Mazo();
+                cartas.add(carta);
+                mazo.setCartas(cartas);
+                mazos.add(mazo);
             }
-            tabla.setMazos(posicion);
+            tabla.setMazos(mazos);
             taservice.saveTablero(tabla);
-            return "redirect:/partida/" + String.format("%d", tabla.getId());
+            return "redirect:/partida/" + tabla.getId();
         }
     }
 
@@ -67,12 +70,10 @@ public class TableroController {
         List<Mazo> mazo1 = mazo.subList(0, 3);
         List<Mazo> mazo2 = mazo.subList(3, 6);
         List<Mazo> mazo3 = mazo.subList(6, 9);
-        List<Mazo> mazo4 = mazo.subList(9, 12);
 
         model.addAttribute("tablero1", mazo1);
         model.addAttribute("tablero2", mazo2);
         model.addAttribute("tablero3", mazo3);
-        model.addAttribute("tablero4", mazo4);
         return tablero1;
     }
 

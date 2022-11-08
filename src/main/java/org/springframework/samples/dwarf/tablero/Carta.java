@@ -14,13 +14,22 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Carta extends BaseEntity {
-    String descripcion;
-    String accion;
+    /*
+     * String descripcion;
+     * String accion;
+     */
 
-    @ManyToOne
-    @JoinColumn(name = "tipo", referencedColumnName = "name")
-    TipoCarta tipo;
+    String imagen;
 
-    boolean enBaraja;
-    Integer posicion;
+    /*
+     * @ManyToOne
+     *
+     * @JoinColumn(name = "tipo", referencedColumnName = "name")
+     * TipoCarta tipo;
+     */
+
+    /*
+     * boolean enBaraja;
+     * Integer posicion;
+     */
 }
