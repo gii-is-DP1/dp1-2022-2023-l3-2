@@ -11,11 +11,11 @@ INSERT INTO users(username,password,enabled) VALUES ('ernsaqrio', '7896',TRUE);
 INSERT INTO users(username,password,enabled) VALUES ('rafgargal', '1234',TRUE);
 INSERT INTO authorities(id,username,authority) VALUES (2,'owner1','owner');
 INSERT INTO authorities(id,username,authority) VALUES (4,'alegarsan11','jugador');
-INSERT INTO authorities(id,username,authority) VALUES (5,'jualeomad','owner');
-INSERT INTO authorities(id,username,authority) VALUES (6,'marescram3','owner');
-INSERT INTO authorities(id,username,authority) VALUES (7,'dandiasua','owner');
-INSERT INTO authorities(id,username,authority) VALUES (8,'rafgargal','owner');
-INSERT INTO authorities(id,username,authority) VALUES (9,'ernsaqrio','owner');
+INSERT INTO authorities(id,username,authority) VALUES (5,'jualeomad','jugador');
+INSERT INTO authorities(id,username,authority) VALUES (6,'marescram3','jugador');
+INSERT INTO authorities(id,username,authority) VALUES (7,'dandiasua','jugador');
+INSERT INTO authorities(id,username,authority) VALUES (8,'rafgargal','jugador');
+INSERT INTO authorities(id,username,authority) VALUES (9,'ernsaqrio','jugador');
 
 -- One vet user, named vet1 with passwor v3t
 INSERT INTO users(username,password,enabled) VALUES ('vet1','v3t',TRUE);
