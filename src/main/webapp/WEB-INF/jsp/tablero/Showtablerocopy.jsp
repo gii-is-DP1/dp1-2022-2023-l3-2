@@ -19,49 +19,38 @@
         </thead>
         <tbody>
             <tr>
-            <c:forEach items="${tablero1}" var="pos">
+                <c:forEach items="${tablero1}" var="pos">
+
+                        <td >
+                            <spring:url value="${pos.getFirstCarta().imagen}" var="dwarf" />
+                            <img class="img-responsive" src="${dwarf}" height="160"
+                                width="160" style="margin: auto;"/>
+                        </td>
+
+                </c:forEach>
+            </tr>
+            <tr>
+                <c:forEach items="${tablero2}" var="pos">
 
                     <td >
-                        <spring:url value="${pos.posicion}" var="dwarf" />
+                        <spring:url value="${pos.getFirstCarta().imagen}" var="dwarf" />
+                        <img class="img-responsive" src="${dwarf}" height="160"
+                            width="160" style="margin: auto;"/>
+                    </td>
+
+                </c:forEach>
+            </tr>
+            <tr>
+                <c:forEach items="${tablero3}" var="pos">
+
+                    <td >
+                        <spring:url value="${pos.getFirstCarta().imagen}" var="dwarf" />
                         <img class="img-responsive" src="${dwarf}" height="160"
                             width="160" style="margin: auto;"/>
                     </td>
 
             </c:forEach>
             </tr>
-            <tr>
-                <c:forEach items="${tablero2}" var="pos">
-
-                        <td>
-                            <spring:url value="${pos.posicion}" var="dwarf" />
-                            <img class="img-responsive" src="${dwarf}" height="160"
-                                width="160" style="margin: auto;"/>
-                        </td>
-
-                </c:forEach>
-                </tr>
-                <tr>
-                    <c:forEach items="${tablero3}" var="pos">
-
-                            <td>
-                                <spring:url value="${pos.posicion}" var="dwarf" />
-                                <img class="img-responsive" src="${dwarf}" height="160"
-                                    width="160" style="margin: auto;"/>
-                            </td>
-
-                    </c:forEach>
-                    </tr>
-                    <tr>
-                        <c:forEach items="${tablero4}" var="pos">
-
-                                <td>
-                                    <spring:url value="${pos.posicion}" var="dwarf" />
-                                    <img class="img-responsive" src="${dwarf}" height="160"
-                                        width="160" style="transform: rotate(90deg); margin: auto;"/>
-                                </td>
-
-                        </c:forEach>
-                        </tr>
         </tbody>
     </table>
 </petclinic:layout>
