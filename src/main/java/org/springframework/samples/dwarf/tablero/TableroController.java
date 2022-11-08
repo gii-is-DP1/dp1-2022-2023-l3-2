@@ -33,7 +33,7 @@ public class TableroController {
     }
 
     @Transactional
-    @GetMapping("")
+    @GetMapping("/")
     public String showTablero(Map<String, Object> model) {
         Tablero tabla = new Tablero();
         model.put("tablero", tabla);
@@ -41,7 +41,7 @@ public class TableroController {
     }
 
     @Transactional
-    @PostMapping("")
+    @PostMapping("/")
     public String processTablero(@Valid Tablero tabla, BindingResult result) {
         if (result.hasErrors()) {
             return tablero;
