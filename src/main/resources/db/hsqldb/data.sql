@@ -68,7 +68,18 @@ INSERT INTO tipo_logro(id, name) VALUES
 (1, 'recursos_conseguidos'),
 (2, 'puntaje_mas_alto');
 
-INSERT INTO carta(id, imagen) VALUES ( 1, '/resources/images/Dimensionadas/001.png');
+INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve) VALUES(1, '/resources/images/Dimensionadas/001.png',1 ,1 , null, null,'hierro',3);
+INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve) VALUES(2, '/resources/images/Dimensionadas/001.png',1 ,1 , null, null,'hierro',3);
+INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve) VALUES(3, '/resources/images/Dimensionadas/001.png',1 ,1 , null, null,'hierro',3);
+INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve) VALUES(4, '/resources/images/Dimensionadas/001.png',1 ,1 , null, null,'hierro',3);
+INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve) VALUES(5, '/resources/images/Dimensionadas/001.png',1 ,1 , null, null,'hierro',3);
+INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve) VALUES(6, '/resources/images/Dimensionadas/001.png',1 ,1 , null, null,'hierro',3);
+INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve) VALUES(7, '/resources/images/Dimensionadas/001.png',1 ,1 , null, null,'hierro',3);
+INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve) VALUES(8, '/resources/images/Dimensionadas/001.png',1 ,1 , null, null,'hierro',3);
+INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve) VALUES(9, '/resources/images/Dimensionadas/001.png',1 ,1 , null, null,'hierro',3);
+
+
+/* INSERT INTO carta(id, imagen) VALUES ( 1, '/resources/images/Dimensionadas/001.png');
 INSERT INTO carta(id, imagen) VALUES ( 2, '/resources/images/Dimensionadas/002.png');
 INSERT INTO carta(id, imagen) VALUES ( 3, '/resources/images/Dimensionadas/003.png');
 INSERT INTO carta(id, imagen) VALUES ( 4, '/resources/images/Dimensionadas/004.png');
@@ -122,3 +133,4 @@ INSERT INTO carta(id, imagen) VALUES ( 51, '/resources/images/Dimensionadas/051.
 INSERT INTO carta(id, imagen) VALUES ( 52, '/resources/images/Dimensionadas/052.png');
 INSERT INTO carta(id, imagen) VALUES ( 53, '/resources/images/Dimensionadas/053.png');
 INSERT INTO carta(id, imagen) VALUES ( 54, '/resources/images/Dimensionadas/054.png');
+ */

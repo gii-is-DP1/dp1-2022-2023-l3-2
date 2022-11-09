@@ -28,5 +28,6 @@ public class ExceptionHandlerConfiguration
         request.setAttribute("javax.servlet.error.status_code", 400);
         request.setAttribute("exeption", ex);
         return "exception";
+        
     }
 }

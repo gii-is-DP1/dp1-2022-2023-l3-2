@@ -11,7 +11,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-public class Pieza {
+public class Enano {
 
     @Id 
     @GeneratedValue(strategy = GenerationType.IDENTITY)

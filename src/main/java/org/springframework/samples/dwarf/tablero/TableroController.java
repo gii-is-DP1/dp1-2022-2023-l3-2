@@ -53,6 +53,7 @@ public class TableroController {
                 List<Carta> cartas = new ArrayList<>();
                 Mazo mazo = new Mazo();
                 cartas.add(carta);
+                mazo.setPosicion(i);
                 mazo.setCartas(cartas);
                 mazos.add(mazo);
             }
