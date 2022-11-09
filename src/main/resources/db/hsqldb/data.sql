@@ -40,22 +40,10 @@ INSERT INTO vet_specialties VALUES (4, 2);
 INSERT INTO vet_specialties VALUES (5, 1);
 
 
-INSERT INTO jugadores VALUES (1, 'George', 'Franklin', '110 W. Liberty St.', 'Madison', '6085551023', 'owner1');
-INSERT INTO jugadores VALUES (2, 'Betty', 'Davis', '638 Cardinal Ave.', 'Sun Prairie', '6085551749', 'owner1');
-INSERT INTO jugadores VALUES (3, 'Eduardo', 'Rodriquez', '2693 Commerce St.', 'McFarland', '6085558763', 'owner1');
-INSERT INTO jugadores VALUES (4, 'Harold', 'Davis', '563 Friendly St.', 'Windsor', '6085553198', 'owner1');
-INSERT INTO jugadores VALUES (5, 'Peter', 'McTavish', '2387 S. Fair Way', 'Madison', '6085552765', 'owner1');
-INSERT INTO jugadores VALUES (6, 'Jean', 'Coleman', '105 N. Lake St.', 'Monona', '6085552654', 'owner1');
-INSERT INTO jugadores VALUES (7, 'Jeff', 'Black', '1450 Oak Blvd.', 'Monona', '6085555387', 'owner1');
-INSERT INTO jugadores VALUES (8, 'Maria', 'Escobito', '345 Maple St.', 'Madison', '6085557683', 'owner1');
-INSERT INTO jugadores VALUES (9, 'David', 'Schroeder', '2749 Blackhawk Trail', 'Madison', '6085559435', 'owner1');
-INSERT INTO jugadores VALUES (10, 'Carlos', 'Estaban', '2335 Independence La.', 'Waunakee', '6085555487', 'owner1');
-INSERT INTO jugadores VALUES (11, 'Alejandro', 'Garcia', '2335 Maple St.', 'Madison', '6085555555', 'alegarsan11');
-INSERT INTO jugadores VALUES (12, 'Juan Carlos', 'Leon', '934 Cable St.', 'Windsor', '6085555532', 'jualeomad');
-INSERT INTO jugadores VALUES (13, 'Maria', 'Escalante', '8 Blackhawk Trail', 'Madison', '678432908', 'marescram3');
-INSERT INTO jugadores VALUES (14, 'Daniel', 'Diañez', '9 Emiliano St.', 'Waunakee', '654258951', 'dandiasua');
-INSERT INTO jugadores VALUES (15, 'Rafael David', 'Garcia', '10 Leo Messi St.', 'Buenos Aires', '722258951', 'rafgargal');
-INSERT INTO jugadores VALUES (16, 'Ernesto', 'Saquete Rios', 'New Delhi 1', 'Sevilla', '618961461', 'ernsaqrio');
+
+INSERT INTO jugadores VALUES (1, 'Daniel', 'Diañez',0 ,false,0,0,0,0,false,'dandiasua');
+INSERT INTO jugadores VALUES (2, 'Rafael David', 'Garcia', 0,false,0,0,0,0,false,'rafgargal');
+INSERT INTO jugadores VALUES (3, 'Ernesto', 'Saquete Rios', 0, false,0,0,0,0,true,'ernsaqrio');
 
 INSERT INTO tipo_carta(id, name) VALUES
 (0, 'defensa'),

@@ -49,6 +49,7 @@ public interface JugadorRepository extends Repository<Jugador, Integer> {
 	
 	public Collection<Jugador> findByLastName(@Param("lastName") String lastName);
 
+	public Collection<Jugador> findAll();
 
 	/**
 	 * Retrieve an <code>Owner</code> from the data store by id.

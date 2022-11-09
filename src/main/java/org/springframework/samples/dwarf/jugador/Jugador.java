@@ -37,6 +37,9 @@ import org.springframework.core.style.ToStringCreator;
 import org.springframework.samples.dwarf.model.Person;
 import org.springframework.samples.dwarf.user.User;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * Simple JavaBean domain object representing an owner.
  *
@@ -46,31 +49,28 @@ import org.springframework.samples.dwarf.user.User;
  * @author Michael Isvy
  */
 @Entity
+@Getter
+@Setter
 @Table(name = "jugadores")
 public class Jugador extends Person {
 
-	@Column(name = "address")
-	@NotEmpty
-	private String address;
-
-	@Column(name = "city")
-	@NotEmpty
-	private String city;
-
-	@Column(name = "telephone")
-	@NotEmpty
-	@Digits(fraction = 0, integer = 10)
-	private String telephone;
+	private boolean primerjugador;
 	
+	private boolean esespectador;
+
+	private Integer acero;
+	private Integer medalla;
+	private Integer	oro;
+	private Integer hierro;
+	private Integer objeto;
+
 	//
 	@OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "username", referencedColumnName = "username")
 	private User user;
 	//
+
 	
-	public String getAddress() {
-		return this.address;
-	}
 
 	public User getUser() {
 		return user;
@@ -78,57 +78,6 @@ public class Jugador extends Person {
 
 	public void setUser(User user) {
 		this.user = user;
-	}
-
-	public void setAddress(String address) {
-		this.address = address;
-	}
-
-	public String getCity() {
-		return this.city;
-	}
-
-	public void setCity(String city) {
-		this.city = city;
-	}
-
-	public String getTelephone() {
-		return this.telephone;
-	}
-
-	public void setTelephone(String telephone) {
-		this.telephone = telephone;
-	}
-
-
-
-
-
-
-
-	/**
-	 * Return the Pet with the given name, or null if none found for this Owner.
-	 * @param name to test
-	 * @return true if pet name is already in use
-	 */
-
-	
-
-
-	/**
-	 * Return the Pet with the given name, or null if none found for this Owner.
-	 * @param name to test
-	 * @return true if pet name is already in use
-	 */
-
-
-	@Override
-	public String toString() {
-		return new ToStringCreator(this)
-
-				.append("id", this.getId()).append("new", this.isNew()).append("lastName", this.getLastName())
-				.append("firstName", this.getFirstName()).append("address", this.address).append("city", this.city)
-				.append("telephone", this.telephone).toString();
 	}
 
 }

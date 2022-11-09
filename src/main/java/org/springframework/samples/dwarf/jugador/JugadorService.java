@@ -16,6 +16,7 @@
 package org.springframework.samples.dwarf.jugador;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -54,6 +55,11 @@ public class JugadorService {
 	@Transactional(readOnly = true)
 	public Collection<Jugador> findOwnerByLastName(String lastName) throws DataAccessException {
 		return ownerRepository.findByLastName(lastName);
+	}
+
+	@Transactional
+	public List<Jugador> findAll() {
+		return (List<Jugador>) ownerRepository.findAll();
 	}
 
 	@Transactional

@@ -48,9 +48,48 @@
                         <img class="img-responsive" src="${dwarf}" height="160"
                             width="160" style="margin: auto;"/>
                     </td>
-
             </c:forEach>
             </tr>
         </tbody>
     </table>
+    <table>
+        <tbody>
+            <tr>
+                <c:forEach items="${jugadores}" var="jugador">
+                <td>
+                    
+                    <ul>
+                        <li>
+                            Nombre: 
+                            <c:out value="${jugador.firstName}" />
+                        </li>
+                        <li>
+                            Hierro: 
+                            <c:out value="${jugador.hierro}" />
+                        </li>
+                        <li>
+                            Medallas: 
+                            <c:out value="${jugador.medalla}" />
+                        </li>
+                        <li>
+                            Acero: 
+                            <c:out value="${jugador.acero}" />
+                        </li>
+                        <li>
+                            Oro: 
+                            <c:out value="${jugador.oro}" />
+                        </li>
+                        <li>
+                            Objetos: 
+                            <c:out value="${jugador.objeto}" />
+                        </li>
+                    </ul>
+                    
+                </td>
+            </c:forEach>
+            </tr>
+        
+        </tbody>
+    </table>
+  
 </petclinic:layout>

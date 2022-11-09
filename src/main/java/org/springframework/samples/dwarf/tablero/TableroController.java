@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import javax.websocket.server.PathParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.samples.dwarf.jugador.JugadorService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -26,10 +28,12 @@ public class TableroController {
     private String tablero1 = "tablero/Showtablerocopy";
 
     private TableroService taservice;
+    private JugadorService jugadorService;
 
     @Autowired
-    public TableroController(TableroService service) {
+    public TableroController(TableroService service, JugadorService jugadorService) {
         this.taservice = service;
+        this.jugadorService=jugadorService;
     }
 
     @Transactional
@@ -58,14 +62,17 @@ public class TableroController {
                 mazos.add(mazo);
             }
             tabla.setMazos(mazos);
+            tabla.setJugadores(jugadorService.findAll());
             taservice.saveTablero(tabla);
+
             return "redirect:/partida/" + tabla.getId();
         }
     }
 
     @Transactional
     @GetMapping("/{partidaId}")
-    public String showTablero(@PathVariable("partidaId") Integer id, Model model) {
+    public String showTablero(@PathVariable("partidaId") Integer id, Model model, HttpServletResponse response) {
+        response.addHeader("Refresh", "2");
         Tablero table = taservice.findById(id);
         List<Mazo> mazo = table.getMazos();
         List<Mazo> mazo1 = mazo.subList(0, 3);
@@ -75,6 +82,7 @@ public class TableroController {
         model.addAttribute("tablero1", mazo1);
         model.addAttribute("tablero2", mazo2);
         model.addAttribute("tablero3", mazo3);
+        model.addAttribute("jugadores", table.getJugadores());
         return tablero1;
     }
 

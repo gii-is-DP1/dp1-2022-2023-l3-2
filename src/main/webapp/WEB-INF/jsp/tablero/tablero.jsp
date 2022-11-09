@@ -11,18 +11,14 @@
     <form:form modelAttribute="tablero" class="form-horizontal" id="add-owner-form">
         <div class="form-group has-feedback">
             <petclinic:inputField label="Name" name="name" />
+                        
 
 
         </div>
         <div class="col-sm-offset-2 col-sm-10">
-            <c:choose>
-                <c:when test="${jugadores['new']}">
-                    <button class="btn btn-default" type="submit">Add Owner</button>
-                </c:when>
-                <c:otherwise>
-                    <button class="btn btn-default" type="submit">Update Owner</button>
-                </c:otherwise>
-            </c:choose>
+
+             <button class="btn btn-default" type="submit">Crear Partida</button>
+
         </div>
     </form:form>
 </petclinic:layout>
