@@ -25,5 +25,5 @@ public class Tablero extends NamedEntity {
 	@JoinTable(name = "mazo_nuevo", joinColumns = @JoinColumn(name="mazo_id"))
 	private List<Mazo> mazos;
 
-
+	
 }

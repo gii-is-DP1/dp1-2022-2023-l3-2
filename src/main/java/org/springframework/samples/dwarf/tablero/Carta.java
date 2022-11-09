@@ -21,12 +21,23 @@ public class Carta extends BaseEntity {
 
     String imagen;
 
-    /*
-     * @ManyToOne
-     *
-     * @JoinColumn(name = "tipo", referencedColumnName = "name")
-     * TipoCarta tipo;
-     */
+    Integer posicion;
+
+    @ManyToOne
+    @JoinColumn(name="mazo_id")
+    Mazo mazo;
+    
+    @ManyToOne 
+    @JoinColumn(name = "tipo")
+    TipoCarta tipo;
+     
+    String entrada;
+
+    Integer cantidadentrada;
+
+    String devuelve;
+
+    Integer cantidaddevuelve;
 
     /*
      * boolean enBaraja;
