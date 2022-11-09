@@ -10,6 +10,7 @@ import javax.xml.bind.annotation.XmlElement;
 
 import org.springframework.beans.support.MutableSortDefinition;
 import org.springframework.beans.support.PropertyComparator;
+import org.springframework.samples.dwarf.jugador.Jugador;
 import org.springframework.samples.dwarf.model.NamedEntity;
 import javax.persistence.JoinColumn;
 import lombok.Getter;
@@ -25,5 +26,11 @@ public class Tablero extends NamedEntity {
 	@JoinTable(name = "mazo_nuevo", joinColumns = @JoinColumn(name="mazo_id"))
 	private List<Mazo> mazos;
 
-	
+	@ManyToMany
+    @JoinTable(name = "jugadores_lobby", joinColumns = @JoinColumn(name = "jugador_id"))
+    private List<Jugador> jugadores;
+
+	public Integer getNumJugadores() {
+		return jugadores.size();
+	}
 }
