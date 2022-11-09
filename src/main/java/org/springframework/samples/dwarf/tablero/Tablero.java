@@ -30,6 +30,8 @@ public class Tablero extends NamedEntity {
     @JoinTable(name = "jugadores_lobby", joinColumns = @JoinColumn(name = "jugador_id"))
     private List<Jugador> jugadores;
 
+	
+
 	public Integer getNumJugadores() {
 		return jugadores.size();
 	}

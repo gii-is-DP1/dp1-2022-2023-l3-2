@@ -29,4 +29,8 @@ public class TableroService {
     public Carta findCartaById(Integer id) {
         return repo.findCartaById(id);
     }
+
+    public List<Carta> findByPosicion(Integer posicion) {
+        return repo.findByPosicion(posicion);
+    }
 }

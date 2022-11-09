@@ -52,14 +52,22 @@ public class TableroController {
         } else {
             List<Mazo> mazos = new ArrayList<>();
 
-            for (int i = 1; i < 10; i++) {
-                Carta carta = taservice.findCartaById(i);
-                List<Carta> cartas = new ArrayList<>();
-                Mazo mazo = new Mazo();
-                cartas.add(carta);
-                mazo.setPosicion(i);
-                mazo.setCartas(cartas);
-                mazos.add(mazo);
+            for (int i = 1; i < 13; i++) {
+                if(i<=9) {
+                    Carta carta = taservice.findCartaById(i);
+                    List<Carta> cartas = new ArrayList<>();
+                    Mazo mazo = new Mazo();
+                    cartas.add(carta);
+                    mazo.setPosicion(i);
+                    mazo.setCartas(cartas);
+                    mazos.add(mazo);
+                } else {
+                    List<Carta> cartasEspeciales = taservice.findByPosicion(i);
+                    Mazo mazo = new Mazo();
+                    mazo.setCartas(cartasEspeciales);
+                    mazo.setPosicion(i);
+                    mazos.add(mazo);
+                }
             }
             tabla.setMazos(mazos);
             tabla.setJugadores(jugadorService.findAll());
@@ -72,16 +80,18 @@ public class TableroController {
     @Transactional
     @GetMapping("/{partidaId}")
     public String showTablero(@PathVariable("partidaId") Integer id, Model model, HttpServletResponse response) {
-        response.addHeader("Refresh", "2");
+      //  response.addHeader("Refresh", "2");
         Tablero table = taservice.findById(id);
         List<Mazo> mazo = table.getMazos();
         List<Mazo> mazo1 = mazo.subList(0, 3);
         List<Mazo> mazo2 = mazo.subList(3, 6);
         List<Mazo> mazo3 = mazo.subList(6, 9);
+        List<Mazo> mazo4 = mazo.subList(9, 12);
 
         model.addAttribute("tablero1", mazo1);
         model.addAttribute("tablero2", mazo2);
         model.addAttribute("tablero3", mazo3);
+        model.addAttribute("tablero4", mazo4);
         model.addAttribute("jugadores", table.getJugadores());
         return tablero1;
     }

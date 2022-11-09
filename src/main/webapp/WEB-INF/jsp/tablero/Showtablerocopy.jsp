@@ -50,6 +50,17 @@
                     </td>
             </c:forEach>
             </tr>
+            <tr>
+                <c:forEach items="${tablero4}" var="pos">
+
+                        <td>
+                            <spring:url value="${pos.getFirstCarta().imagen}" var="dwarf" />
+                            <img class="img-responsive" src="${dwarf}" height="160"
+                                width="160" style="transform: rotate(90deg); margin: auto;"/>
+                        </td>
+
+                </c:forEach>
+                </tr>
         </tbody>
     </table>
     <table>
