@@ -10,6 +10,7 @@ import javax.validation.Valid;
 import javax.websocket.server.PathParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.samples.dwarf.jugador.Jugador;
 import org.springframework.samples.dwarf.jugador.JugadorService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -110,9 +112,9 @@ public class TableroController {
 
     @Transactional
     @GetMapping("/{partidaId}/comienza")
-    public String rondaPrincipio(@PathVariable("partidaId") Integer id, Model model) {
+    public String rondaPrincipio(@PathVariable("partidaId") Integer id) {
+        Tablero tabla = taservice.findById(id);
         for(int i = 0 ; i <2; i++) {
-            Tablero tabla = taservice.findById(id);
             List<Carta> baraja = tabla.getMazos().get(tabla.getMazos().size()-1).getCartas();
             Double num1 = Math.floor(Math.random() * baraja.size() + 1);
             final Integer numero1= num1.intValue();
@@ -122,6 +124,29 @@ public class TableroController {
             Mazo mazo1 = tabla.getMazos().get(12);
             mazo1.getCartas().remove(taservice.findCartaById(numero1));
         }
+        List<Jugador> jugadores = tabla.getJugadores();
+        List<Enano> enanos = new ArrayList<>();
+        for(Jugador j : jugadores){
+            for ( int r = 0 ; r < 4 ; r++) {
+                Enano enano = new Enano();
+                enano.setMazo(null);
+                enanos.add(enano);
+            }
+            j.setEnano(enanos); 
+            enanos.clear();
+        }
         return "redirect:/partida/" + id;
     }
+
+    @Transactional
+    @GetMapping("/{partidaId}/coloca")
+    public String rondaColoca(@PathVariable("partidaId") Integer id, @RequestParam String firstName, @RequestParam Integer posicion) {
+        
+        System.out.println("ESTO ES N"+firstName);
+        System.out.println("ESTO ES M"+posicion);
+        return "redirect:/partida/" + id;
+
+    }
+
+
 }

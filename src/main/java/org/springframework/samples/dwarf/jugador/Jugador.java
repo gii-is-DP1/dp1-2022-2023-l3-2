@@ -25,6 +25,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -35,6 +36,7 @@ import org.springframework.beans.support.MutableSortDefinition;
 import org.springframework.beans.support.PropertyComparator;
 import org.springframework.core.style.ToStringCreator;
 import org.springframework.samples.dwarf.model.Person;
+import org.springframework.samples.dwarf.tablero.Enano;
 import org.springframework.samples.dwarf.user.User;
 
 import lombok.Getter;
@@ -69,6 +71,10 @@ public class Jugador extends Person {
     @JoinColumn(name = "username", referencedColumnName = "username")
 	private User user;
 	//
+
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinTable(name = "enano_jugador", joinColumns = @JoinColumn(name="enano"))
+	private List<Enano> enano;
 
 	
 
