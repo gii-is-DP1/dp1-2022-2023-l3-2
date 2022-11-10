@@ -17,11 +17,11 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-public class Enano extends BaseEntity{
+public class Enano extends NamedEntity{
 
-    private Integer posicion;
+    int posicion;
     
     @ManyToOne
     @JoinColumn(name="mazo_id")
-    private Mazo mazo;
+    Mazo mazo;
 }
