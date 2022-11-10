@@ -41,9 +41,9 @@ INSERT INTO vet_specialties VALUES (5, 1);
 
 
 
-INSERT INTO jugadores VALUES (1, 'Daniel', 'Diañez',0 ,false,0,0,0,0,false,'dandiasua');
-INSERT INTO jugadores VALUES (2, 'Rafael David', 'Garcia', 0,false,0,0,0,0,false,'rafgargal');
-INSERT INTO jugadores VALUES (3, 'Ernesto', 'Saquete Rios', 0, false,0,0,0,0,true,'ernsaqrio');
+INSERT INTO jugadores(id,first_name, last_name, acero,esespectador,hierro,medalla,objeto,oro,primerjugador,username) VALUES (1, 'Daniel', 'Diañez',0 ,false,0,0,0,0,false,'dandiasua');
+INSERT INTO jugadores(id,first_name, last_name, acero,esespectador,hierro,medalla,objeto,oro,primerjugador,username) VALUES (2, 'Rafael David', 'Garcia', 0,false,0,0,0,0,false,'rafgargal');
+INSERT INTO jugadores(id,first_name, last_name, acero,esespectador,hierro,medalla,objeto,oro,primerjugador,username) VALUES (3, 'Ernesto', 'Saquete Rios', 0, false,0,0,0,0,true,'ernsaqrio');
 
 INSERT INTO tipo_carta(id, name) VALUES
 (0, 'defensa'),

@@ -125,16 +125,17 @@ public class TableroController {
             mazo1.getCartas().remove(taservice.findCartaById(numero1));
         }
         List<Jugador> jugadores = tabla.getJugadores();
-        List<Enano> enanos = new ArrayList<>();
         for(Jugador j : jugadores){
+            List<Enano> enanos = new ArrayList<>();
             for ( int r = 0 ; r < 4 ; r++) {
                 Enano enano = new Enano();
-                enano.setMazo(null);
+                enano.setPosicion(12);
                 enanos.add(enano);
             }
             j.setEnano(enanos); 
-            enanos.clear();
+
         }
+        
         return "redirect:/partida/" + id;
     }
 
