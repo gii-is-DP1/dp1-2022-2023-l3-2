@@ -23,7 +23,7 @@ import java.util.*;
 public class Tablero extends NamedEntity {
 
     @OneToMany(cascade = CascadeType.ALL)
-	@JoinTable(name = "mazo_nuevo", joinColumns = @JoinColumn(name="mazo_id"))
+	@JoinTable(name = "mazo_tablero", joinColumns = @JoinColumn(name="tablero"))
 	private List<Mazo> mazos;
 
 	@ManyToMany

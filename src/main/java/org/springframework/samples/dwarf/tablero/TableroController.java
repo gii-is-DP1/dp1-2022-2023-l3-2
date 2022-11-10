@@ -51,8 +51,7 @@ public class TableroController {
             return tablero;
         } else {
             List<Mazo> mazos = new ArrayList<>();
-
-            for (int i = 1; i < 13; i++) {
+            for (int i = 1; i < 14; i++) {
                 if(i<=9) {
                     Carta carta = taservice.findCartaById(i);
                     List<Carta> cartas = new ArrayList<>();
@@ -61,11 +60,23 @@ public class TableroController {
                     mazo.setPosicion(i);
                     mazo.setCartas(cartas);
                     mazos.add(mazo);
-                } else {
+                } else if(i<13){
                     List<Carta> cartasEspeciales = taservice.findByPosicion(i);
                     Mazo mazo = new Mazo();
                     mazo.setCartas(cartasEspeciales);
                     mazo.setPosicion(i);
+                    mazos.add(mazo);
+                }else{
+                    Mazo mazo = new Mazo();
+                    List<Carta> cartas = new ArrayList<>();
+                    
+                    for(int j = 10 ; j <55;j++) {
+                        Carta carta = new Carta();
+                        carta = taservice.findCartaById(j);
+                        cartas.add(carta);
+                    }
+                    mazo.setPosicion(i);
+                    mazo.setCartas(cartas);
                     mazos.add(mazo);
                 }
             }
@@ -73,7 +84,7 @@ public class TableroController {
             tabla.setJugadores(jugadorService.findAll());
             taservice.saveTablero(tabla);
 
-            return "redirect:/partida/" + tabla.getId();
+            return "redirect:/partida/" + tabla.getId() + "/comienza";
         }
     }
 
@@ -96,4 +107,21 @@ public class TableroController {
         return tablero1;
     }
 
+
+    @Transactional
+    @GetMapping("/{partidaId}/comienza")
+    public String rondaPrincipio(@PathVariable("partidaId") Integer id, Model model) {
+        for(int i = 0 ; i <2; i++) {
+            Tablero tabla = taservice.findById(id);
+            List<Carta> baraja = tabla.getMazos().get(tabla.getMazos().size()-1).getCartas();
+            Double num1 = Math.floor(Math.random() * baraja.size() + 1);
+            final Integer numero1= num1.intValue();
+            Integer posicion1=taservice.findCartaById(numero1).getPosicion();
+            Mazo mazo = tabla.getMazos().get(posicion1-1);
+            mazo.getCartas().add(0, taservice.findCartaById(numero1));
+            Mazo mazo1 = tabla.getMazos().get(12);
+            mazo1.getCartas().remove(taservice.findCartaById(numero1));
+        }
+        return "redirect:/partida/" + id;
+    }
 }

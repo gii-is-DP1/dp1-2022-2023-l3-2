@@ -22,7 +22,7 @@ public class Mazo extends NamedEntity {
     private Integer posicion;
 
     @ManyToMany
-    @JoinTable(name = "cartas_mazo", joinColumns = @JoinColumn(name = "carta_id"))
+    @JoinTable(name = "cartas_mazo", joinColumns = @JoinColumn(name = "mazo"))
     private List<Carta> cartas;
 
     public Carta getFirstCarta() {

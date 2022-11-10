@@ -39,8 +39,8 @@ public class Carta extends BaseEntity {
 
     Integer cantidaddevuelve;
 
-    /*
-     * boolean enBaraja;
-     * Integer posicion;
-     */
+    
+    boolean enbaraja;
+
+    
 }
