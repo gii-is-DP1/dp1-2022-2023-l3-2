@@ -8,6 +8,16 @@
 
 
 <petclinic:layout pageName="tablero">
+    <style>
+        .ficha {
+            width: 80px;
+            height: 80px;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+    </style>
     <h2>Tablero</h2>
     <table id="tableroTable" class="table table-striped" style="width: 1100px;">
         <thead>
@@ -21,10 +31,15 @@
             <tr>
                 <c:forEach items="${tablero1}" var="pos">
 
-                        <td >
+                        <td style="position: relative;">
+                            <c:if test="${mazosConEnanoEncima.stream().filter(i -> pos.id.equals(i)).toList().size() != 0}">
+                                <img class="ficha" src="/resources/images/ficha.png">
+                            </c:if>
                             <spring:url value="${pos.getFirstCarta().imagen}" var="dwarf" />
-                            <img class="img-responsive" src="${dwarf}" height="160"
-                                width="160" style="margin: auto;"/>
+                            <a href="/partida/${id_partida}/coloca?firstName=${jugadores.get(0).firstName}&posicion=${pos.id}">
+                                <img class="img-responsive" src="${dwarf}" height="160"
+                                    width="160" style="margin: auto;"/>
+                            </a>
                         </td>
 
                 </c:forEach>
@@ -32,10 +47,15 @@
             <tr>
                 <c:forEach items="${tablero2}" var="pos">
 
-                    <td >
+                    <td style="position: relative;">
+                        <c:if test="${mazosConEnanoEncima.stream().filter(i -> pos.id.equals(i)).toList().size() != 0}">
+                            <img class="ficha" src="/resources/images/ficha.png">
+                        </c:if>
                         <spring:url value="${pos.getFirstCarta().imagen}" var="dwarf" />
-                        <img class="img-responsive" src="${dwarf}" height="160"
-                            width="160" style="margin: auto;"/>
+                        <a href="/partida/${id_partida}/coloca?firstName=${jugadores.get(0).firstName}&posicion=${pos.id}">
+                            <img class="img-responsive" src="${dwarf}" height="160"
+                                width="160" style="margin: auto;"/>
+                        </a>
                     </td>
 
                 </c:forEach>
@@ -43,10 +63,15 @@
             <tr>
                 <c:forEach items="${tablero3}" var="pos">
 
-                    <td >
+                    <td style="position: relative;">
+                        <c:if test="${mazosConEnanoEncima.stream().filter(i -> pos.id.equals(i)).toList().size() != 0}">
+                            <img class="ficha" src="/resources/images/ficha.png">
+                        </c:if>
                         <spring:url value="${pos.getFirstCarta().imagen}" var="dwarf" />
-                        <img class="img-responsive" src="${dwarf}" height="160"
-                            width="160" style="margin: auto;"/>
+                        <a href="/partida/${id_partida}/coloca?firstName=${jugadores.get(0).firstName}&posicion=${pos.id}">
+                            <img class="img-responsive" src="${dwarf}" height="160"
+                                width="160" style="margin: auto;"/>
+                        </a>
                     </td>
             </c:forEach>
             </tr>
@@ -68,34 +93,34 @@
             <tr>
                 <c:forEach items="${jugadores}" var="jugador">
                 <td>
-                    
+
                     <ul>
                         <li>
-                            Nombre: 
+                            Nombre:
                             <c:out value="${jugador.firstName}" />
                         </li>
                         <li>
-                            Hierro: 
+                            Hierro:
                             <c:out value="${jugador.hierro}" />
                         </li>
                         <li>
-                            Medallas: 
+                            Medallas:
                             <c:out value="${jugador.medalla}" />
                         </li>
                         <li>
-                            Acero: 
+                            Acero:
                             <c:out value="${jugador.acero}" />
                         </li>
                         <li>
-                            Oro: 
+                            Oro:
                             <c:out value="${jugador.oro}" />
                         </li>
                         <li>
-                            Objetos: 
+                            Objetos:
                             <c:out value="${jugador.objeto}" />
                         </li>
                     </ul>
-                    
+
                 </td>
             </c:forEach>
             <br/>
@@ -103,12 +128,12 @@
                     <spring:url value="/resources/images/Dimensionadas/000.png" var="img"/>
                     <img src="${img}" height="223"
                     width="160" style="margin-left: 80px;"/>
-                    
+
                 </td>
             </tr>
 
-        
+
         </tbody>
     </table>
-  
+
 </petclinic:layout>
