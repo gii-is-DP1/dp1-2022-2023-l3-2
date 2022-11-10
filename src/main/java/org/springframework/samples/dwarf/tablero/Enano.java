@@ -8,6 +8,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import org.springframework.samples.dwarf.jugador.Jugador;
+import org.springframework.samples.dwarf.model.BaseEntity;
+import org.springframework.samples.dwarf.model.NamedEntity;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -15,19 +17,11 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-public class Enano {
+public class Enano extends BaseEntity{
 
-    @Id 
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-
-    private Integer Posicion;
+    private Integer posicion;
     
     @ManyToOne
-    @JoinColumn(name = "jugador_id")
-    private Jugador jugador;
-
-    @ManyToOne
-    @JoinColumn(name="carta_id")
-    private Carta carta;
+    @JoinColumn(name="mazo_id")
+    private Mazo mazo;
 }
