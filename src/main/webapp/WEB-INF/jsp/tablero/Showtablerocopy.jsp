@@ -98,7 +98,15 @@
                     
                 </td>
             </c:forEach>
+            <br/>
+                <td>
+                    <spring:url value="/resources/images/Dimensionadas/000.png" var="img"/>
+                    <img src="${img}" height="223"
+                    width="160" style="margin-left: 80px;"/>
+                    
+                </td>
             </tr>
+
         
         </tbody>
     </table>
