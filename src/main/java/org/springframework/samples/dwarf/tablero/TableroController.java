@@ -85,6 +85,7 @@ public class TableroController {
                     mazos.add(mazo);
                 }
             }
+            
             tabla.setMazos(mazos);
             tabla.setJugadores(jugadorService.findAll());
             taservice.saveTablero(tabla);
@@ -119,27 +120,27 @@ public class TableroController {
         // ==============================
 
         for (int i = 0; i < table.getJugadores().size(); i++) {
-            Jugador j = table.getJugadores().stream().filter(jugador -> jugador.isPrimerjugador()).findAny().get();
+            Jugador j = table.getJugadores().get(i);
             Integer enanosSituados = j.getEnano().stream().filter(e -> e.getPosicion() != 12).toList().size();
             if (1 == enanosSituados) {
                 j.setPrimerjugador(false);
-                if (i == table.getJugadores().size() - 1) {
+                if (i == table.getJugadores().size() -1) {
                     table.getJugadores().get(0).setPrimerjugador(true);
                     break;
                 }
                 table.getJugadores().get(i + 1).setPrimerjugador(true);
             }
         }
-        for (int i = 0; i < table.getJugadores().size(); i++) {
-            Jugador j = table.getJugadores().stream().filter(jugador -> jugador.isPrimerjugador()).findAny().get();
+        for (int t = 0; t < table.getJugadores().size(); t++) {
+            Jugador j = table.getJugadores().get(t);
             Integer enanosSituados = j.getEnano().stream().filter(e -> e.getPosicion() != 12).toList().size();
             if (2 == enanosSituados) {
                 j.setPrimerjugador(false);
-                if (i == table.getJugadores().size() - 1) {
+                if (t == table.getJugadores().size() - 1) {
                     table.getJugadores().get(0).setPrimerjugador(true);
                     break;
                 }
-                table.getJugadores().get(i + 1).setPrimerjugador(true);
+                table.getJugadores().get(t + 1).setPrimerjugador(true);
             }
         }
         String username = table.getJugadores().stream().filter(j -> j.isPrimerjugador()).toList().get(0).getUser()
@@ -232,6 +233,7 @@ public class TableroController {
             for (Enano e : j.getEnano()) {
                 if (e.getPosicion() != 12) {
                     cont++;
+                    System.out.println("Esto es N:" + cont);
                 }
             }
             if (cont < 2) {
@@ -239,7 +241,7 @@ public class TableroController {
             }
         }
 
-        return "redirect:/partida/" + id + "/recursos";
+        return "redirect:/partida/" + id +"/recursos";
 
     }
 
@@ -251,6 +253,9 @@ public class TableroController {
          * Carta primera = tabla.getJugadores().stream().filter(jugador ->
          * jugador.getEnano())
          */
+        tabla.getJugadores().stream().filter(j -> j.isPrimerjugador()).toList().get(0).setPrimerjugador(false);
+        tabla.getJugadores().get(0).setPrimerjugador(true);
+        
         for (Jugador j : tabla.getJugadores()) {
             for (Enano e : j.getEnano()) {
                 if (e.getPosicion() != 12) {
