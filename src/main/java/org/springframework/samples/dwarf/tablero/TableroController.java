@@ -3,6 +3,7 @@ package org.springframework.samples.dwarf.tablero;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collector;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
@@ -93,7 +94,7 @@ public class TableroController {
     @Transactional
     @GetMapping("/{partidaId}")
     public String showTablero(@PathVariable("partidaId") Integer id, Model model, HttpServletResponse response) {
-        // response.addHeader("Refresh", "2");
+      /*   response.addHeader("Refresh", "2"); */
         Tablero table = taservice.findById(id);
         List<Mazo> mazo = table.getMazos();
         List<Mazo> mazo1 = mazo.subList(0, 3);
@@ -115,6 +116,29 @@ public class TableroController {
         model.addAttribute("id_partida", table.getId());
         // ==============================
 
+
+        
+        for(int i = 0 ; i<table.getJugadores().size()  ; i++){
+            Jugador j = table.getJugadores().stream().filter(jugador -> jugador.isPrimerjugador()).findAny().get();
+            Integer enanosSituados = j.getEnano().stream().filter(e -> e.getPosicion()!=12).toList().size();
+            if(1==enanosSituados ){
+                j.setPrimerjugador(false);
+                if(i==table.getJugadores().size()-1){
+                    table.getJugadores().get(0).setPrimerjugador(true);
+                    break;
+                }
+                table.getJugadores().get(i+1).setPrimerjugador(true);
+            }else if(enanosSituados==2 ){
+                 j.setPrimerjugador(false);
+                if(i==table.getJugadores().size()-1){
+                    table.getJugadores().get(0).setPrimerjugador(true);
+                    break;
+                }
+                table.getJugadores().get(i+1).setPrimerjugador(true);
+            }      
+        }
+        String username = table.getJugadores().stream().filter(j -> j.isPrimerjugador()).toList().get(0).getUser().getUsername();
+        model.addAttribute("username", username);
         model.addAttribute("tablero1", mazo1);
         model.addAttribute("tablero2", mazo2);
         model.addAttribute("tablero3", mazo3);
@@ -154,22 +178,75 @@ public class TableroController {
 
     @Transactional
     @GetMapping("/{partidaId}/coloca")
-    public String rondaColoca(@PathVariable("partidaId") Integer id, @RequestParam String firstName,
+    public String rondaColoca(@PathVariable("partidaId") Integer id,Model model, @RequestParam String username,
             @RequestParam Integer posicion) {
 
         Tablero tabla = taservice.findById(id);
-
-        System.out.println("ESTO ES N" + firstName);
-        System.out.println("ESTO ES M" + posicion);
-
+        
         List<Enano> enanosJugador = tabla.getJugadores().stream()
-                .filter(jugador -> jugador.getFirstName().equals(firstName))
+                .filter(jugador -> jugador.getUser().getUsername().equals(username))
                 .toList().get(0).getEnano();
+        for(Enano e : enanosJugador){
+            if(e.getPosicion()==12){   
+                e.setPosicion(posicion);
+                for(Mazo m : tabla.getMazos()){
+                    if(posicion==m.getPosicion())
+                        e.setMazo(m);
+                }
+                break;
+                
+            }
+        }
 
-        enanosJugador.get(0).setMazo(tabla.getMazos().get(posicion - 1));
+        for(Jugador j : tabla.getJugadores()){
+            Integer cont = 0;
+            for(Enano e : j.getEnano()){
+                if(e.getPosicion()!=12){
+                    cont++;
+                }
+            }
+            if(cont<2){
+                return "redirect:/partida/" + id ;
+            }
+        }
+
+        return "redirect:/partida/" + id + "/recursos";
+
+    }
+
+    @Transactional
+    @GetMapping("{partidaId}/recursos")
+    public String rondaRecursos(@PathVariable("partidaId") Integer id){
+        Tablero tabla = taservice.findById(id);
+/*         Carta primera = tabla.getJugadores().stream().filter(jugador -> jugador.getEnano()) */
+        for(Jugador j : tabla.getJugadores()) {
+            for(Enano e : j.getEnano()){
+                if(e.getPosicion() != 12){
+                    Carta primera = e.getMazo().getFirstCarta();
+                    if(primera.getDevuelve().equals("hierro")){
+                        j.setHierro(j.getHierro()+primera.getCantidaddevuelve());
+                    }
+                    if(primera.getDevuelve().equals("oro")){
+                        j.setOro(j.getOro()+primera.getCantidaddevuelve());
+                    }
+                    if(primera.getDevuelve().equals("medalla")){
+                        j.setMedalla(j.getMedalla()+primera.getCantidaddevuelve());
+                    }
+                    if(primera.getDevuelve().equals("acero")){
+                        j.setAcero(j.getAcero()+primera.getCantidaddevuelve());
+                    }
+                    if(primera.getDevuelve().equals("objeto")){
+                        j.setObjeto(j.getObjeto()+primera.getCantidaddevuelve());
+                    }
+                    e.setPosicion(12);
+                    e.setMazo(null);
+                }
+            }
+        }
+
+
 
         return "redirect:/partida/" + id;
-
     }
 
 }

@@ -11,6 +11,7 @@
     <form:form modelAttribute="tablero" class="form-horizontal" id="add-owner-form">
         <div class="form-group has-feedback">
             <petclinic:inputField label="Name" name="name" />
+            
                         
 
 
