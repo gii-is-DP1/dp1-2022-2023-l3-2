@@ -128,14 +128,19 @@ public class TableroController {
                     break;
                 }
                 table.getJugadores().get(i+1).setPrimerjugador(true);
-            }else if(enanosSituados==2 ){
-                 j.setPrimerjugador(false);
+            }     
+        }
+        for(int i = 0 ; i<table.getJugadores().size()  ; i++){
+            Jugador j = table.getJugadores().stream().filter(jugador -> jugador.isPrimerjugador()).findAny().get();
+            Integer enanosSituados = j.getEnano().stream().filter(e -> e.getPosicion()!=12).toList().size();
+            if(2==enanosSituados ){
+                j.setPrimerjugador(false);
                 if(i==table.getJugadores().size()-1){
                     table.getJugadores().get(0).setPrimerjugador(true);
                     break;
                 }
                 table.getJugadores().get(i+1).setPrimerjugador(true);
-            }      
+            }     
         }
         String username = table.getJugadores().stream().filter(j -> j.isPrimerjugador()).toList().get(0).getUser().getUsername();
         model.addAttribute("username", username);
