@@ -33,7 +33,7 @@
 
                         <td style="position: relative;">
                             <c:if test="${mazosConEnanoEncima.stream().filter(i -> pos.id.equals(i)).toList().size() != 0}">
-                                <img class="ficha" src="/resources/images/Dimensionadas/Rojo.png">
+                                <img class="ficha" src="/resources/images/Dimensionadas/${asociacionesColores.get(asociacionesUsernameMazo.get(pos.id))}.png">
                             </c:if>
                             <spring:url value="${pos.getFirstCarta().imagen}" var="dwarf" />
                             <a href="/partida/${id_partida}/coloca?username=${username}&posicion=${pos.posicion}">
@@ -49,7 +49,7 @@
 
                     <td style="position: relative;">
                         <c:if test="${mazosConEnanoEncima.stream().filter(i -> pos.id.equals(i)).toList().size() != 0}">
-                            <img class="ficha" src="/resources/images/Dimensionadas/Rojo.png">
+                            <img class="ficha" src="/resources/images/Dimensionadas/${asociacionesColores.get(asociacionesUsernameMazo.get(pos.id))}.png">
                         </c:if>
                         <spring:url value="${pos.getFirstCarta().imagen}" var="dwarf" />
                         <a href="/partida/${id_partida}/coloca?username=${username}&posicion=${pos.posicion}">
@@ -65,7 +65,7 @@
 
                     <td style="position: relative;">
                         <c:if test="${mazosConEnanoEncima.stream().filter(i -> pos.id.equals(i)).toList().size() != 0}">
-                            <img class="ficha" src="/resources/images/Dimensionadas/Rojo.png">
+                            <img class="ficha" src="/resources/images/Dimensionadas/${asociacionesColores.get(asociacionesUsernameMazo.get(pos.id))}.png">
                         </c:if>
                         <spring:url value="${pos.getFirstCarta().imagen}" var="dwarf" />
                         <a href="/partida/${id_partida}/coloca?username=${username}&posicion=${pos.posicion}">
@@ -95,27 +95,40 @@
                 <td>
 
                     <ul>
-                        <li>
-                            Nombre:
-                            <c:out value="${jugador.firstName}" />
-                        </li>
-                        <li>
+                        <c:if test="${jugador.primerjugador}">
+                            <li style="list-style-type: none;">
+                                <img src="/resources/images/FichaDeInicio.png" height="18" width="20"/>
+                                <c:out value="${jugador.firstName}" />
+                            </li>
+                        </c:if>
+                        <c:if test="${!jugador.primerjugador}">
+                            <li style="list-style-type: none;">
+                                <img src="/resources/images/FichaDeInicioVacia.png" height="18" width="20"/>
+                                <c:out value="${jugador.firstName}" />
+                            </li>
+                        </c:if>
+                        <li style="list-style-type: none;">
+                            <img src="/resources/images/HierroRecortado.png" height="20" width="20"/>
                             Hierro:
                             <c:out value="${jugador.hierro}" />
                         </li>
-                        <li>
+                        <li style="list-style-type: none;">
+                            <img src="/resources/images/MedallaRecortada.png" height="20" width="20"/>
                             Medallas:
                             <c:out value="${jugador.medalla}" />
                         </li>
-                        <li>
+                        <li style="list-style-type: none;">
+                            <img src="/resources/images/AceroRecortado.png" height="20" width="20"/>
                             Acero:
                             <c:out value="${jugador.acero}" />
                         </li>
-                        <li>
+                        <li style="list-style-type: none;">
+                            <img src="/resources/images/OroRecortado.png" height="20" width="20"/>
                             Oro:
                             <c:out value="${jugador.oro}" />
                         </li>
-                        <li>
+                        <li style="list-style-type: none;">
+                            <img src="/resources/images/ObjetoRecortado.png" height="16" width="20"/>
                             Objetos:
                             <c:out value="${jugador.objeto}" />
                         </li>
