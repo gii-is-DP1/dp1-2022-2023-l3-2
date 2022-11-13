@@ -33,10 +33,10 @@
 
                         <td style="position: relative;">
                             <c:if test="${mazosConEnanoEncima.stream().filter(i -> pos.id.equals(i)).toList().size() != 0}">
-                                <img class="ficha" src="/resources/images/ficha.png">
+                                <img class="ficha" src="/resources/images/Dimensionadas/Rojo.png">
                             </c:if>
                             <spring:url value="${pos.getFirstCarta().imagen}" var="dwarf" />
-                            <a href="/partida/${id_partida}/coloca?firstName=${jugadores.get(0).firstName}&posicion=${pos.id}">
+                            <a href="/partida/${id_partida}/coloca?username=${username}&posicion=${pos.posicion}">
                                 <img class="img-responsive" src="${dwarf}" height="160"
                                     width="160" style="margin: auto;"/>
                             </a>
@@ -49,10 +49,10 @@
 
                     <td style="position: relative;">
                         <c:if test="${mazosConEnanoEncima.stream().filter(i -> pos.id.equals(i)).toList().size() != 0}">
-                            <img class="ficha" src="/resources/images/ficha.png">
+                            <img class="ficha" src="/resources/images/Dimensionadas/Rojo.png">
                         </c:if>
                         <spring:url value="${pos.getFirstCarta().imagen}" var="dwarf" />
-                        <a href="/partida/${id_partida}/coloca?firstName=${jugadores.get(0).firstName}&posicion=${pos.id}">
+                        <a href="/partida/${id_partida}/coloca?username=${username}&posicion=${pos.posicion}">
                             <img class="img-responsive" src="${dwarf}" height="160"
                                 width="160" style="margin: auto;"/>
                         </a>
@@ -65,10 +65,10 @@
 
                     <td style="position: relative;">
                         <c:if test="${mazosConEnanoEncima.stream().filter(i -> pos.id.equals(i)).toList().size() != 0}">
-                            <img class="ficha" src="/resources/images/ficha.png">
+                            <img class="ficha" src="/resources/images/Dimensionadas/Rojo.png">
                         </c:if>
                         <spring:url value="${pos.getFirstCarta().imagen}" var="dwarf" />
-                        <a href="/partida/${id_partida}/coloca?firstName=${jugadores.get(0).firstName}&posicion=${pos.id}">
+                        <a href="/partida/${id_partida}/coloca?username=${username}&posicion=${pos.posicion}">
                             <img class="img-responsive" src="${dwarf}" height="160"
                                 width="160" style="margin: auto;"/>
                         </a>
