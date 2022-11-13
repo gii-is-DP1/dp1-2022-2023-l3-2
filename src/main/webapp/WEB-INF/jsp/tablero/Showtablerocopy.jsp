@@ -17,8 +17,32 @@
             top: 50%;
             transform: translate(-50%, -50%);
         }
+        .ronda_container {
+            position: absolute;
+            top: 200px;
+            right: 20px;
+            width: 200px;
+            height: 100px;
+            background-color: #34302d;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            border-radius: 5px;
+            gap: 10px;
+        }
+        .ronda_container h2 {
+            color: white;
+            display: block;
+            margin: 0;
+            padding: 0;
+        }
     </style>
     <h2>Tablero</h2>
+    <div class="ronda_container">
+        <h2>RONDA</h2>
+        <h2 style="font-size: 30px;">${ronda}</h2>
+    </div>
     <table id="tableroTable" class="table table-striped" style="width: 1100px;">
         <thead>
             <tr>

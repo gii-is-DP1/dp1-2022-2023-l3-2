@@ -85,7 +85,8 @@ public class TableroController {
                     mazos.add(mazo);
                 }
             }
-            
+
+            tabla.setRonda(1);
             tabla.setMazos(mazos);
             tabla.setJugadores(jugadorService.findAll());
             taservice.saveTablero(tabla);
@@ -124,7 +125,7 @@ public class TableroController {
             Integer enanosSituados = j.getEnano().stream().filter(e -> e.getPosicion() != 12).toList().size();
             if (1 == enanosSituados) {
                 j.setPrimerjugador(false);
-                if (i == table.getJugadores().size() -1) {
+                if (i == table.getJugadores().size() - 1) {
                     table.getJugadores().get(0).setPrimerjugador(true);
                     break;
                 }
@@ -173,6 +174,9 @@ public class TableroController {
             asociacionesColores.put(username1, colores.get(i));
         }
         model.addAttribute("asociacionesColores", asociacionesColores);
+
+        // Rondas
+        model.addAttribute("ronda", table.getRonda());
 
         return tablero1;
     }
@@ -241,7 +245,7 @@ public class TableroController {
             }
         }
 
-        return "redirect:/partida/" + id +"/recursos";
+        return "redirect:/partida/" + id + "/recursos";
 
     }
 
@@ -255,7 +259,7 @@ public class TableroController {
          */
         tabla.getJugadores().stream().filter(j -> j.isPrimerjugador()).toList().get(0).setPrimerjugador(false);
         tabla.getJugadores().get(0).setPrimerjugador(true);
-        
+
         for (Jugador j : tabla.getJugadores()) {
             for (Enano e : j.getEnano()) {
                 if (e.getPosicion() != 12) {
@@ -280,6 +284,9 @@ public class TableroController {
                 }
             }
         }
+
+        // Sumamos 1 ronda
+        tabla.setRonda(tabla.getRonda() + 1);
 
         return "redirect:/partida/" + id + "/comienza";
     }

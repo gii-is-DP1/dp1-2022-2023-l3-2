@@ -6,6 +6,7 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlElement;
 
 import org.springframework.beans.support.MutableSortDefinition;
@@ -22,17 +23,17 @@ import java.util.*;
 @Setter
 public class Tablero extends NamedEntity {
 
-    @OneToMany(cascade = CascadeType.ALL)
-	@JoinTable(name = "mazo_tablero", joinColumns = @JoinColumn(name="tablero"))
-	private List<Mazo> mazos;
+    Integer ronda;
 
-	@ManyToMany
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "mazo_tablero", joinColumns = @JoinColumn(name = "tablero"))
+    private List<Mazo> mazos;
+
+    @ManyToMany
     @JoinTable(name = "jugadores_lobby", joinColumns = @JoinColumn(name = "jugador_id"))
     private List<Jugador> jugadores;
 
-	
-
-	public Integer getNumJugadores() {
-		return jugadores.size();
-	}
+    public Integer getNumJugadores() {
+        return jugadores.size();
+    }
 }
