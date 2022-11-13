@@ -251,7 +251,7 @@ public class TableroController {
 
 
 
-        return "redirect:/partida/" + id;
+        return "redirect:/partida/" + id + "/comienza";
     }
 
 }
