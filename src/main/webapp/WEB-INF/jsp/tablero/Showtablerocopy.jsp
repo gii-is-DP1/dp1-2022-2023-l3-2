@@ -57,6 +57,21 @@
             margin: 0;
             padding: 0;
         }
+        .cartas-restantes-container {
+            position: absolute;
+            right: 0;
+            top: 20%;
+            transform: translate(0, -50%);
+            width: 160px;
+            background-color: #34302d;
+            padding: 5px 0;
+        }
+        .cartas-restantes-container h2 {
+            display: block;
+            margin: auto;
+            text-align: center;
+            color: white;
+        }
     </style>
     <h1>${nombrePartida.toUpperCase()}</h1>
     <div class="ronda_container">
@@ -185,11 +200,13 @@
                 </td>
             </c:forEach>
             <br/>
-                <td>
+                <td style="position: relative;">
                     <spring:url value="/resources/images/Dimensionadas/000.png" var="img"/>
                     <img src="${img}" height="223"
                     width="160" style="margin-left: 80px;"/>
-
+                    <div class="cartas-restantes-container">
+                        <h2>${cartasRestantesBaraja}</h2>
+                    </div>
                 </td>
             </tr>
 
