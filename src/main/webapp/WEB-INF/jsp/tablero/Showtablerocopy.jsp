@@ -31,17 +31,41 @@
             border-radius: 5px;
             gap: 10px;
         }
+        .turno_container {
+            position: absolute;
+            top: 350px;
+            right: 20px;
+            width: 200px;
+            height: 100px;
+            background-color: #34302d;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            border-radius: 5px;
+            gap: 10px;
+        }
         .ronda_container h2 {
             color: white;
             display: block;
             margin: 0;
             padding: 0;
         }
+        .turno_container h2 {
+            color: white;
+            display: block;
+            margin: 0;
+            padding: 0;
+        }
     </style>
-    <h2>Tablero</h2>
+    <h1>${nombrePartida.toUpperCase()}</h1>
     <div class="ronda_container">
         <h2>RONDA</h2>
         <h2 style="font-size: 30px;">${ronda}</h2>
+    </div>
+    <div class="turno_container">
+        <h2>TURNO</h2>
+        <h2 style="font-size: 30px;">${jugadores.stream().filter(j -> j.primerjugador).toList().get(0).getUser().username}</h2>
     </div>
     <table id="tableroTable" class="table table-striped" style="width: 1100px;">
         <thead>

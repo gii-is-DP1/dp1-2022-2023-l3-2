@@ -118,6 +118,7 @@ public class TableroController {
 
         model.addAttribute("mazosConEnanoEncima", mazosConEnanoEncima);
         model.addAttribute("id_partida", table.getId());
+        model.addAttribute("nombrePartida", table.getName());
         // ==============================
 
         for (int i = 0; i < table.getJugadores().size(); i++) {
