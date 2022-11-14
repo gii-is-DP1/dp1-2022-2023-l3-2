@@ -153,6 +153,8 @@ public class TableroController {
         model.addAttribute("tablero3", mazo3);
         model.addAttribute("tablero4", mazo4);
         model.addAttribute("jugadores", table.getJugadores());
+        model.addAttribute("cartasRestantesBaraja",
+                table.getMazos().get(table.getMazos().size() - 1).getCartas().size());
 
         Map<Integer, String> asociacionesUsernameMazo = new HashMap<>(); // <idMazo, String>
         for (Jugador j : table.getJugadores()) {
