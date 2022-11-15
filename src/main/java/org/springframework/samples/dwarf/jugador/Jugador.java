@@ -57,35 +57,35 @@ import lombok.Setter;
 @Table(name = "jugadores")
 public class Jugador extends Person {
 
-	private boolean primerjugador;
-	
-	private boolean esespectador;
+    private boolean primerjugador;
 
-	private Integer acero;
-	private Integer medalla;
-	private Integer	oro;
-	private Integer hierro;
-	private Integer objeto;
+    private boolean esespectador;
 
-	//
-	@OneToOne(cascade = CascadeType.ALL)
+    private Integer acero;
+    private Integer medalla;
+    private Integer oro;
+    private Integer hierro;
+    private Integer objeto;
+
+    @Column(name = "posicion_final")
+    private Integer posicionFinal;
+
+    //
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "username", referencedColumnName = "username")
-	private User user;
-	//
+    private User user;
+    //
 
-	
-	@OneToMany(cascade = CascadeType.ALL)
-	@JoinTable(name = "enano_jugador", joinColumns = @JoinColumn(name="enano"))
-	private List<Enano> enano;
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "enano_jugador", joinColumns = @JoinColumn(name = "enano"))
+    private List<Enano> enano;
 
-	
+    public User getUser() {
+        return user;
+    }
 
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
+    public void setUser(User user) {
+        this.user = user;
+    }
 
 }

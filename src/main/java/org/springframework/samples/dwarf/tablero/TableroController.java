@@ -2,7 +2,9 @@ package org.springframework.samples.dwarf.tablero;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collector;
@@ -181,6 +183,12 @@ public class TableroController {
         // Rondas
         model.addAttribute("ronda", table.getRonda());
 
+        // Resultados finales
+        if (table.getJugadores().get(0).getPosicionFinal() != null) {
+            model.addAttribute("jugadoresOrdenados",
+                    table.getJugadores().stream().sorted(Comparator.comparing(j -> j.getPosicionFinal())).toList());
+        }
+
         return tablero1;
     }
 
@@ -294,4 +302,64 @@ public class TableroController {
         return "redirect:/partida/" + id + "/comienza";
     }
 
+    @Transactional
+    @GetMapping("{partidaId}/fin")
+    public String finPartida(@PathVariable("partidaId") Integer id) {
+        Tablero tabla = taservice.findById(id);
+
+        // Comprobamos si tenemos ganador sin desempate
+        Map<String, Integer> mayorias = new HashMap<>();
+        // Inicializamos mayorias a 0
+        for (Jugador j : tabla.getJugadores()) {
+            mayorias.put(j.getUser().getUsername(), 0);
+        }
+
+        List<Integer> oro = tabla.getJugadores().stream().map(j -> j.getOro()).toList();
+        List<Integer> acero = tabla.getJugadores().stream().map(j -> j.getAcero()).toList();
+        List<Integer> objetos = tabla.getJugadores().stream().map(j -> j.getObjeto()).toList();
+
+        List<Integer> oroOrdenado = oro.stream().sorted(Comparator.reverseOrder()).toList();
+        // Si hay mayoria
+        if (oroOrdenado.get(0) != oroOrdenado.get(1)) {
+            String user = tabla.getJugadores().get(oro.indexOf(oroOrdenado.get(0))).getUser().getUsername();
+            mayorias.put(
+                    user,
+                    mayorias.get(user) + 1);
+        }
+
+        List<Integer> aceroOrdenado = acero.stream().sorted(Comparator.reverseOrder()).toList();
+        // Si hay mayoria
+        if (aceroOrdenado.get(0) != aceroOrdenado.get(1)) {
+            String user = tabla.getJugadores().get(acero.indexOf(aceroOrdenado.get(0))).getUser().getUsername();
+            mayorias.put(
+                    user,
+                    mayorias.get(user) + 1);
+        }
+
+        List<Integer> objetosOrdenado = objetos.stream().sorted(Comparator.reverseOrder()).toList();
+        // Si hay mayoria
+        if (objetosOrdenado.get(0) != objetosOrdenado.get(1)) {
+            String user = tabla.getJugadores().get(objetos.indexOf(objetosOrdenado.get(0))).getUser().getUsername();
+            mayorias.put(
+                    user,
+                    mayorias.get(user) + 1);
+        }
+
+        List<Jugador> results; // Orden de victoria
+        Comparator<Jugador> comparator = Comparator.comparing(j -> mayorias.get(j.getUser().getUsername()),
+                Comparator.reverseOrder());
+        comparator = comparator.thenComparing(Comparator.comparing(jugador -> jugador.getMedalla(),
+                Comparator.reverseOrder()));
+        comparator = comparator.thenComparing(Comparator.comparing(jugador -> jugador.getHierro(),
+                Comparator.reverseOrder()));
+
+        results = tabla.getJugadores().stream().sorted(comparator).toList();
+
+        // Guardamos las posiciones finales
+        for (int i = 0; i < results.size(); i++) {
+            results.get(i).setPosicionFinal(i + 1);
+        }
+
+        return "redirect:/partida/" + id;
+    }
 }
