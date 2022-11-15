@@ -15,6 +15,7 @@
  */
 package org.springframework.samples.dwarf.user;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
@@ -27,6 +28,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 /**
@@ -39,12 +41,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class UserController {
 
 	private static final String VIEWS_OWNER_CREATE_FORM = "users/createOwnerForm";
+	private static final String view_user = "users/showUser";
 
 	private final JugadorService ownerService;
+	private final UserService userService;
 
 	@Autowired
-	public UserController(JugadorService clinicService) {
+	public UserController(JugadorService clinicService, UserService userService) {
 		this.ownerService = clinicService;
+		this.userService= userService;
 	}
 
 	@InitBinder
@@ -69,6 +74,14 @@ public class UserController {
 			this.ownerService.saveOwner(owner);
 			return "redirect:/";
 		}
+	}
+	@GetMapping(value = "/users/{userid}")
+	public String showUser(@PathVariable("userid") String id,Map<String, Object> model){
+		User usuario = userService.findUser(id).get();
+		List<Jugador> jugadores = ownerService.findJugadorUser(id);
+		model.put("usuario", usuario);
+		model.put("jugadores", jugadores);
+		return view_user;
 	}
 
 }

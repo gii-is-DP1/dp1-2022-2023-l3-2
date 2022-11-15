@@ -16,6 +16,7 @@
 package org.springframework.samples.dwarf.jugador;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.jpa.repository.Query;
@@ -59,5 +60,8 @@ public interface JugadorRepository extends Repository<Jugador, Integer> {
 	 */	
 
 	public Jugador findById(@Param("id") int id);
+
+	public List<Jugador> findByUserUsername(String name);
+
 
 }
