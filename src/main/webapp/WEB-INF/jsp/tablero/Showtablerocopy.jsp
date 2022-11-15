@@ -126,6 +126,26 @@
             -webkit-backdrop-filter: blur(5px);
             border: 1px solid rgba(255, 255, 255, 0.3);
         }
+        .button-fin {
+            display: block;
+            width: 200px;
+            background: #4E9CAF;
+            padding: 15px;
+            text-align: center;
+            border-radius: 5px;
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+            line-height: 25px;
+            margin-top: 30px;
+        }
+        .button-fin:hover {
+            color: white;
+            cursor: pointer;
+            text-decoration: none;
+            transform: scale(1.1);
+            transition: transform .1s;
+        }
     </style>
     <c:if test="${jugadores.get(0).posicionFinal != null}">
         <div class="blur">
@@ -135,6 +155,9 @@
             <c:forEach items="${jugadoresOrdenados}" var="jugador">
                 <h2>${jugador.posicionFinal}. ${jugador.getUser().username}</h2>
             </c:forEach>
+            <a class="button-fin" href="/partida/${id_partida}/borrar_partida">
+                Finalizar partida
+            </a>
         </div>
     </c:if>
     <h1>${nombrePartida.toUpperCase()}</h1>

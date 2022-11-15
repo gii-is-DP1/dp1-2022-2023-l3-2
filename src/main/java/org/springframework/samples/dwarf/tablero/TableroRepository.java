@@ -21,4 +21,6 @@ public interface TableroRepository extends Repository<Tablero, String> {
 
     @Query("SELECT carta FROM Carta carta WHERE carta.posicion=:posicion")
     List<Carta> findByPosicion(Integer posicion);
+
+    void deleteById(Integer id);
 }
