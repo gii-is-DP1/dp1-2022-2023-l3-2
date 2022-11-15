@@ -140,7 +140,7 @@
             margin-top: 30px;
         }
         .button-fin:hover {
-            color: white;
+            color: rgb(0, 0, 0);
             cursor: pointer;
             text-decoration: none;
             transform: scale(1.1);
