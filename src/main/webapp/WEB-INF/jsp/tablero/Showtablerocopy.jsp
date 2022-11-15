@@ -72,7 +72,71 @@
             text-align: center;
             color: white;
         }
+
+        .container-fin {
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 160px;
+            background-color: #34302d;
+            width: 800px;
+            height: 500px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-radius: 20px;
+        }
+        .container-fin :nth-child(1) {
+            color: yellow;
+            font-size: 60px;
+            margin: 0 0 35px 0;
+            padding: 0;
+        }
+        .container-fin :nth-child(2) {
+            color: green;
+            font-size: 50px;
+            margin: 0 0 25px 0;
+            padding: 0;
+        }
+        .container-fin :nth-child(3) {
+            color: blue;
+            font-size: 40px;
+            margin: 0;
+            padding: 0;
+        }
+        .container-fin input {
+            color: white;
+        }
+        .blur {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 2490px;
+            z-index: 9998;
+
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
     </style>
+    <c:if test="${jugadores.get(0).posicionFinal != null}">
+        <div class="blur">
+
+        </div>
+        <div class="container-fin">
+            <c:forEach items="${jugadoresOrdenados}" var="jugador">
+                <h2>${jugador.posicionFinal}. ${jugador.getUser().username}</h2>
+            </c:forEach>
+        </div>
+    </c:if>
     <h1>${nombrePartida.toUpperCase()}</h1>
     <div class="ronda_container">
         <h2>RONDA</h2>

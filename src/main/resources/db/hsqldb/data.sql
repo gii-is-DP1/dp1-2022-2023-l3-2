@@ -40,9 +40,9 @@ INSERT INTO vet_specialties VALUES (4, 2);
 INSERT INTO vet_specialties VALUES (5, 1);
 
 
-INSERT INTO jugadores(id,first_name, last_name, acero,esespectador,hierro,medalla,objeto,oro,primerjugador,username) VALUES (1, 'Ernesto', 'Saquete Rios', 0, false,0,0,0,0,true,'ernsaqrio');
-INSERT INTO jugadores(id,first_name, last_name, acero,esespectador,hierro,medalla,objeto,oro,primerjugador,username) VALUES (2, 'Daniel', 'Diañez',0 ,false,0,0,0,0,false,'dandiasua');
-INSERT INTO jugadores(id,first_name, last_name, acero,esespectador,hierro,medalla,objeto,oro,primerjugador,username) VALUES (3, 'Rafael David', 'Garcia', 0,false,0,0,0,0,false,'rafgargal');
+INSERT INTO jugadores(id,first_name, last_name, acero,esespectador,hierro,medalla,objeto,oro,primerjugador,username, posicion_final) VALUES (1, 'Ernesto', 'Saquete Rios', 0, false,0,0,0,0,true,'ernsaqrio', null);
+INSERT INTO jugadores(id,first_name, last_name, acero,esespectador,hierro,medalla,objeto,oro,primerjugador,username, posicion_final) VALUES (2, 'Daniel', 'Diañez',0 ,false,0,0,0,0,false,'dandiasua', null);
+INSERT INTO jugadores(id,first_name, last_name, acero,esespectador,hierro,medalla,objeto,oro,primerjugador,username, posicion_final) VALUES (3, 'Rafael David', 'Garcia', 0,false,0,0,0,0,false,'rafgargal', null);
 
 
 INSERT INTO tipo_carta(id, name) VALUES
@@ -55,7 +55,7 @@ INSERT INTO tipo_carta(id, name) VALUES
 INSERT INTO tipo_logro(id, name) VALUES
 (0, 'partidas_ganadas'),
 (1, 'recursos_conseguidos'),
-(2, 'puntaje_mas_alto'); 
+(2, 'puntaje_mas_alto');
 
 INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve) VALUES(1, '/resources/images/Dimensionadas/001.png', 1, 1, null, null, 'hierro', 3);
 INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve) VALUES(2, '/resources/images/Dimensionadas/002.png', 2, 1, null, null, 'hierro', 3);
