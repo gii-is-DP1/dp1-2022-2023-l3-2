@@ -33,4 +33,8 @@ public class TableroService {
     public List<Carta> findByPosicion(Integer posicion) {
         return repo.findByPosicion(posicion);
     }
+
+    public void deleteById(Integer id) {
+        repo.deleteById(id);
+    }
 }

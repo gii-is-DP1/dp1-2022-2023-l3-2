@@ -362,4 +362,13 @@ public class TableroController {
 
         return "redirect:/partida/" + id;
     }
+
+    @Transactional
+    @GetMapping("{partidaId}/borrar_partida")
+    public String borrarPartida(@PathVariable("partidaId") Integer id) {
+
+        taservice.deleteById(id);
+
+        return "redirect:/";
+    }
 }
