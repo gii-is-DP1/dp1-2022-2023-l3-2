@@ -63,6 +63,11 @@ public class JugadorService {
 	}
 
 	@Transactional
+	public List<Jugador> findJugadorUser(String name){
+		return ownerRepository.findByUserUsername(name);
+	}
+
+	@Transactional
 	public void saveOwner(Jugador owner) throws DataAccessException {
 		//creating owner
 		ownerRepository.save(owner);		
