@@ -40,9 +40,15 @@ INSERT INTO vet_specialties VALUES (4, 2);
 INSERT INTO vet_specialties VALUES (5, 1);
 
 
-INSERT INTO jugadores(id,first_name, last_name, acero,esespectador,hierro,medalla,objeto,oro,primerjugador,username, posicion_final) VALUES (1, 'Ernesto', 'Saquete Rios', 0, false,0,0,0,0,true,'ernsaqrio', null);
-INSERT INTO jugadores(id,first_name, last_name, acero,esespectador,hierro,medalla,objeto,oro,primerjugador,username, posicion_final) VALUES (2, 'Daniel', 'Diañez',0 ,false,0,0,0,0,false,'dandiasua', null);
-INSERT INTO jugadores(id,first_name, last_name, acero,esespectador,hierro,medalla,objeto,oro,primerjugador,username, posicion_final) VALUES (3, 'Rafael David', 'Garcia', 0,false,0,0,0,0,false,'rafgargal', null);
+INSERT INTO jugadores(id,first_name, last_name, acero,esespectador,hierro,medalla,objeto,oro,primerjugador,username, posicion_final) VALUES
+(1, 'Ernesto', 'Saquete Rios', 0, false,0,0,0,0,true,'ernsaqrio', null),
+(2, 'Daniel', 'Diañez',0 ,false,0,0,0,0,false,'dandiasua', null),
+(3, 'Rafael David', 'Garcia', 0,false,0,0,0,0,false,'rafgargal', null);
+
+INSERT INTO estadistica(id, partidas_ganadas, partidas_perdidas, user_id) VALUES
+(1, 0, 0, 'jualeomad'),
+(2, 0, 0, 'rafgargal'),
+(3, 0, 0, 'dandiasua');
 
 
 INSERT INTO tipo_carta(id, name) VALUES

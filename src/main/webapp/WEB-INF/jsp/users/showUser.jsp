@@ -11,7 +11,7 @@
          Usuario:  ${usuario.username}
     </h2>
 
-    
+
     <br>
     Tabla de Jugadores
     <table id="jugadoresTable" class="table table-striped" style="width: 1100px;">
@@ -26,15 +26,15 @@
             <tr>
                 <c:forEach items="${jugadores}" var="jugador">
                     <td>
-            
+
                         <c:out value="${jugador.firstName}"></c:out>
-            
+
                     </td>
                     <td>
                         Oro: ${jugador.oro}, Acero: ${jugador.acero}, Hierro: ${jugador.hierro}, Medallas: ${jugador.medalla}, Objetos: ${jugador.objeto}
                     </td>
                     <td>
-                        
+
                     </td>
                 </c:forEach>
             </tr>
@@ -52,7 +52,7 @@
         </thead>
         <tbody>
             <tr>
-                
+
                     <td>
                         Ejemplo de nombre de Logro
                     </td>
@@ -62,6 +62,24 @@
                     <td>
                         Este es un logro de prueba
                     </td>
+            </tr>
+        </tbody>
+    </table>
+    <table id="estadisticas-table" class="table table-striped" style="width: 1100px;">
+        <thead>
+            <tr>
+                <th style="width: 200px; text-align: center;">Nombre estadistica</th>
+                <th style="width: 200px; text-align: center;">Valor</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Partidas ganadas</td>
+                <td>${usuario.estadistica.partidasGanadas}</td>
+            </tr>
+            <tr>
+                <td>Partidas perdidas</td>
+                <td>${usuario.estadistica.partidasPerdidas}</td>
             </tr>
         </tbody>
     </table>

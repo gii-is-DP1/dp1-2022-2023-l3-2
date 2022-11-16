@@ -40,48 +40,48 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class UserController {
 
-	private static final String VIEWS_OWNER_CREATE_FORM = "users/createOwnerForm";
-	private static final String view_user = "users/showUser";
+    private static final String VIEWS_OWNER_CREATE_FORM = "users/createOwnerForm";
+    private static final String view_user = "users/showUser";
 
-	private final JugadorService ownerService;
-	private final UserService userService;
+    private final JugadorService ownerService;
+    private final UserService userService;
 
-	@Autowired
-	public UserController(JugadorService clinicService, UserService userService) {
-		this.ownerService = clinicService;
-		this.userService= userService;
-	}
+    @Autowired
+    public UserController(JugadorService clinicService, UserService userService) {
+        this.ownerService = clinicService;
+        this.userService = userService;
+    }
 
-	@InitBinder
-	public void setAllowedFields(WebDataBinder dataBinder) {
-		dataBinder.setDisallowedFields("id");
-	}
+    @InitBinder
+    public void setAllowedFields(WebDataBinder dataBinder) {
+        dataBinder.setDisallowedFields("id");
+    }
 
-	@GetMapping(value = "/users/new")
-	public String initCreationForm(Map<String, Object> model) {
-		Jugador owner = new Jugador();
-		model.put("owner", owner);
-		return VIEWS_OWNER_CREATE_FORM;
-	}
+    @GetMapping(value = "/users/new")
+    public String initCreationForm(Map<String, Object> model) {
+        Jugador owner = new Jugador();
+        model.put("owner", owner);
+        return VIEWS_OWNER_CREATE_FORM;
+    }
 
-	@PostMapping(value = "/users/new")
-	public String processCreationForm(@Valid Jugador owner, BindingResult result) {
-		if (result.hasErrors()) {
-			return VIEWS_OWNER_CREATE_FORM;
-		}
-		else {
-			//creating owner, user, and authority
-			this.ownerService.saveOwner(owner);
-			return "redirect:/";
-		}
-	}
-	@GetMapping(value = "/users/{userid}")
-	public String showUser(@PathVariable("userid") String id,Map<String, Object> model){
-		User usuario = userService.findUser(id).get();
-		List<Jugador> jugadores = ownerService.findJugadorUser(id);
-		model.put("usuario", usuario);
-		model.put("jugadores", jugadores);
-		return view_user;
-	}
+    @PostMapping(value = "/users/new")
+    public String processCreationForm(@Valid Jugador owner, BindingResult result) {
+        if (result.hasErrors()) {
+            return VIEWS_OWNER_CREATE_FORM;
+        } else {
+            // creating owner, user, and authority
+            this.ownerService.saveOwner(owner);
+            return "redirect:/";
+        }
+    }
+
+    @GetMapping(value = "/users/{userid}")
+    public String showUser(@PathVariable("userid") String id, Map<String, Object> model) {
+        User usuario = userService.findUser(id).get();
+        List<Jugador> jugadores = ownerService.findJugadorUser(id);
+        model.put("usuario", usuario);
+        model.put("jugadores", jugadores);
+        return view_user;
+    }
 
 }
