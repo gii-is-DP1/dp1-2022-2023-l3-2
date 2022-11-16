@@ -57,6 +57,29 @@ INSERT INTO tipo_logro(id, name) VALUES
 (1, 'recursos_conseguidos'),
 (2, 'puntaje_mas_alto');
 
+INSERT INTO logro(id, name, descripcion, dificultad, requisito, tipo) VALUES
+(1, '10 victorias', 'Se consigue al ganar 10 partidas', 1, 10, 0),
+(2, '50 victorias', 'Se consigue al ganar 50 partidas', 2, 50, 0),
+(3, '100 victorias', 'Se consigue al ganar 100 partidas', 2, 100, 0),
+(4, '1000 victorias', 'Se consigue al ganar 1000 partidas', 3, 1000, 0),
+(5, '100 hierro', 'Se consigue al coleccionar 100 de hierro', 1, 100, 1),
+(6, '1000 hierro', 'Se consigue al coleccionar 1000 de hierro', 2, 1000, 1),
+(7, '10000 hierro', 'Se consigue al coleccionar 10000 de hierro', 3, 10000, 1),
+(8, '100 oro', 'Se consigue al coleccionar 100 de oro', 1, 100, 1),
+(9, '1000 oro', 'Se consigue al coleccionar 1000 de oro', 2, 1000, 1),
+(10, '5000 oro', 'Se consigue al coleccionar 5000 de oro', 3, 5000, 1),
+(11, '100 acero', 'Se consigue al coleccionar 100 de acero', 1, 100, 1),
+(12, '1000 acero', 'Se consigue al coleccionar 1000 de acero', 2, 1000, 1),
+(13, '5000 acero', 'Se consigue al coleccionar 5000 de acero', 3, 5000, 1),
+(14, '50 objetos', 'Se consigue al coleccionar 50 objetos', 1, 50, 1),
+(15, '200 objetos', 'Se consigue al coleccionar 200 objetos', 2, 200, 1),
+(16, '1000 objetos', 'Se consigue al coleccionar 1000 objetos', 3, 1000, 1),
+(17, '50 medallas', 'Se consigue al coleccionar 50 medallas', 1, 50, 1),
+(18, '200 medallas', 'Se consigue al coleccionar 200 medallas', 2, 200, 1),
+(19, '1000 medallas', 'Se consigue al coleccionar 1000 medallas', 3, 1000, 1);
+
+
+
 INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve) VALUES(1, '/resources/images/Dimensionadas/001.png', 1, 1, null, null, 'hierro', 3);
 INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve) VALUES(2, '/resources/images/Dimensionadas/002.png', 2, 1, null, null, 'hierro', 3);
 INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve) VALUES(3, '/resources/images/Dimensionadas/003.png', 3, 1, null, null, 'hierro', 3);
