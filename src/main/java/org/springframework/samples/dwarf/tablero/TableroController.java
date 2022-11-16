@@ -189,15 +189,16 @@ public class TableroController {
                     table.getJugadores().stream().sorted(Comparator.comparing(j -> j.getPosicionFinal())).toList());
         }
 
-/*      Finalizacion automatica provisional 
-        for(Jugador j: table.getJugadores()){
-            if(j.getObjeto()==4){
+        if (table.getJugadores().get(0).getPosicionFinal() == null) {
+            for (Jugador j : table.getJugadores()) {
+                if (j.getObjeto() == 4) {
+                    return "redirect:/partida/" + id + "/fin";
+                }
+            }
+            if (table.getMazos().get(12).getCartas().size() == 0) {
                 return "redirect:/partida/" + id + "/fin";
             }
         }
-        if(table.getMazos().get(12).getCartas().size()==0){
-            return "redirect:/partida/" + id + "/fin";
-        } */
         return tablero1;
     }
 
@@ -206,39 +207,37 @@ public class TableroController {
     public String rondaPrincipio(@PathVariable("partidaId") Integer id) {
         Tablero tabla = taservice.findById(id);
 
-            List<Carta> baraja = tabla.getMazos().get(tabla.getMazos().size() - 1).getCartas();
-            Double num1 = Math.floor(Math.random() * baraja.size() + 1);
-            Double num2 = Math.floor(Math.random() * baraja.size() + 1);
-            final Integer numero1 = num1.intValue();
-            final Integer numero2 = num2.intValue();
-            Integer posicion1 = taservice.findCartaById(numero1).getPosicion();
-            Integer posicion2 = taservice.findCartaById(numero2).getPosicion();
-            if(posicion1 != posicion2){
-                Mazo mazo = tabla.getMazos().get(posicion1 - 1);
-                Mazo mazo2 = tabla.getMazos().get(posicion2 - 1);
-                mazo.getCartas().add(0, taservice.findCartaById(numero1));
-                mazo2.getCartas().add(0, taservice.findCartaById(numero2));
-                Mazo mazo1 = tabla.getMazos().get(12); 
-                mazo1.getCartas().remove(taservice.findCartaById(numero1));
-                mazo1.getCartas().remove(taservice.findCartaById(numero2));
-            }
-            else if(posicion1==posicion2){
-                Double num3 = Math.floor(Math.random() * baraja.size() + 1);
-                final Integer numero3 = num3.intValue();
-                Integer posicion3 = taservice.findCartaById(numero3).getPosicion();
-                Mazo mazo = tabla.getMazos().get(posicion1 - 1);
-                Mazo mazo2 = tabla.getMazos().get(posicion2 - 1);
-                Mazo mazo3 = tabla.getMazos().get(posicion3 - 1);
-                mazo.getCartas().add(0, taservice.findCartaById(numero1));
-                mazo2.getCartas().add(0, taservice.findCartaById(numero2));
-                mazo3.getCartas().add(0,taservice.findCartaById(numero3));
-                Mazo mazo1 = tabla.getMazos().get(12); 
-                mazo1.getCartas().remove(taservice.findCartaById(numero1));
-                mazo1.getCartas().remove(taservice.findCartaById(numero2));
-                mazo1.getCartas().remove(taservice.findCartaById(numero3));
-            }
-             
-        
+        List<Carta> baraja = tabla.getMazos().get(tabla.getMazos().size() - 1).getCartas();
+        Double num1 = Math.floor(Math.random() * baraja.size() + 1);
+        Double num2 = Math.floor(Math.random() * baraja.size() + 1);
+        final Integer numero1 = num1.intValue();
+        final Integer numero2 = num2.intValue();
+        Integer posicion1 = taservice.findCartaById(numero1).getPosicion();
+        Integer posicion2 = taservice.findCartaById(numero2).getPosicion();
+        if (posicion1 != posicion2) {
+            Mazo mazo = tabla.getMazos().get(posicion1 - 1);
+            Mazo mazo2 = tabla.getMazos().get(posicion2 - 1);
+            mazo.getCartas().add(0, taservice.findCartaById(numero1));
+            mazo2.getCartas().add(0, taservice.findCartaById(numero2));
+            Mazo mazo1 = tabla.getMazos().get(12);
+            mazo1.getCartas().remove(taservice.findCartaById(numero1));
+            mazo1.getCartas().remove(taservice.findCartaById(numero2));
+        } else if (posicion1 == posicion2) {
+            Double num3 = Math.floor(Math.random() * baraja.size() + 1);
+            final Integer numero3 = num3.intValue();
+            Integer posicion3 = taservice.findCartaById(numero3).getPosicion();
+            Mazo mazo = tabla.getMazos().get(posicion1 - 1);
+            Mazo mazo2 = tabla.getMazos().get(posicion2 - 1);
+            Mazo mazo3 = tabla.getMazos().get(posicion3 - 1);
+            mazo.getCartas().add(0, taservice.findCartaById(numero1));
+            mazo2.getCartas().add(0, taservice.findCartaById(numero2));
+            mazo3.getCartas().add(0, taservice.findCartaById(numero3));
+            Mazo mazo1 = tabla.getMazos().get(12);
+            mazo1.getCartas().remove(taservice.findCartaById(numero1));
+            mazo1.getCartas().remove(taservice.findCartaById(numero2));
+            mazo1.getCartas().remove(taservice.findCartaById(numero3));
+        }
+
         List<Jugador> jugadores = tabla.getJugadores();
         for (Jugador j : jugadores) {
             List<Enano> enanos = new ArrayList<>();
@@ -400,7 +399,6 @@ public class TableroController {
     @GetMapping("{partidaId}/borrar_partida")
     public String borrarPartida(@PathVariable("partidaId") Integer id) {
         // Acaba cuando un jugador tiene 4 objetos o la baraja no tiene mas cartas
-        
 
         return "redirect:/";
     }
