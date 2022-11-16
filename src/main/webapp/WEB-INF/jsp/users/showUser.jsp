@@ -42,27 +42,26 @@
     </table>
     <br>
     Tabla de logros
-    <table id="logrosTable" class="table table-striped" style="width: 1100px;">
+    <table id="logrosTable" class="table table-striped">
         <thead>
-            <tr>
-                <th style="width: 200px; text-align: center;">Nombre de Logro</th>
-                <th style="width: 200px; text-align: center;">Dificultad</th>
-                <th style="width: 200px; text-align: center;">Descripcion</th>
-            </tr>
+        <tr>
+            <th style="width: 150px;">Nombre</th>
+            <th style="width: 150px;">Descripcion</th>
+            <th style="width: 150px;">Dificultad</th>
+            <th style="width: 150px;">Requisito</th>
+            <th style="width: 150px;">Tipo</th>
+        </tr>
         </thead>
         <tbody>
+        <c:forEach items="${logros}" var="logro">
             <tr>
-
-                    <td>
-                        Ejemplo de nombre de Logro
-                    </td>
-                    <td>
-                        Ejemplo de dificultad (2 estrellas)
-                    </td>
-                    <td>
-                        Este es un logro de prueba
-                    </td>
+                <td>${logro.name}</td>
+                <td>${logro.descripcion}</td>
+                <td>${"&#11088".repeat(logro.dificultad)}</td>
+                <td>${logro.requisito}</td>
+                <td>${logro.tipo.name.replace("_", " ").toUpperCase()}</td>
             </tr>
+        </c:forEach>
         </tbody>
     </table>
     <table id="estadisticas-table" class="table table-striped" style="width: 1100px;">
