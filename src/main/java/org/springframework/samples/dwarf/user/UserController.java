@@ -23,6 +23,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.dwarf.jugador.Jugador;
 import org.springframework.samples.dwarf.jugador.JugadorService;
+import org.springframework.samples.dwarf.logro.LogroService;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
@@ -46,11 +47,13 @@ public class UserController {
 
     private final JugadorService ownerService;
     private final UserService userService;
+    private final LogroService logroService;
 
     @Autowired
-    public UserController(JugadorService clinicService, UserService userService) {
+    public UserController(JugadorService clinicService, UserService userService, LogroService logroService) {
         this.ownerService = clinicService;
         this.userService = userService;
+        this.logroService = logroService;
     }
 
     @InitBinder

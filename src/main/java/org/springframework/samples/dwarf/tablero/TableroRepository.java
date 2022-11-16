@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.springframework.dao.DataAccessException;
 
+@org.springframework.stereotype.Repository
 public interface TableroRepository extends Repository<Tablero, String> {
 
     void save(Tablero tabla) throws DataAccessException;

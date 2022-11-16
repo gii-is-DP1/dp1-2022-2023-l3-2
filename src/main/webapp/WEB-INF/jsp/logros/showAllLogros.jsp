@@ -5,22 +5,28 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
 
-<petclinic:layout pageName="owners">
-    <h2>Usuarios</h2>
+<petclinic:layout pageName="Logros">
+    <h2>Logros</h2>
 
-    <table id="jugadoresTable" class="table table-striped">
+    <table id="logrosTable" class="table table-striped">
         <thead>
         <tr>
-            <th style="width: 150px;">Username</th>
+            <th style="width: 150px;">Nombre</th>
+            <th style="width: 150px;">Descripcion</th>
+            <th style="width: 150px;">Dificultad</th>
+            <th style="width: 150px;">Requisito</th>
+            <th style="width: 150px;">Tipo</th>
         </tr>
         </thead>
         <tbody>
-        <c:forEach items="${usuarios}" var="usuario">
+        <c:forEach items="${logros}" var="logro">
             <tr>
-                <td>
-                    <a href="/users/${usuario.username}">${usuario.username}</a>
-                </td>
-
+                <td>${logro.name}</td>
+                <td>${logro.descripcion}</td>
+                <td>${logro.dificultad}</td>
+                <td>${logro.requisito}</td>
+                <td>${logro.tipo.name.replace("_", " ").toUpperCase()}</td>
+                <!-- logro(id, name, descripcion, dificultad, requisito, tipo) -->
 
 <!--
                 <td>
