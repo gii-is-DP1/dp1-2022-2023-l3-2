@@ -42,6 +42,7 @@ public class UserController {
 
     private static final String VIEWS_OWNER_CREATE_FORM = "users/createOwnerForm";
     private static final String view_user = "users/showUser";
+    private static final String VIEW_USERS_LIST = "users/usersList";
 
     private final JugadorService ownerService;
     private final UserService userService;
@@ -55,6 +56,13 @@ public class UserController {
     @InitBinder
     public void setAllowedFields(WebDataBinder dataBinder) {
         dataBinder.setDisallowedFields("id");
+    }
+
+    @GetMapping(value = "/users")
+    public String usersList(Map<String, Object> model) {
+        List<User> usuarios = userService.findAll();
+        model.put("usuarios", usuarios);
+        return VIEW_USERS_LIST;
     }
 
     @GetMapping(value = "/users/new")
