@@ -15,7 +15,8 @@
  */
 package org.springframework.samples.dwarf.user;
 
-
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,20 +33,29 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class UserService {
 
-	private UserRepository userRepository;
+    private UserRepository userRepository;
 
-	@Autowired
-	public UserService(UserRepository userRepository) {
-		this.userRepository = userRepository;
-	}
+    @Autowired
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
-	@Transactional
-	public void saveUser(User user) throws DataAccessException {
-		user.setEnabled(true);
-		userRepository.save(user);
-	}
-	
-	public Optional<User> findUser(String username) {
-		return userRepository.findById(username);
-	}
+    @Transactional
+    public void saveUser(User user) throws DataAccessException {
+        user.setEnabled(true);
+        userRepository.save(user);
+    }
+
+    public List<User> findAll() {
+        Iterable<User> users = userRepository.findAll();
+        List<User> usersList = new ArrayList<>();
+        for (User u : users) {
+            usersList.add(u);
+        }
+        return usersList;
+    }
+
+    public Optional<User> findUser(String username) {
+        return userRepository.findById(username);
+    }
 }
