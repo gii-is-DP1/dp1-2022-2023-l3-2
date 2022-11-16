@@ -7,6 +7,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.samples.dwarf.model.NamedEntity;
@@ -23,12 +24,13 @@ public class Logro extends NamedEntity {
 
     @NotNull
     @Max(value=3)
-    @Min(value=0)
+    @Min(value=1)
     private Integer dificultad;
 
-    private String requisito;
+    @NotEmpty
+    private Integer requisito;
 
     @ManyToOne
-    @JoinColumn(name = "tipo", referencedColumnName = "name")
+    @JoinColumn(name = "tipo")
     private TipoLogro tipo;
 }
