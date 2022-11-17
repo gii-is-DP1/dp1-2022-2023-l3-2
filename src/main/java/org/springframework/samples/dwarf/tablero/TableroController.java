@@ -14,9 +14,14 @@ import javax.transaction.Transactional;
 import javax.validation.Valid;
 import javax.websocket.server.PathParam;
 
+import org.springframework.security.core.userdetails.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.dwarf.jugador.Jugador;
 import org.springframework.samples.dwarf.jugador.JugadorService;
+
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -260,35 +265,49 @@ public class TableroController {
 
         Tablero tabla = taservice.findById(id);
 
-        List<Enano> enanosJugador = tabla.getJugadores().stream()
-                .filter(jugador -> jugador.getUser().getUsername().equals(username))
-                .toList().get(0).getEnano();
-        for (Enano e : enanosJugador) {
-            if (e.getPosicion() == 12) {
-                e.setPosicion(posicion);
-                for (Mazo m : tabla.getMazos()) {
-                    if (posicion == m.getPosicion())
-                        e.setMazo(m);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null) {
+            if (authentication.isAuthenticated()) {
+                User currentUser = (User) authentication.getPrincipal();
+                if (!username.equals(currentUser.getUsername())) {
+                    System.out.println("#".repeat(200));
+                    return "redirect:/partida/" + id;
                 }
-                break;
+                System.out.println(currentUser.getUsername() + "#".repeat(200));
+               
 
+                List<Enano> enanosJugador = tabla.getJugadores().stream()
+                        .filter(jugador -> jugador.getUser().getUsername().equals(username))
+                        .toList().get(0).getEnano();
+                for (Enano e : enanosJugador) {
+                    if (e.getPosicion() == 12) {
+                        e.setPosicion(posicion);
+                        for (Mazo m : tabla.getMazos()) {
+                            if (posicion == m.getPosicion())
+                                e.setMazo(m);
+                        }
+                        break;
+
+                    }
+                }
+
+                for (Jugador j : tabla.getJugadores()) {
+                    Integer cont = 0;
+                    for (Enano e : j.getEnano()) {
+                        if (e.getPosicion() != 12) {
+                            cont++;
+                            System.out.println("Esto es N:" + cont);
+                        }
+                    }
+                    if (cont < 2) {
+                        return "redirect:/partida/" + id;
+                    }
+                }
+
+                return "redirect:/partida/" + id + "/recursos";
             }
         }
-
-        for (Jugador j : tabla.getJugadores()) {
-            Integer cont = 0;
-            for (Enano e : j.getEnano()) {
-                if (e.getPosicion() != 12) {
-                    cont++;
-                    System.out.println("Esto es N:" + cont);
-                }
-            }
-            if (cont < 2) {
-                return "redirect:/partida/" + id;
-            }
-        }
-
-        return "redirect:/partida/" + id + "/recursos";
+        return "redirect:/login/";
 
     }
 
