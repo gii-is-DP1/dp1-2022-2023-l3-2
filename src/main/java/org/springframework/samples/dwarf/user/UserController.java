@@ -33,6 +33,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 /**
  * @author Juergen Hoeller
@@ -70,21 +71,21 @@ public class UserController {
         return VIEW_USERS_LIST;
     }
 
-    @GetMapping(value = "/users/new")
+    @GetMapping(value = "/users/find")
     public String initCreationForm(Map<String, Object> model) {
-        Jugador owner = new Jugador();
-        model.put("owner", owner);
-        return VIEWS_OWNER_CREATE_FORM;
+        User user = new User();
+        model.put("user", user);
+        return "users/findUsers";
     }
 
-    @PostMapping(value = "/users/new")
-    public String processCreationForm(@Valid Jugador owner, BindingResult result) {
+    @PostMapping(value = "/users/find")
+    public String processCreationForm(Map<String, Object> model, @Valid User user, BindingResult result) {
         if (result.hasErrors()) {
-            return VIEWS_OWNER_CREATE_FORM;
+            return "users/findUsers";
         } else {
             // creating owner, user, and authority
-            this.ownerService.saveOwner(owner);
-            return "redirect:/";
+            model.put("usuarios", userService.findUserByString(user.username));
+            return VIEW_USERS_LIST;
         }
     }
 
