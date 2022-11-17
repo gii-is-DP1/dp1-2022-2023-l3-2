@@ -28,10 +28,10 @@
 					<span>Home</span>
 				</petclinic:menuItem>
 
-				<petclinic:menuItem active="${name eq 'owners'}" url="/jugador/find"
+				<petclinic:menuItem active="${name eq 'owners'}" url="/users/find"
 					title="find owners">
 					<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-					<span>Encontrar Jugadores</span>
+					<span>Usuarios</span>
 				</petclinic:menuItem>
 
 				<petclinic:menuItem active="${name eq 'tablero'}" url="/partida/"
@@ -84,8 +84,8 @@
 								</div>
 							</li>
 							<li class="divider"></li>
-<!-- 							
-                            <li> 
+<!--
+                            <li>
 								<div class="navbar-login navbar-login-session">
 									<div class="row">
 										<div class="col-lg-12">

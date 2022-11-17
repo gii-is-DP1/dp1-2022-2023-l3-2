@@ -58,4 +58,8 @@ public class UserService {
     public Optional<User> findUser(String username) {
         return userRepository.findById(username);
     }
+
+    public List<User> findUserByString(String username) {
+        return this.findAll().stream().filter(user -> user.getUsername().contains(username)).toList();
+    };
 }
