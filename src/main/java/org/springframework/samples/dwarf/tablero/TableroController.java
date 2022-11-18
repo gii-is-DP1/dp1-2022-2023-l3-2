@@ -105,7 +105,7 @@ public class TableroController {
     @Transactional
     @GetMapping("/{partidaId}")
     public String showTablero(@PathVariable("partidaId") Integer id, Model model, HttpServletResponse response) {
-        /* response.addHeader("Refresh", "2"); */
+        response.addHeader("Refresh", "3"); 
         Tablero table = taservice.findById(id);
         List<Mazo> mazo = table.getMazos();
         List<Mazo> mazo1 = mazo.subList(0, 3);
@@ -132,27 +132,27 @@ public class TableroController {
             Jugador j = table.getJugadores().get(i);
             Integer enanosSituados = j.getEnano().stream().filter(e -> e.getPosicion() != 12).toList().size();
             if (1 == enanosSituados) {
-                j.setPrimerjugador(false);
+                j.setTurno(false);
                 if (i == table.getJugadores().size() - 1) {
-                    table.getJugadores().get(0).setPrimerjugador(true);
+                    table.getJugadores().get(0).setTurno(true);
                     break;
                 }
-                table.getJugadores().get(i + 1).setPrimerjugador(true);
+                table.getJugadores().get(i + 1).setTurno(true);
             }
         }
         for (int t = 0; t < table.getJugadores().size(); t++) {
             Jugador j = table.getJugadores().get(t);
             Integer enanosSituados = j.getEnano().stream().filter(e -> e.getPosicion() != 12).toList().size();
             if (2 == enanosSituados) {
-                j.setPrimerjugador(false);
+                j.setTurno(false);
                 if (t == table.getJugadores().size() - 1) {
-                    table.getJugadores().get(0).setPrimerjugador(true);
+                    table.getJugadores().get(0).setTurno(true);
                     break;
                 }
-                table.getJugadores().get(t + 1).setPrimerjugador(true);
+                table.getJugadores().get(t + 1).setTurno(true);
             }
         }
-        String username = table.getJugadores().stream().filter(j -> j.isPrimerjugador()).toList().get(0).getUser()
+        String username = table.getJugadores().stream().filter(j -> j.isTurno()).toList().get(0).getUser()
                 .getUsername();
         model.addAttribute("username", username);
         model.addAttribute("tablero1", mazo1);
@@ -319,8 +319,8 @@ public class TableroController {
          * Carta primera = tabla.getJugadores().stream().filter(jugador ->
          * jugador.getEnano())
          */
-        tabla.getJugadores().stream().filter(j -> j.isPrimerjugador()).toList().get(0).setPrimerjugador(false);
-        tabla.getJugadores().get(0).setPrimerjugador(true);
+        tabla.getJugadores().stream().filter(j -> j.isTurno()).toList().get(0).setTurno(false);
+        tabla.getJugadores().get(0).setTurno(true);
 
         for (Jugador j : tabla.getJugadores()) {
             for (Enano e : j.getEnano()) {
