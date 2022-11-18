@@ -167,7 +167,7 @@
     </div>
     <div class="turno_container">
         <h2>TURNO</h2>
-        <h2 style="font-size: 30px;">${jugadores.stream().filter(j -> j.primerjugador).toList().get(0).getUser().username}</h2>
+        <h2 style="font-size: 30px;">${jugadores.stream().filter(j -> j.turno).toList().get(0).getUser().username}</h2>
     </div>
     <table id="tableroTable" class="table table-striped" style="width: 1100px;">
         <thead>

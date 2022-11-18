@@ -58,6 +58,8 @@ import lombok.Setter;
 @Table(name = "jugadores")
 public class Jugador extends Person {
 
+    private boolean turno;
+
     private boolean primerjugador;
 
     private boolean esespectador;
