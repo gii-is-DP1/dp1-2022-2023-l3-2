@@ -36,4 +36,28 @@ public class Tablero extends NamedEntity {
     public Integer getNumJugadores() {
         return jugadores.size();
     }
+
+    public boolean estaEnTablero(int cartaId) {
+        int res = mazos.stream().filter(mazo -> mazo.getFirstCarta().getId() == cartaId).toList().size();
+        return res >= 1 ? true : false;
+    }
+
+    public boolean tieneEnanoEncima(int cartaId) {
+        List<Enano> todosLosEnanos = new ArrayList<>();
+        for (Jugador j : this.jugadores) {
+            for (Enano e : j.getEnano()) {
+                todosLosEnanos.add(e);
+            }
+        }
+        List<Mazo> mazosConEnanoEncima = todosLosEnanos.stream().filter(e -> e.getMazo() != null)
+                .map(e -> e.getMazo()).toList();
+
+        int res = mazos.stream().filter(mazo -> mazo.getFirstCarta().getId() == cartaId).toList().size();
+
+        return ((res >= 1)
+                && mazosConEnanoEncima.stream().map(mazo -> mazo.getFirstCarta().getId()).toList().contains(cartaId))
+                        ? true
+                        : false;
+
+    }
 }
