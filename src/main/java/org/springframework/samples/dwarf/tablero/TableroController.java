@@ -105,7 +105,7 @@ public class TableroController {
     @Transactional
     @GetMapping("/{partidaId}")
     public String showTablero(@PathVariable("partidaId") Integer id, Model model, HttpServletResponse response) {
-        response.addHeader("Refresh", "3"); 
+        response.addHeader("Refresh", "3");
         Tablero table = taservice.findById(id);
         List<Mazo> mazo = table.getMazos();
         List<Mazo> mazo1 = mazo.subList(0, 3);
@@ -269,12 +269,11 @@ public class TableroController {
         if (authentication != null) {
             if (authentication.isAuthenticated()) {
                 User currentUser = (User) authentication.getPrincipal();
-                if (!username.equals(currentUser.getUsername())) {
+                if (!username.equals(currentUser.getUsername()) && false) { // Cambiar para usar autenticacion
                     System.out.println("#".repeat(200));
                     return "redirect:/partida/" + id;
                 }
                 System.out.println(currentUser.getUsername() + "#".repeat(200));
-               
 
                 List<Enano> enanosJugador = tabla.getJugadores().stream()
                         .filter(jugador -> jugador.getUser().getUsername().equals(username))
@@ -322,23 +321,61 @@ public class TableroController {
         tabla.getJugadores().stream().filter(j -> j.isTurno()).toList().get(0).setTurno(false);
         tabla.getJugadores().get(0).setTurno(true);
 
+        // Manejo cartas no comunes
+
+        boolean farmeo = true;
+
+        final List<Integer> ORCOS = Arrays.asList(11, 20, 30, 49);
+        if (ORCOS.stream().anyMatch(cartaId -> tabla.estaEnTablero(cartaId) && !tabla.tieneEnanoEncima(cartaId))) {
+            farmeo = false;
+        }
+
+        final List<Integer> GRAN_DRAGONES = Arrays.asList(13, 48);
+        if (GRAN_DRAGONES.stream()
+                .anyMatch(cartaId -> tabla.estaEnTablero(cartaId) && !tabla.tieneEnanoEncima(cartaId))) {
+            // Si no se defiende le quita 1 de oro a cada jugador
+            tabla.getJugadores().forEach(jugador -> jugador.setOro(jugador.getOro() - 1));
+        }
+
+        final List<Integer> DRAGONES = Arrays.asList(22, 27, 35);
+        if (DRAGONES.stream().anyMatch(cartaId -> tabla.estaEnTablero(cartaId) && !tabla.tieneEnanoEncima(cartaId))) {
+            // Si no se defiende le quita 1 de oro a cada jugador
+            tabla.getJugadores().forEach(jugador -> jugador.setOro(jugador.getOro() - 1));
+        }
+        final List<Integer> KNOCKERS = Arrays.asList(14, 42, 43, 53);
+        if (KNOCKERS.stream().anyMatch(cartaId -> tabla.estaEnTablero(cartaId) && !tabla.tieneEnanoEncima(cartaId))) {
+            // Si no se defiende le quita 1 de hierro a cada jugador
+            tabla.getJugadores().forEach(jugador -> jugador.setHierro(jugador.getHierro() - 1));
+        }
+
+        final List<Integer> SIDHES = Arrays.asList(37, 38, 47);
+        if (SIDHES.stream().anyMatch(cartaId -> tabla.estaEnTablero(cartaId) && !tabla.tieneEnanoEncima(cartaId))) {
+            // Si no se defiende cambia 2 oro por 2 hierro
+            tabla.getJugadores().forEach(jugador -> {
+                jugador.setOro(jugador.getOro() - 2);
+                jugador.setHierro(jugador.getHierro() + 2);
+            });
+        }
+
+        // ========================
+
         for (Jugador j : tabla.getJugadores()) {
             for (Enano e : j.getEnano()) {
                 if (e.getPosicion() != 12) {
                     Carta primera = e.getMazo().getFirstCarta();
-                    if (primera.getDevuelve().equals("hierro")) {
+                    if (primera.getDevuelve().equals("hierro") && farmeo) {
                         j.setHierro(j.getHierro() + primera.getCantidaddevuelve());
                     }
-                    if (primera.getDevuelve().equals("oro")) {
+                    if (primera.getDevuelve().equals("oro") && farmeo) {
                         j.setOro(j.getOro() + primera.getCantidaddevuelve());
                     }
-                    if (primera.getDevuelve().equals("medalla")) {
+                    if (primera.getDevuelve().equals("medalla") && farmeo) {
                         j.setMedalla(j.getMedalla() + primera.getCantidaddevuelve());
                     }
-                    if (primera.getDevuelve().equals("acero")) {
+                    if (primera.getDevuelve().equals("acero") && farmeo) {
                         j.setAcero(j.getAcero() + primera.getCantidaddevuelve());
                     }
-                    if (primera.getDevuelve().equals("objeto")) {
+                    if (primera.getDevuelve().equals("objeto") && farmeo) {
                         j.setObjeto(j.getObjeto() + primera.getCantidaddevuelve());
                     }
                     e.setPosicion(12);
