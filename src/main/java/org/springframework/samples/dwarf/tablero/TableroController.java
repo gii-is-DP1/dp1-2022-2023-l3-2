@@ -42,6 +42,8 @@ public class TableroController {
     private TableroService taservice;
     private JugadorService jugadorService;
 
+    List<Integer> cartasAyuda = Arrays.asList(24,32,39,52);
+
     @Autowired
     public TableroController(TableroService service, JugadorService jugadorService) {
         this.taservice = service;
@@ -146,12 +148,32 @@ public class TableroController {
             if (2 == enanosSituados) {
                 j.setTurno(false);
                 if (t == table.getJugadores().size() - 1) {
+
                     table.getJugadores().get(0).setTurno(true);
                     break;
                 }
                 table.getJugadores().get(t + 1).setTurno(true);
             }
         }
+
+        for(Integer carta : cartasAyuda){
+            if(table.estaEnTablero(carta)){
+                for (int t = 0; t < table.getJugadores().size(); t++) {
+                    Jugador j = table.getJugadores().get(t);
+                    Integer enanosSituados = j.getEnano().stream().filter(e -> e.getPosicion() != 12).toList().size();
+                    if (2 < enanosSituados) {
+                        j.setTurno(false);
+                        Integer posicionCarta = taservice.findCartaById(carta).getPosicion();
+                        Jugador jugadorConAyuda = table.getJugadores().stream().filter(jugador -> jugador.getEnano().stream().anyMatch(e -> e.getPosicion()==posicionCarta)).toList().get(0);
+                        jugadorConAyuda.setTurno(true);
+                    }
+                }
+            }
+        }
+
+
+
+
         String username = table.getJugadores().stream().filter(j -> j.isTurno()).toList().get(0).getUser()
                 .getUsername();
         model.addAttribute("username", username);
@@ -290,6 +312,19 @@ public class TableroController {
                     }
                 }
 
+                boolean noAyuda = true;
+                Jugador jugadorConAyuda = null;
+                for(Integer i : cartasAyuda){
+                    if(tabla.estaEnTablero(i)){
+                         if(tabla.tieneEnanoEncima(i)){
+                            noAyuda = false;
+                            Integer posicionCarta = taservice.findCartaById(i).getPosicion();
+                            jugadorConAyuda = tabla.getJugadores().stream().filter(j -> j.getEnano().stream().anyMatch(e -> e.getPosicion()==posicionCarta)).toList().get(0);
+                        } 
+                    }
+ 
+                }
+
                 for (Jugador j : tabla.getJugadores()) {
                     Integer cont = 0;
                     for (Enano e : j.getEnano()) {
@@ -298,8 +333,14 @@ public class TableroController {
                             System.out.println("Esto es N:" + cont);
                         }
                     }
-                    if (cont < 2) {
+                    if (cont < 2 && noAyuda) {
                         return "redirect:/partida/" + id;
+                    }
+                    else if(!noAyuda && jugadorConAyuda!=null){
+                        Integer enanosColocados = jugadorConAyuda.getEnano().stream().filter(e -> e.getPosicion()!=12).toList().size();
+                        if(enanosColocados<4){
+                            return "redirect:/partida/" + id;
+                        }
                     }
                 }
 
@@ -336,6 +377,9 @@ public class TableroController {
             for (Enano e : j.getEnano()) {
                 if (e.getPosicion() != 12) {
                     Carta primera = e.getMazo().getFirstCarta();
+                    if(cartasAyuda.contains(primera.getId())){
+                        continue;
+                    }
                     if (primera.getDevuelve().equals("hierro") && farmeo) {
                         j.setHierro(j.getHierro() + primera.getCantidaddevuelve());
                     }
