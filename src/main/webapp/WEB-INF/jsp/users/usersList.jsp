@@ -67,11 +67,13 @@
     </style>
 
     <div style="display: flex; flex-direction: row; margin: 0 auto; width: fit-content; gap:15px;">
-        <a href="/users?page=${paginaActual-1}", style="width: 50px; height: 50px; text-decoration: none;" >
-            <div class="boton-pagina">
-                <
-            </div>
-        </a>
+        <c:if test="${paginaActual != 0}">
+            <a href="/users?page=${paginaActual-1}", style="width: 50px; height: 50px; text-decoration: none;" >
+                <div class="boton-pagina">
+                    <
+                </div>
+            </a>
+        </c:if>
         <c:forEach items="${paginas}" var="pageNumber">
 
             <a href="/users?page=${pageNumber}", style="width: 50px; height: 50px; text-decoration: none;" >
@@ -88,11 +90,13 @@
                 </c:if>
             </a>
         </c:forEach>
-        <a href="/users?page=${paginaActual+1}", style="width: 50px; height: 50px; text-decoration: none;" >
-            <div class="boton-pagina">
-                >
-            </div>
-        </a>
+        <c:if test="${paginaActual != paginas.size() - 1}">
+            <a href="/users?page=${paginaActual+1}", style="width: 50px; height: 50px; text-decoration: none;" >
+                <div class="boton-pagina">
+                    >
+                </div>
+            </a>
+        </c:if>
     </div>
 
 
