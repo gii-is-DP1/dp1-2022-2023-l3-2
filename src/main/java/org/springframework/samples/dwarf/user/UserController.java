@@ -85,8 +85,6 @@ public class UserController {
             partition.add(new ArrayList<>());
         }
 
-        System.out.println("PARTITION: " + partition.toString());
-
         int startIndex = 0;
         int finishIndex = PAGE_SIZE;
         for (int i = 0; i < partition.size(); i++) {
