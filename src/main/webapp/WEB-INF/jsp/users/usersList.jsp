@@ -35,4 +35,66 @@
         </c:forEach>
         </tbody>
     </table>
+    <style>
+        .boton-pagina {
+            margin: 0 auto;
+            width: 100%;
+            height: 100%;
+            background-color: #34302D;
+            outline: solid #6db33f;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .boton-pagina-actual {
+            margin: 0 auto;
+            width: 100%;
+            height: 100%;
+            background-color: #6db33f;
+            outline: solid #6db33f;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .boton-pagina:hover {
+            transform: scale(1.1);
+            transition: transform .2s;
+        }
+    </style>
+
+    <div style="display: flex; flex-direction: row; margin: 0 auto; width: fit-content; gap:15px;">
+        <a href="/users?page=${paginaActual-1}", style="width: 50px; height: 50px; text-decoration: none;" >
+            <div class="boton-pagina">
+                <
+            </div>
+        </a>
+        <c:forEach items="${paginas}" var="pageNumber">
+
+            <a href="/users?page=${pageNumber}", style="width: 50px; height: 50px; text-decoration: none;" >
+                <c:if test="${paginaActual == pageNumber}">
+                    <div class="boton-pagina-actual">
+                        ${pageNumber}
+                    </div>
+                </c:if>
+
+                <c:if test="${paginaActual != pageNumber}">
+                    <div class="boton-pagina">
+                        ${pageNumber}
+                    </div>
+                </c:if>
+            </a>
+        </c:forEach>
+        <a href="/users?page=${paginaActual+1}", style="width: 50px; height: 50px; text-decoration: none;" >
+            <div class="boton-pagina">
+                >
+            </div>
+        </a>
+    </div>
+
+
+
 </petclinic:layout>

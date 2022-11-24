@@ -18,9 +18,11 @@ package org.springframework.samples.dwarf.user;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.IntStream;
 
 import javax.validation.Valid;
 
+import org.h2.expression.analysis.PartitionData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.dwarf.jugador.Jugador;
 import org.springframework.samples.dwarf.jugador.JugadorService;
@@ -33,6 +35,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
@@ -65,9 +68,41 @@ public class UserController {
     }
 
     @GetMapping(value = "/users")
-    public String usersList(Map<String, Object> model) {
+    public String usersList(Map<String, Object> model, @RequestParam Integer page) {
         List<User> usuarios = userService.findAll();
-        model.put("usuarios", usuarios);
+
+        final int PAGE_SIZE = 5;
+        int pageNumber = 0;
+
+        if (usuarios.size() % PAGE_SIZE != 0) {
+            pageNumber = (usuarios.size() / PAGE_SIZE) + 1;
+        } else {
+            pageNumber = usuarios.size() / PAGE_SIZE;
+        }
+
+        List<List<User>> partition = new ArrayList<>();
+        for (int i = 0; i < pageNumber; i++) {
+            partition.add(new ArrayList<>());
+        }
+
+        System.out.println("PARTITION: " + partition.toString());
+
+        int startIndex = 0;
+        int finishIndex = PAGE_SIZE;
+        for (int i = 0; i < partition.size(); i++) {
+            if (finishIndex > usuarios.size()) {
+                partition.set(i, usuarios.subList(startIndex, usuarios.size()));
+                break;
+            }
+            partition.set(i, usuarios.subList(startIndex, finishIndex));
+            startIndex += PAGE_SIZE;
+            finishIndex += PAGE_SIZE;
+        }
+
+        model.put("usuarios", partition.get(page));
+        model.put("paginaActual", page);
+        model.put("paginas", IntStream.rangeClosed(0, partition.size() - 1)
+                .boxed().toList());
         return VIEW_USERS_LIST;
     }
 
