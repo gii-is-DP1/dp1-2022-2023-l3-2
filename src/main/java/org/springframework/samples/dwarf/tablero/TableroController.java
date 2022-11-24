@@ -330,33 +330,6 @@ public class TableroController {
             farmeo = false;
         }
 
-        final List<Integer> GRAN_DRAGONES = Arrays.asList(13, 48);
-        if (GRAN_DRAGONES.stream()
-                .anyMatch(cartaId -> tabla.estaEnTablero(cartaId) && !tabla.tieneEnanoEncima(cartaId))) {
-            // Si no se defiende le quita 1 de oro a cada jugador
-            tabla.getJugadores().forEach(jugador -> jugador.setOro(jugador.getOro() - 1));
-        }
-
-        final List<Integer> DRAGONES = Arrays.asList(22, 27, 35);
-        if (DRAGONES.stream().anyMatch(cartaId -> tabla.estaEnTablero(cartaId) && !tabla.tieneEnanoEncima(cartaId))) {
-            // Si no se defiende le quita 1 de oro a cada jugador
-            tabla.getJugadores().forEach(jugador -> jugador.setOro(jugador.getOro() - 1));
-        }
-        final List<Integer> KNOCKERS = Arrays.asList(14, 42, 43, 53);
-        if (KNOCKERS.stream().anyMatch(cartaId -> tabla.estaEnTablero(cartaId) && !tabla.tieneEnanoEncima(cartaId))) {
-            // Si no se defiende le quita 1 de hierro a cada jugador
-            tabla.getJugadores().forEach(jugador -> jugador.setHierro(jugador.getHierro() - 1));
-        }
-
-        final List<Integer> SIDHES = Arrays.asList(37, 38, 47);
-        if (SIDHES.stream().anyMatch(cartaId -> tabla.estaEnTablero(cartaId) && !tabla.tieneEnanoEncima(cartaId))) {
-            // Si no se defiende cambia 2 oro por 2 hierro
-            tabla.getJugadores().forEach(jugador -> {
-                jugador.setOro(jugador.getOro() - 2);
-                jugador.setHierro(jugador.getHierro() + 2);
-            });
-        }
-
         // ========================
 
         for (Jugador j : tabla.getJugadores()) {
@@ -382,6 +355,44 @@ public class TableroController {
                     e.setMazo(null);
                 }
             }
+        }
+
+        final List<Integer> GRAN_DRAGONES = Arrays.asList(13, 48);
+        if (GRAN_DRAGONES.stream()
+                .anyMatch(cartaId -> tabla.estaEnTablero(cartaId) && !tabla.tieneEnanoEncima(cartaId))) {
+            // Si no se defiende le quita 1 de oro a cada jugador
+            tabla.getJugadores().forEach(jugador -> {
+                if (jugador.getOro() > 0)
+                    jugador.setOro(jugador.getOro() - 1);
+            });
+        }
+
+        final List<Integer> DRAGONES = Arrays.asList(22, 27, 35);
+        if (DRAGONES.stream().anyMatch(cartaId -> tabla.estaEnTablero(cartaId) && !tabla.tieneEnanoEncima(cartaId))) {
+            // Si no se defiende le quita 1 de oro a cada jugador
+            tabla.getJugadores().forEach(jugador -> {
+                if (jugador.getOro() > 0)
+                    jugador.setOro(jugador.getOro() - 1);
+            });
+        }
+        final List<Integer> KNOCKERS = Arrays.asList(14, 42, 43, 53);
+        if (KNOCKERS.stream().anyMatch(cartaId -> tabla.estaEnTablero(cartaId) && !tabla.tieneEnanoEncima(cartaId))) {
+            // Si no se defiende le quita 1 de hierro a cada jugador
+            tabla.getJugadores().forEach(jugador -> {
+                if (jugador.getHierro() > 0)
+                    jugador.setHierro(jugador.getHierro() - 1);
+            });
+        }
+
+        final List<Integer> SIDHES = Arrays.asList(37, 38, 47);
+        if (SIDHES.stream().anyMatch(cartaId -> tabla.estaEnTablero(cartaId) && !tabla.tieneEnanoEncima(cartaId))) {
+            // Si no se defiende cambia 2 oro por 2 hierro
+            tabla.getJugadores().forEach(jugador -> {
+                if (jugador.getOro() >= 2) {
+                    jugador.setOro(jugador.getOro() - 2);
+                    jugador.setHierro(jugador.getHierro() + 2);
+                }
+            });
         }
 
         // Sumamos 1 ronda
