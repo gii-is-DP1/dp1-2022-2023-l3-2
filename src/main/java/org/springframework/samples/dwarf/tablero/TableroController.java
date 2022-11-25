@@ -148,10 +148,19 @@ public class TableroController {
             if (2 == enanosSituados) {
                 j.setTurno(false);
                 if (t == table.getJugadores().size() - 1) {
-
-                    table.getJugadores().get(0).setTurno(true);
-                    break;
+                    for(Integer carta:cartasAyuda){
+                        if(table.estaEnTablero(carta) && table.tieneEnanoEncima(carta)){
+                            Integer posicionCarta = taservice.findCartaById(carta).getPosicion();
+                            Jugador jugadorConAyuda = table.getJugadores().stream().filter(jugador -> jugador.getEnano().stream().anyMatch(e -> e.getPosicion()==posicionCarta)).toList().get(0);
+                            jugadorConAyuda.setTurno(true);
+                            break;
+                        }
+                        table.getJugadores().get(0).setTurno(true);
+                        break;
+                    }
+                    
                 }
+                else if(t<table.getJugadores().size()-1)
                 table.getJugadores().get(t + 1).setTurno(true);
             }
         }
