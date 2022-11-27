@@ -386,26 +386,95 @@ public class TableroController {
             for (Enano e : j.getEnano()) {
                 if (e.getPosicion() != 12) {
                     Carta primera = e.getMazo().getFirstCarta();
-                    if(cartasAyuda.contains(primera.getId())){
-                        continue;
+                    if(primera.getTipo().getName().equals("extraccion")){
+                       
+                      
+                        if (primera.getDevuelve().equals("hierro") && farmeo) {
+                            j.setHierro(j.getHierro() + primera.getCantidaddevuelve());
+                        }
+                        if (primera.getDevuelve().equals("oro") && farmeo) {
+                            j.setOro(j.getOro() + primera.getCantidaddevuelve());
+                        }
+                        if (primera.getDevuelve().equals("medalla") && farmeo) {
+                            j.setMedalla(j.getMedalla() + primera.getCantidaddevuelve());
+                        }
+                        if (primera.getDevuelve().equals("acero") && farmeo) {
+                            j.setAcero(j.getAcero() + primera.getCantidaddevuelve());
+                        }
+                        if (primera.getDevuelve().equals("objeto") && farmeo) {
+                            j.setObjeto(j.getObjeto() + primera.getCantidaddevuelve());
+                        }
+                        e.setPosicion(12);
+                        e.setMazo(null);
                     }
-                    if (primera.getDevuelve().equals("hierro") && farmeo) {
-                        j.setHierro(j.getHierro() + primera.getCantidaddevuelve());
+                }
+            }
+        }
+        for (Jugador j : tabla.getJugadores()) {
+            for (Enano e : j.getEnano()) {
+                if (e.getPosicion() != 12) {
+                    Carta primera = e.getMazo().getFirstCarta();
+                    List<Integer> cartasForjaEspeciales = Arrays.asList(16,25,26,45,51);
+                    // Condiciones especiales para las cartas de forja que piden materiales ditintos
+                    if(cartasForjaEspeciales.contains(primera.getId())){
+                        if(primera.getId()==16 && j.getAcero()>= 2 && j.getOro()>=1) {
+                            j.setAcero(j.getAcero()-2);
+                            j.setOro(j.getOro()-1);
+                            j.setObjeto(j.getObjeto()+1);
+                            break;
+                        }
+                        if(primera.getId()==25 && j.getAcero()>= 1 && j.getOro()>=1 && j.getHierro()>= 1) {
+                            j.setAcero(j.getAcero()-1);
+                            j.setOro(j.getOro()-1);
+                            j.setHierro(j.getHierro()-1);
+                            j.setObjeto(j.getObjeto()+1);
+                            break;
+                        }
+                        if(primera.getId()==26 && j.getAcero()>= 1 && j.getOro()>=2) {
+                            j.setAcero(j.getAcero()-1);
+                            j.setOro(j.getOro()-2);
+                            j.setObjeto(j.getObjeto()+1);
+                            break;
+                        }
+                        if(primera.getId()==45 && j.getAcero()>= 2 && j.getHierro()>=1) {
+                            j.setHierro(j.getHierro()-1);
+                            j.setAcero(j.getAcero()-2);
+                            j.setObjeto(j.getObjeto()+1);
+                            break;
+                        }
+                        if(primera.getId()==51 && j.getAcero()>= 2 && j.getOro()>=1) {
+                            j.setAcero(j.getAcero()-2);
+                            j.setOro(j.getOro()-1);
+                            j.setObjeto(j.getObjeto()+1);
+                            break;
+                        }
                     }
-                    if (primera.getDevuelve().equals("oro") && farmeo) {
-                        j.setOro(j.getOro() + primera.getCantidaddevuelve());
+                    if(primera.getTipo().getName().equals("forja")){
+                       
+                        
+                        if (primera.getEntrada().equals("hierro") && primera.getCantidadentrada()<= j.getHierro()) {
+                            j.setHierro(j.getHierro() - primera.getCantidadentrada());
+                            j.setObjeto(j.getObjeto()+primera.getCantidaddevuelve());
+                        }
+                        if (primera.getEntrada().equals("oro") && primera.getCantidadentrada()<= j.getOro()) {
+                            j.setOro(j.getOro() - primera.getCantidadentrada());
+                            j.setObjeto(j.getObjeto()+primera.getCantidaddevuelve());
+                        }
+                        if (primera.getEntrada().equals("medalla") && primera.getCantidadentrada()<= j.getMedalla()) {
+                            j.setMedalla(j.getMedalla() - primera.getCantidadentrada());
+                            j.setObjeto(j.getObjeto()+primera.getCantidaddevuelve());
+                        }
+                        if (primera.getEntrada().equals("acero") && primera.getCantidadentrada()<= j.getAcero()) {
+                            j.setAcero(j.getAcero() - primera.getCantidadentrada());
+                            j.setObjeto(j.getObjeto()+primera.getCantidaddevuelve());
+                        }
+                        if (primera.getEntrada().equals("objeto") && primera.getCantidadentrada()<= j.getObjeto()) {
+                            j.setObjeto(j.getObjeto() - primera.getCantidadentrada());
+                            j.setObjeto(j.getObjeto()+primera.getCantidaddevuelve());
+                        }
+                        e.setPosicion(12);
+                        e.setMazo(null);
                     }
-                    if (primera.getDevuelve().equals("medalla") && farmeo) {
-                        j.setMedalla(j.getMedalla() + primera.getCantidaddevuelve());
-                    }
-                    if (primera.getDevuelve().equals("acero") && farmeo) {
-                        j.setAcero(j.getAcero() + primera.getCantidaddevuelve());
-                    }
-                    if (primera.getDevuelve().equals("objeto") && farmeo) {
-                        j.setObjeto(j.getObjeto() + primera.getCantidaddevuelve());
-                    }
-                    e.setPosicion(12);
-                    e.setMazo(null);
                 }
             }
         }
