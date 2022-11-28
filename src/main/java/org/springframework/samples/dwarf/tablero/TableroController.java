@@ -34,7 +34,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping("/partida")
-public class TableroController {
+public class TableroController { 
 
     private String tablero = "tablero/tablero";
     private String tablero1 = "tablero/Showtablerocopy";
