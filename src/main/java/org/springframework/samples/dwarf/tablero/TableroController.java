@@ -34,15 +34,13 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping("/partida")
-public class TableroController { 
+public class TableroController {
 
     private String tablero = "tablero/tablero";
     private String tablero1 = "tablero/Showtablerocopy";
 
     private TableroService taservice;
     private JugadorService jugadorService;
-
-    List<Integer> cartasAyuda = Arrays.asList(24,32,39,52);
 
     @Autowired
     public TableroController(TableroService service, JugadorService jugadorService) {
@@ -98,6 +96,16 @@ public class TableroController {
             tabla.setRonda(1);
             tabla.setMazos(mazos);
             tabla.setJugadores(jugadorService.findAll());
+
+            // Seteamos los turnos iniciales
+            for (int i = 0; i < tabla.getJugadores().size(); i++) {
+                if (i == 0) {
+                    tabla.getJugadores().get(i).setTurno(true);
+                } else {
+                    tabla.getJugadores().get(i).setTurno(false);
+                }
+            }
+
             taservice.saveTablero(tabla);
 
             return "redirect:/partida/" + tabla.getId() + "/comienza";
@@ -107,7 +115,7 @@ public class TableroController {
     @Transactional
     @GetMapping("/{partidaId}")
     public String showTablero(@PathVariable("partidaId") Integer id, Model model, HttpServletResponse response) {
-        response.addHeader("Refresh", "3");
+        /* response.addHeader("Refresh", "3"); */
         Tablero table = taservice.findById(id);
         List<Mazo> mazo = table.getMazos();
         List<Mazo> mazo1 = mazo.subList(0, 3);
@@ -129,59 +137,6 @@ public class TableroController {
         model.addAttribute("id_partida", table.getId());
         model.addAttribute("nombrePartida", table.getName());
         // ==============================
-
-        for (int i = 0; i < table.getJugadores().size(); i++) {
-            Jugador j = table.getJugadores().get(i);
-            Integer enanosSituados = j.getEnano().stream().filter(e -> e.getPosicion() != 12).toList().size();
-            if (1 == enanosSituados) {
-                j.setTurno(false);
-                if (i == table.getJugadores().size() - 1) {
-                    table.getJugadores().get(0).setTurno(true);
-                    break;
-                }
-                table.getJugadores().get(i + 1).setTurno(true);
-            }
-        }
-        for (int t = 0; t < table.getJugadores().size(); t++) {
-            Jugador j = table.getJugadores().get(t);
-            Integer enanosSituados = j.getEnano().stream().filter(e -> e.getPosicion() != 12).toList().size();
-            if (2 == enanosSituados) {
-                j.setTurno(false);
-                if (t == table.getJugadores().size() - 1) {
-                    for(Integer carta:cartasAyuda){
-                        if(table.estaEnTablero(carta) && table.tieneEnanoEncima(carta)){
-                            Integer posicionCarta = taservice.findCartaById(carta).getPosicion();
-                            Jugador jugadorConAyuda = table.getJugadores().stream().filter(jugador -> jugador.getEnano().stream().anyMatch(e -> e.getPosicion()==posicionCarta)).toList().get(0);
-                            jugadorConAyuda.setTurno(true);
-                            break;
-                        }
-                        table.getJugadores().get(0).setTurno(true);
-                        break;
-                    }
-                    
-                }
-                else if(t<table.getJugadores().size()-1)
-                table.getJugadores().get(t + 1).setTurno(true);
-            }
-        }
-
-        for(Integer carta : cartasAyuda){
-            if(table.estaEnTablero(carta)){
-                for (int t = 0; t < table.getJugadores().size(); t++) {
-                    Jugador j = table.getJugadores().get(t);
-                    Integer enanosSituados = j.getEnano().stream().filter(e -> e.getPosicion() != 12).toList().size();
-                    if (2 < enanosSituados) {
-                        j.setTurno(false);
-                        Integer posicionCarta = taservice.findCartaById(carta).getPosicion();
-                        Jugador jugadorConAyuda = table.getJugadores().stream().filter(jugador -> jugador.getEnano().stream().anyMatch(e -> e.getPosicion()==posicionCarta)).toList().get(0);
-                        jugadorConAyuda.setTurno(true);
-                    }
-                }
-            }
-        }
-
-
-
 
         String username = table.getJugadores().stream().filter(j -> j.isTurno()).toList().get(0).getUser()
                 .getUsername();
@@ -243,35 +198,29 @@ public class TableroController {
     public String rondaPrincipio(@PathVariable("partidaId") Integer id) {
         Tablero tabla = taservice.findById(id);
 
+        // Coger dos cartas aleatorias de la baraja y colocarlas
         List<Carta> baraja = tabla.getMazos().get(tabla.getMazos().size() - 1).getCartas();
-        Double num1 = Math.floor(Math.random() * baraja.size() + 1);
-        Double num2 = Math.floor(Math.random() * baraja.size() + 1);
-        final Integer numero1 = num1.intValue();
-        final Integer numero2 = num2.intValue();
-        Integer posicion1 = taservice.findCartaById(numero1).getPosicion();
-        Integer posicion2 = taservice.findCartaById(numero2).getPosicion();
-        if (posicion1 != posicion2) {
-            Mazo mazo = tabla.getMazos().get(posicion1 - 1);
-            Mazo mazo2 = tabla.getMazos().get(posicion2 - 1);
-            mazo.getCartas().add(0, taservice.findCartaById(numero1));
-            mazo2.getCartas().add(0, taservice.findCartaById(numero2));
-            Mazo mazo1 = tabla.getMazos().get(12);
-            mazo1.getCartas().remove(taservice.findCartaById(numero1));
-            mazo1.getCartas().remove(taservice.findCartaById(numero2));
-        } else if (posicion1 == posicion2) {
-            Double num3 = Math.floor(Math.random() * baraja.size() + 1);
-            final Integer numero3 = num3.intValue();
-            Integer posicion3 = taservice.findCartaById(numero3).getPosicion();
-            Mazo mazo = tabla.getMazos().get(posicion1 - 1);
-            Mazo mazo2 = tabla.getMazos().get(posicion2 - 1);
-            Mazo mazo3 = tabla.getMazos().get(posicion3 - 1);
-            mazo.getCartas().add(0, taservice.findCartaById(numero1));
-            mazo2.getCartas().add(0, taservice.findCartaById(numero2));
-            mazo3.getCartas().add(0, taservice.findCartaById(numero3));
-            Mazo mazo1 = tabla.getMazos().get(12);
-            mazo1.getCartas().remove(taservice.findCartaById(numero1));
-            mazo1.getCartas().remove(taservice.findCartaById(numero2));
-            mazo1.getCartas().remove(taservice.findCartaById(numero3));
+
+        /*
+         * Generar valor aleatorio ejemplo:
+         * int HASTA = 20;
+         * int DESDE = 7;
+         * int aleatorio = (int)(Math.random()*(HASTA-DESDE+1)+DESDE);
+         */
+
+        for (int i = 0; i < 2; i++) {
+            int DESDE = 0;
+            int HASTA = baraja.size() - 1;
+
+            int idCarta = (int) (Math.random() * (HASTA - DESDE + 1) + DESDE) + 1;
+            Carta carta = taservice.findCartaById(idCarta);
+            tabla.getMazos().stream().filter(mazo -> mazo.getPosicion() == carta.getPosicion()).toList().get(0)
+                    .getCartas()
+                    .add(0, carta);
+            baraja.remove(carta);
+
+            if (baraja.size() == 0)
+                break;
         }
 
         List<Jugador> jugadores = tabla.getJugadores();
@@ -285,6 +234,15 @@ public class TableroController {
             j.setEnano(enanos);
 
         }
+
+        // Se establecen los enanos disponibles por defecto a 2
+        tabla.getJugadores().stream().forEach(jugador -> jugador.setEnanosDisponibles(2));
+
+        // Forzamos una carta de ayuda al inicio para testing
+        // tabla.getMazos().get(1).getCartas().add(0,
+        // tabla.getMazos().get(12).getCartas().stream()
+        // .filter(cartas -> cartas.getId() == 24 || cartas.getId() ==
+        // 32).toList().get(0));
 
         return "redirect:/partida/" + id;
     }
@@ -304,8 +262,18 @@ public class TableroController {
                     System.out.println("#".repeat(200));
                     return "redirect:/partida/" + id;
                 }
-                System.out.println(currentUser.getUsername() + "#".repeat(200));
 
+                Jugador jugadorActual = tabla.getJugadores().stream()
+                        .filter(jugador -> jugador.getUser().getUsername().equals(username))
+                        .toList().get(0);
+
+                if (tabla.getMazos().get(posicion - 1).getFirstCarta().getTipo().getName().equals("ayuda")) {
+                    // jugador con username igual al query
+
+                    jugadorActual.setEnanosDisponibles(jugadorActual.getEnanosDisponibles() + 2);
+                }
+
+                // Colocamos el primer enano disponible del jugador en la posicion
                 List<Enano> enanosJugador = tabla.getJugadores().stream()
                         .filter(jugador -> jugador.getUser().getUsername().equals(username))
                         .toList().get(0).getEnano();
@@ -316,44 +284,41 @@ public class TableroController {
                             if (posicion == m.getPosicion())
                                 e.setMazo(m);
                         }
+
+                        jugadorActual.setEnanosDisponibles(jugadorActual.getEnanosDisponibles() - 1);
+
                         break;
 
                     }
                 }
 
-                boolean noAyuda = true;
-                Jugador jugadorConAyuda = null;
-                for(Integer i : cartasAyuda){
-                    if(tabla.estaEnTablero(i)){
-                         if(tabla.tieneEnanoEncima(i)){
-                            noAyuda = false;
-                            Integer posicionCarta = taservice.findCartaById(i).getPosicion();
-                            jugadorConAyuda = tabla.getJugadores().stream().filter(j -> j.getEnano().stream().anyMatch(e -> e.getPosicion()==posicionCarta)).toList().get(0);
-                        } 
+                if (!tabla.getJugadores().stream().anyMatch(jugador -> jugador.getEnanosDisponibles() > 0))
+                    return "redirect:/partida/" + id + "/recursos";
+
+                // Seteamos turno en el siguiente jugador con enanos disponibles
+                int indexOfJugadorActual = tabla.getJugadores().indexOf(jugadorActual);
+
+                int i = indexOfJugadorActual + 1;
+                while (true) {
+
+                    if (i == tabla.getJugadores().size()) {
+                        i = 0;
+                        continue;
                     }
- 
+
+                    if (tabla.getJugadores().get(i).getEnanosDisponibles() > 0) {
+                        tabla.setTurnoByUsername(tabla.getJugadores().get(i).getUser().getUsername());
+                        break;
+                    }
+
+                    i++;
                 }
 
-                for (Jugador j : tabla.getJugadores()) {
-                    Integer cont = 0;
-                    for (Enano e : j.getEnano()) {
-                        if (e.getPosicion() != 12) {
-                            cont++;
-                            System.out.println("Esto es N:" + cont);
-                        }
-                    }
-                    if (cont < 2 && noAyuda) {
-                        return "redirect:/partida/" + id;
-                    }
-                    else if(!noAyuda && jugadorConAyuda!=null){
-                        Integer enanosColocados = jugadorConAyuda.getEnano().stream().filter(e -> e.getPosicion()!=12).toList().size();
-                        if(enanosColocados<4){
-                            return "redirect:/partida/" + id;
-                        }
-                    }
-                }
+                // Nueva condicion de llamada a recursos
+                // si enanosDisponibles de todos igual a 0
 
-                return "redirect:/partida/" + id + "/recursos";
+                return "redirect:/partida/" + id;
+
             }
         }
         return "redirect:/login/";
@@ -382,13 +347,50 @@ public class TableroController {
 
         // ========================
 
+        final List<Integer> ALLOY_STEEL = Arrays.asList(10, 15, 19, 21, 23, 29, 44, 54);
         for (Jugador j : tabla.getJugadores()) {
             for (Enano e : j.getEnano()) {
                 if (e.getPosicion() != 12) {
                     Carta primera = e.getMazo().getFirstCarta();
-                    if(primera.getTipo().getName().equals("extraccion")){
-                       
-                      
+                    if (primera.getTipo().getName().equals("extraccion")) {
+
+                        if (primera.getDevuelve() != null || primera.getEntrada() != null) {
+
+                            if (primera.getDevuelve().equals("hierro") && farmeo) {
+                                j.setHierro(j.getHierro() + primera.getCantidaddevuelve());
+                            }
+                            if (primera.getDevuelve().equals("oro") && farmeo) {
+                                j.setOro(j.getOro() + primera.getCantidaddevuelve());
+                            }
+                            if (primera.getDevuelve().equals("medalla") && farmeo) {
+                                j.setMedalla(j.getMedalla() + primera.getCantidaddevuelve());
+                            }
+                            if (primera.getDevuelve().equals("acero") && farmeo) {
+                                j.setAcero(j.getAcero() + primera.getCantidaddevuelve());
+                            }
+                            if (primera.getDevuelve().equals("objeto") && farmeo) {
+                                j.setObjeto(j.getObjeto() + primera.getCantidaddevuelve());
+                            }
+                        }
+
+                        if (ALLOY_STEEL.contains(primera.getId())) {
+                            if (j.getHierro() >= 3) {
+                                j.setHierro(j.getHierro() - 3);
+                                j.setAcero(j.getAcero() + 2);
+                            }
+                        }
+                        e.setPosicion(12);
+                        e.setMazo(null);
+                    }
+                }
+            }
+        }
+        for (Jugador j : tabla.getJugadores()) {
+            for (Enano e : j.getEnano()) {
+                if (e.getPosicion() != 12) {
+                    Carta primera = e.getMazo().getFirstCarta();
+                    if (primera.getTipo().getName().equals("extraccion")) {
+
                         if (primera.getDevuelve().equals("hierro") && farmeo) {
                             j.setHierro(j.getHierro() + primera.getCantidaddevuelve());
                         }
@@ -414,63 +416,61 @@ public class TableroController {
             for (Enano e : j.getEnano()) {
                 if (e.getPosicion() != 12) {
                     Carta primera = e.getMazo().getFirstCarta();
-                    List<Integer> cartasForjaEspeciales = Arrays.asList(16,25,26,45,51);
+                    List<Integer> cartasForjaEspeciales = Arrays.asList(16, 25, 26, 45, 51);
                     // Condiciones especiales para las cartas de forja que piden materiales ditintos
-                    if(cartasForjaEspeciales.contains(primera.getId())){
-                        if(primera.getId()==16 && j.getAcero()>= 2 && j.getOro()>=1) {
-                            j.setAcero(j.getAcero()-2);
-                            j.setOro(j.getOro()-1);
-                            j.setObjeto(j.getObjeto()+1);
+                    if (cartasForjaEspeciales.contains(primera.getId())) {
+                        if (primera.getId() == 16 && j.getAcero() >= 2 && j.getOro() >= 1) {
+                            j.setAcero(j.getAcero() - 2);
+                            j.setOro(j.getOro() - 1);
+                            j.setObjeto(j.getObjeto() + 1);
                             break;
                         }
-                        if(primera.getId()==25 && j.getAcero()>= 1 && j.getOro()>=1 && j.getHierro()>= 1) {
-                            j.setAcero(j.getAcero()-1);
-                            j.setOro(j.getOro()-1);
-                            j.setHierro(j.getHierro()-1);
-                            j.setObjeto(j.getObjeto()+1);
+                        if (primera.getId() == 25 && j.getAcero() >= 1 && j.getOro() >= 1 && j.getHierro() >= 1) {
+                            j.setAcero(j.getAcero() - 1);
+                            j.setOro(j.getOro() - 1);
+                            j.setHierro(j.getHierro() - 1);
+                            j.setObjeto(j.getObjeto() + 1);
                             break;
                         }
-                        if(primera.getId()==26 && j.getAcero()>= 1 && j.getOro()>=2) {
-                            j.setAcero(j.getAcero()-1);
-                            j.setOro(j.getOro()-2);
-                            j.setObjeto(j.getObjeto()+1);
+                        if (primera.getId() == 26 && j.getAcero() >= 1 && j.getOro() >= 2) {
+                            j.setAcero(j.getAcero() - 1);
+                            j.setOro(j.getOro() - 2);
+                            j.setObjeto(j.getObjeto() + 1);
                             break;
                         }
-                        if(primera.getId()==45 && j.getAcero()>= 2 && j.getHierro()>=1) {
-                            j.setHierro(j.getHierro()-1);
-                            j.setAcero(j.getAcero()-2);
-                            j.setObjeto(j.getObjeto()+1);
+                        if (primera.getId() == 45 && j.getAcero() >= 2 && j.getHierro() >= 1) {
+                            j.setHierro(j.getHierro() - 1);
+                            j.setAcero(j.getAcero() - 2);
+                            j.setObjeto(j.getObjeto() + 1);
                             break;
                         }
-                        if(primera.getId()==51 && j.getAcero()>= 2 && j.getOro()>=1) {
-                            j.setAcero(j.getAcero()-2);
-                            j.setOro(j.getOro()-1);
-                            j.setObjeto(j.getObjeto()+1);
+                        if (primera.getId() == 51 && j.getAcero() >= 2 && j.getOro() >= 1) {
+                            j.setAcero(j.getAcero() - 2);
+                            j.setOro(j.getOro() - 1);
+                            j.setObjeto(j.getObjeto() + 1);
                             break;
                         }
-                    }
-                    if(primera.getTipo().getName().equals("forja")){
-                       
-                        
-                        if (primera.getEntrada().equals("hierro") && primera.getCantidadentrada()<= j.getHierro()) {
+                    } else if (primera.getTipo().getName().equals("forja")) {
+
+                        if (primera.getEntrada().equals("hierro") && primera.getCantidadentrada() <= j.getHierro()) {
                             j.setHierro(j.getHierro() - primera.getCantidadentrada());
-                            j.setObjeto(j.getObjeto()+primera.getCantidaddevuelve());
+                            j.setObjeto(j.getObjeto() + primera.getCantidaddevuelve());
                         }
-                        if (primera.getEntrada().equals("oro") && primera.getCantidadentrada()<= j.getOro()) {
+                        if (primera.getEntrada().equals("oro") && primera.getCantidadentrada() <= j.getOro()) {
                             j.setOro(j.getOro() - primera.getCantidadentrada());
-                            j.setObjeto(j.getObjeto()+primera.getCantidaddevuelve());
+                            j.setObjeto(j.getObjeto() + primera.getCantidaddevuelve());
                         }
-                        if (primera.getEntrada().equals("medalla") && primera.getCantidadentrada()<= j.getMedalla()) {
+                        if (primera.getEntrada().equals("medalla") && primera.getCantidadentrada() <= j.getMedalla()) {
                             j.setMedalla(j.getMedalla() - primera.getCantidadentrada());
-                            j.setObjeto(j.getObjeto()+primera.getCantidaddevuelve());
+                            j.setObjeto(j.getObjeto() + primera.getCantidaddevuelve());
                         }
-                        if (primera.getEntrada().equals("acero") && primera.getCantidadentrada()<= j.getAcero()) {
+                        if (primera.getEntrada().equals("acero") && primera.getCantidadentrada() <= j.getAcero()) {
                             j.setAcero(j.getAcero() - primera.getCantidadentrada());
-                            j.setObjeto(j.getObjeto()+primera.getCantidaddevuelve());
+                            j.setObjeto(j.getObjeto() + primera.getCantidaddevuelve());
                         }
-                        if (primera.getEntrada().equals("objeto") && primera.getCantidadentrada()<= j.getObjeto()) {
+                        if (primera.getEntrada().equals("objeto") && primera.getCantidadentrada() <= j.getObjeto()) {
                             j.setObjeto(j.getObjeto() - primera.getCantidadentrada());
-                            j.setObjeto(j.getObjeto()+primera.getCantidaddevuelve());
+                            j.setObjeto(j.getObjeto() + primera.getCantidaddevuelve());
                         }
                         e.setPosicion(12);
                         e.setMazo(null);

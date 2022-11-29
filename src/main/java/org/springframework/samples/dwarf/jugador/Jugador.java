@@ -71,6 +71,8 @@ public class Jugador extends Person {
     private Integer hierro;
     private Integer objeto;
 
+    private Integer enanosDisponibles;
+
     @Column(name = "posicion_final")
     private Integer posicionFinal;
 
