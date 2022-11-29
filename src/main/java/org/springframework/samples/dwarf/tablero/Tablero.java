@@ -33,7 +33,6 @@ public class Tablero extends NamedEntity {
     @JoinTable(name = "jugadores_lobby", joinColumns = @JoinColumn(name = "jugador_id"))
     private List<Jugador> jugadores;
 
-    
     public Integer getNumJugadores() {
         return jugadores.size();
     }
@@ -60,5 +59,14 @@ public class Tablero extends NamedEntity {
                         ? true
                         : false;
 
+    }
+
+    public Jugador getJugadorByUsername(String username) {
+        return jugadores.stream().filter(jugador -> jugador.getUser().getUsername().equals(username)).toList().get(0);
+    }
+
+    public void setTurnoByUsername(String username) {
+        jugadores.stream().forEach(jugador -> jugador.setTurno(false));
+        getJugadorByUsername(username).setTurno(true);
     }
 }

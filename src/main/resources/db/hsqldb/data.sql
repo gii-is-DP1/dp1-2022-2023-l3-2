@@ -96,26 +96,26 @@ INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve
 INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve) VALUES(8, '/resources/images/Dimensionadas/008.png', 8, 1, null, null, 'hierro', 3);
 INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve) VALUES(9, '/resources/images/Dimensionadas/009.png', 9, 1, null, null, 'oro', 1);
 
-INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve) VALUES(10, '/resources/images/Dimensionadas/010.png', 1, 1, 'hierro', 3, 'acero', 2);
+INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve) VALUES(10, '/resources/images/Dimensionadas/010.png', 1, 1, null, 0, null, 0);
 INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve) VALUES(11, '/resources/images/Dimensionadas/011.png', 9, 0, null, null, 'medalla', 1);
 INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve) VALUES(12, '/resources/images/Dimensionadas/012.png', 3, 3, 'acero', 3, 'objeto', 1);
 INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve) VALUES(13, '/resources/images/Dimensionadas/013.png', 4, 0, null, null, 'medalla', 1);
 INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve) VALUES(14, '/resources/images/Dimensionadas/014.png', 5, 0, null, null, 'medalla', 1);
-INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve) VALUES(15, '/resources/images/Dimensionadas/015.png', 6, 1, 'hierro', 3, 'acero', 2);
+INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve) VALUES(15, '/resources/images/Dimensionadas/015.png', 6, 1, null, 0, null, 0);
 INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve) VALUES(16, '/resources/images/Dimensionadas/016.png', 7, 3, null, null, null, null);
 INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve) VALUES(17, '/resources/images/Dimensionadas/017.png', 8, 1, null, null, 'oro', 1);
 INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve) VALUES(18, '/resources/images/Dimensionadas/018.png', 9, 1, null, null, 'hierro', 3);
-INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve) VALUES(19, '/resources/images/Dimensionadas/019.png', 1, 1, 'hierro', 3, 'acero', 2);
+INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve) VALUES(19, '/resources/images/Dimensionadas/019.png', 1, 1, null, 0, null, 0);
 INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve) VALUES(20, '/resources/images/Dimensionadas/020.png', 2, 0, null, null, 'medalla', 1);
-INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve) VALUES(21, '/resources/images/Dimensionadas/021.png', 3, 1, 'hierro', 3, 'acero', 2);
+INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve) VALUES(21, '/resources/images/Dimensionadas/021.png', 3, 1, null, 0, null, 0);
 INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve) VALUES(22, '/resources/images/Dimensionadas/022.png', 4, 0, null, null, 'medalla', 1);
-INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve) VALUES(23, '/resources/images/Dimensionadas/023.png', 5, 1, 'hierro', 3, 'acero', 2);
+INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve) VALUES(23, '/resources/images/Dimensionadas/023.png', 5, 1, null, 0, null, 0);
 INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve) VALUES(24, '/resources/images/Dimensionadas/024.png', 6, 2, null, null, null, null);
 INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve) VALUES(25, '/resources/images/Dimensionadas/025.png', 7, 3, null, null, null, null);
 INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve) VALUES(26, '/resources/images/Dimensionadas/026.png', 8, 3, null, null, null, null);
 INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve) VALUES(27, '/resources/images/Dimensionadas/027.png', 9, 0, null, null, 'medalla', 1);
 INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve) VALUES(28, '/resources/images/Dimensionadas/028.png', 1, 1, null, null, 'oro', 1);
-INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve) VALUES(29, '/resources/images/Dimensionadas/029.png', 2, 1, 'hierro', 3, 'acero', 2);
+INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve) VALUES(29, '/resources/images/Dimensionadas/029.png', 2, 1, null, 0, null, 0);
 INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve) VALUES(30, '/resources/images/Dimensionadas/030.png', 3, 0, null, null, 'medalla', 1);
 INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve) VALUES(31, '/resources/images/Dimensionadas/031.png', 4, 3, 'acero', 2, 'objeto', 1);
 INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve) VALUES(32, '/resources/images/Dimensionadas/032.png', 5, 2, null, null, null, null);
@@ -130,7 +130,7 @@ INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve
 INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve) VALUES(41, '/resources/images/Dimensionadas/041.png', 5, 1, null, null, 'oro', 1);
 INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve) VALUES(42, '/resources/images/Dimensionadas/042.png', 6, 0, null, null, 'medalla', 1);
 INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve) VALUES(43, '/resources/images/Dimensionadas/043.png', 7, 0, null, null, 'medalla', 1);
-INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve) VALUES(44, '/resources/images/Dimensionadas/044.png', 8, 1, 'hierro', 3, 'acero', 2);
+INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve) VALUES(44, '/resources/images/Dimensionadas/044.png', 8, 1, null, 0, null, 0);
 INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve) VALUES(45, '/resources/images/Dimensionadas/045.png', 9, 3, null, null, null, null);
 INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve) VALUES(46, '/resources/images/Dimensionadas/046.png', 1, 1, null, null, 'oro', 1);
 INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve) VALUES(47, '/resources/images/Dimensionadas/047.png', 2, 0, null, null, 'medalla', 1);
@@ -140,7 +140,7 @@ INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve
 INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve) VALUES(51, '/resources/images/Dimensionadas/051.png', 6, 3, null, null, null, null);
 INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve) VALUES(52, '/resources/images/Dimensionadas/052.png', 7, 2, null, null, null, null);
 INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve) VALUES(53, '/resources/images/Dimensionadas/053.png', 8, 0, null, null, 'medalla', 1);
-INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve) VALUES(54, '/resources/images/Dimensionadas/054.png', 9, 1, 'hierro', 3, 'acero', 2);
+INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve) VALUES(54, '/resources/images/Dimensionadas/054.png', 9, 1, null, 0, null, 0);
 
 INSERT INTO carta(id, imagen, posicion, tipo, entrada,cantidadEntrada, devuelve, cantidadDevuelve) VALUES(55, '/resources/images/Dimensionadas/055-A.png', 10, 4, null, null, null, null);
 INSERT INTO carta(id, imagen, posicion, tipo, entrada,cantidadEntrada, devuelve, cantidadDevuelve) VALUES(56, '/resources/images/Dimensionadas/056-A.png', 10, 4, null, null, null, null);

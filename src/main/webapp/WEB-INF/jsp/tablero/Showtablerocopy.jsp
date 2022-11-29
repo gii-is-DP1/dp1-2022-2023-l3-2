@@ -45,6 +45,22 @@
             border-radius: 5px;
             gap: 10px;
         }
+
+        .enanos_container {
+            position: absolute;
+            top: 500px;
+            right: 20px;
+            width: 200px;
+            min-height: 200px;
+            background-color: #34302d;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            border-radius: 5px;
+            gap: 10px;
+        }
+
         .ronda_container h2 {
             color: white;
             display: block;
@@ -57,6 +73,26 @@
             margin: 0;
             padding: 0;
         }
+
+        .enanos_container h2 {
+            color: white;
+            display: block;
+            text-align: center;
+            padding: 0;
+        }
+        .enanos_container div {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+        }
+        .enanos_container p {
+            color: white;
+            font-size: 16px;
+            padding: 0;
+        }
+
         .cartas-restantes-container {
             position: absolute;
             right: 0;
@@ -168,6 +204,15 @@
     <div class="turno_container">
         <h2>TURNO</h2>
         <h2 style="font-size: 30px;">${jugadores.stream().filter(j -> j.turno).toList().get(0).getUser().username}</h2>
+    </div>
+    <div class="enanos_container">
+        <h2>ENANOS DISPONIBLES</h2>
+        <div>
+            <c:forEach items="${jugadores}" var="jugador">
+                <p>${jugador.getUser().username}: ${jugador.enanosDisponibles}</p>
+            </c:forEach>
+        </div>
+
     </div>
     <table id="tableroTable" class="table table-striped" style="width: 1100px;">
         <thead>
