@@ -263,6 +263,10 @@ public class TableroController {
                     return "redirect:/partida/" + id;
                 }
 
+                // Si el mazo ya tiene un enano encima no se coloca
+                if (tabla.tieneEnanoEncima(tabla.getMazos().get(posicion - 1).getFirstCarta().getId()))
+                    return "redirect:/partida/" + id;
+
                 Jugador jugadorActual = tabla.getJugadores().stream()
                         .filter(jugador -> jugador.getUser().getUsername().equals(username))
                         .toList().get(0);
