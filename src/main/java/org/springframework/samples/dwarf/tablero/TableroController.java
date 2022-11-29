@@ -212,8 +212,8 @@ public class TableroController {
             int DESDE = 0;
             int HASTA = baraja.size() - 1;
 
-            int idCarta = (int) (Math.random() * (HASTA - DESDE + 1) + DESDE) + 1;
-            Carta carta = taservice.findCartaById(idCarta);
+            int indexCarta = (int) (Math.random() * (HASTA - DESDE + 1) + DESDE);
+            Carta carta = tabla.getMazos().get(12).getCartas().get(indexCarta);
             tabla.getMazos().stream().filter(mazo -> mazo.getPosicion() == carta.getPosicion()).toList().get(0)
                     .getCartas()
                     .add(0, carta);
