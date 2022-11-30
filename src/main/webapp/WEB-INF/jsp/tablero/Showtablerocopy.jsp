@@ -61,6 +61,39 @@
             gap: 10px;
         }
 
+        .chat_container {
+            position: absolute;
+            top: 750px;
+            right: 20px;
+            width: 400px;
+            min-height: 200px;
+            background-color: #34302d;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            border-radius: 5px;
+            gap: 10px;
+            padding: 20px 0;
+        }
+
+        .chat_container>div {
+            width: 90%;
+            overflow-y: scroll;
+            height: 300px;
+        }
+
+        .chat_container label {
+            display: none;
+        }
+
+        .chat_container h2 {
+            color: white;
+        }
+        .chat_container p {
+            color: white;
+        }
+
         .ronda_container h2 {
             color: white;
             display: block;
@@ -214,6 +247,26 @@
         </div>
 
     </div>
+    <div class="chat_container">
+        <h2>CHAT</h2>
+        <div id="chat_lines">
+            <c:forEach items="${chat}" var="chatLine">
+                <p>(${chatLine.username}): ${chatLine.mensaje}</p>
+            </c:forEach>
+        </div>
+
+        <form:form modelAttribute="chatLine" action="/partida/${id_partida}/chatline" class="form-horizontal" id="add-owner-form" >
+            <div class="form-group has-feedback">
+                <petclinic:inputField label="Mensaje" name="mensaje"/>
+            </div>
+            <div class="col-sm-offset-2 col-sm-10">
+
+                <button class="btn btn-default" type="submit">Enviar</button>
+
+            </div>
+        </form:form>
+
+    </div>
     <table id="tableroTable" class="table table-striped" style="width: 1100px;">
         <thead>
             <tr>
@@ -345,5 +398,10 @@
 
         </tbody>
     </table>
+    <script>
+        // Scroll chat hacia abajo por defecto
+        var objDiv = document.getElementById("chat_lines");
+        objDiv.scrollTop = objDiv.scrollHeight;
+    </script>
 
 </petclinic:layout>

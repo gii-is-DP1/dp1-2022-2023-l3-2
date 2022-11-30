@@ -29,6 +29,10 @@ public class Tablero extends NamedEntity {
     @JoinTable(name = "mazo_tablero", joinColumns = @JoinColumn(name = "tablero"))
     private List<Mazo> mazos;
 
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "chat_tablero", joinColumns = @JoinColumn(name = "tablero"))
+    private List<ChatLine> chat;
+
     @ManyToMany
     @JoinTable(name = "jugadores_lobby", joinColumns = @JoinColumn(name = "jugador_id"))
     private List<Jugador> jugadores;

@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collector;
 
+import javax.persistence.Table;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
@@ -136,6 +137,9 @@ public class TableroController {
         model.addAttribute("mazosConEnanoEncima", mazosConEnanoEncima);
         model.addAttribute("id_partida", table.getId());
         model.addAttribute("nombrePartida", table.getName());
+
+        model.addAttribute("chat", table.getChat());
+        model.addAttribute("chatLine", new ChatLine());
         // ==============================
 
         String username = table.getJugadores().stream().filter(j -> j.isTurno()).toList().get(0).getUser()
@@ -594,5 +598,31 @@ public class TableroController {
         // Acaba cuando un jugador tiene 4 objetos o la baraja no tiene mas cartas
 
         return "redirect:/";
+    }
+
+    @Transactional
+    @PostMapping("{partidaId}/chatline")
+    public String processChatLine(@PathVariable("partidaId") Integer id, ChatLine chatLine,
+            BindingResult result) {
+        if (result.hasErrors()) {
+            System.out.println("#".repeat(200));
+            return "redirect:/partida/" + id;
+
+        } else {
+            Tablero tabla = taservice.findById(id);
+
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            if (authentication != null) {
+                if (authentication.isAuthenticated()) {
+                    User currentUser = (User) authentication.getPrincipal();
+                    chatLine.setUsername(currentUser.getUsername());
+                } else {
+                    chatLine.setUsername("anonymous");
+                }
+            }
+
+            tabla.getChat().add(chatLine);
+            return "redirect:/partida/" + id;
+        }
     }
 }
