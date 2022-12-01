@@ -149,12 +149,11 @@ public class UserController {
             }
 
             InvitacionAmistad invitacionAmistad = new InvitacionAmistad();
-            invitacionAmistad.setUserEnvia(userService.findUser(enviaUsername).get());
-            invitacionAmistad.setUserRecibe(recibe);
+            invitacionAmistad.setUserenvia(userService.findUser(enviaUsername).get());
+            invitacionAmistad.setUserrecibe(recibe);
 
             invitacionAmistadService.saveInvitacionAmistad(invitacionAmistad);
-
-            // model.put("usuarios", userService.findUserByString(user.username));
+            model.put("usuarios", userService.findUserByString(user.username));
             return "redirect:/users/" + enviaUsername;
         }
     }
@@ -201,10 +200,15 @@ public class UserController {
 
         }
 
+        List<User> usuarios =  invitacionAmistadService.findFriends(usuario).stream().map(invitacion -> invitacion.getUserrecibe()).toList();
+       
+        model.put("usuarios",usuarios);
+        
         model.put("user", new User());
         model.put("usuario", usuario);
         model.put("jugadores", jugadores);
         model.put("logros", logrosCumplidos);
+        
         return view_user;
     }
 

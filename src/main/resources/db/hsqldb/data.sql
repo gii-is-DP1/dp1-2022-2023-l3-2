@@ -48,7 +48,8 @@ INSERT INTO jugadores(id,first_name, last_name, acero,esespectador,hierro,medall
 INSERT INTO estadistica(id, partidas_ganadas, partidas_perdidas, user_id) VALUES
 (1, 0, 0, 'jualeomad'),
 (2, 0, 0, 'rafgargal'),
-(3, 0, 0, 'dandiasua');
+(3, 0, 0, 'dandiasua'),
+(4, 0, 0, 'alegarsan11');
 
 
 INSERT INTO tipo_carta(id, name) VALUES
