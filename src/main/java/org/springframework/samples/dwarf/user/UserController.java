@@ -28,6 +28,9 @@ import org.springframework.samples.dwarf.jugador.Jugador;
 import org.springframework.samples.dwarf.jugador.JugadorService;
 import org.springframework.samples.dwarf.logro.Logro;
 import org.springframework.samples.dwarf.logro.LogroService;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
@@ -54,12 +57,15 @@ public class UserController {
     private final JugadorService ownerService;
     private final UserService userService;
     private final LogroService logroService;
+    private final InvitacionAmistadService invitacionAmistadService;
 
     @Autowired
-    public UserController(JugadorService clinicService, UserService userService, LogroService logroService) {
+    public UserController(JugadorService clinicService, UserService userService, LogroService logroService,
+            InvitacionAmistadService invitacionAmistadService) {
         this.ownerService = clinicService;
         this.userService = userService;
         this.logroService = logroService;
+        this.invitacionAmistadService = invitacionAmistadService;
     }
 
     @InitBinder
@@ -122,6 +128,37 @@ public class UserController {
         }
     }
 
+    @PostMapping(value = "/users/friend")
+    public String processAddFriendForm(Map<String, Object> model, @Valid User user, BindingResult result) {
+        if (result.hasErrors()) {
+            return "users/findUsers";
+        } else {
+            // creating owner, user, and authority
+
+            String enviaUsername = "";
+            User recibe = userService.findUser(user.username).get();
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+            if (authentication != null) {
+                if (authentication.isAuthenticated()) {
+                    org.springframework.security.core.userdetails.User currentUser = (org.springframework.security.core.userdetails.User) authentication
+                            .getPrincipal();
+
+                    enviaUsername = currentUser.getUsername();
+                }
+            }
+
+            InvitacionAmistad invitacionAmistad = new InvitacionAmistad();
+            invitacionAmistad.setUserEnvia(userService.findUser(enviaUsername).get());
+            invitacionAmistad.setUserRecibe(recibe);
+
+            invitacionAmistadService.saveInvitacionAmistad(invitacionAmistad);
+
+            // model.put("usuarios", userService.findUserByString(user.username));
+            return "redirect:/users/" + enviaUsername;
+        }
+    }
+
     @GetMapping(value = "/users/{userid}")
     public String showUser(@PathVariable("userid") String id, Map<String, Object> model) {
         User usuario = userService.findUser(id).get();
@@ -164,6 +201,7 @@ public class UserController {
 
         }
 
+        model.put("user", new User());
         model.put("usuario", usuario);
         model.put("jugadores", jugadores);
         model.put("logros", logrosCumplidos);
