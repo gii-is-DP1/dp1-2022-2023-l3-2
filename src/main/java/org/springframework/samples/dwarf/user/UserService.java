@@ -62,4 +62,5 @@ public class UserService {
     public List<User> findUserByString(String username) {
         return this.findAll().stream().filter(user -> user.getUsername().contains(username)).toList();
     };
+
 }
