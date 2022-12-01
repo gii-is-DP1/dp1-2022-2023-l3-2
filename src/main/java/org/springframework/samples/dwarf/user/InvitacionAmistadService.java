@@ -1,5 +1,7 @@
 package org.springframework.samples.dwarf.user;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,5 +18,10 @@ public class InvitacionAmistadService {
     @Transactional
     public void saveInvitacionAmistad(InvitacionAmistad invitacion) {
         invitacionrepo.save(invitacion);
+    }
+
+    @Transactional
+    public List<InvitacionAmistad> findFriends(User user){
+        return invitacionrepo.findByUserenvia(user);
     }
 }

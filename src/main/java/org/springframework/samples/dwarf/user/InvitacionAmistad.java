@@ -17,9 +17,9 @@ public class InvitacionAmistad extends BaseEntity {
 
     @OneToOne
     @JoinColumn(name = "user_id_envia")
-    private User userEnvia;
+    private User userenvia;
 
     @OneToOne
     @JoinColumn(name = "user_id_recibe")
-    private User userRecibe;
+    private User userrecibe;
 }

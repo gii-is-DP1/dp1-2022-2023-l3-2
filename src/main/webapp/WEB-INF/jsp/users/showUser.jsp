@@ -101,6 +101,22 @@
         </div>
 
     </form:form>
+    <table id="jugadoresTable" class="table table-striped">
+        <thead>
+        <tr>
+            <th style="width: 150px;">Username</th>
+        </tr>
+        </thead>
+        <tbody>
+        <c:forEach items="${usuarios}" var="usuario">
+            <tr>
+                <td>
+                    <a href="/users/${usuario.username}">${usuario.username}</a>
+                </td>
+            </tr>
+        </c:forEach>
+        </tbody>
+    </table>
 
 
 </petclinic:layout>
