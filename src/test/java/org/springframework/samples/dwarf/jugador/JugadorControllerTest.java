@@ -96,9 +96,15 @@ public class JugadorControllerTest {
 	// 			.andExpect(status().is3xxRedirection());
 	// }
 
-    //
-    //
-    //
+    // @WithMockUser(value = "spring")
+	// @Test
+	// void testProcessCreationFormHasErrors() throws Exception {
+	// 	mockMvc.perform(post("/jugadores/new").with(csrf()).param("firstName", "Pepe").param("lastName", "Biyuela")
+	// 			.param("city", "London")).andExpect(status().isOk()).andExpect(model().attributeHasErrors("jugador"))
+	// 			.andExpect(model().attributeHasFieldErrors("jugador", "address"))
+	// 			.andExpect(model().attributeHasFieldErrors("jugador", "telephone"))
+	// 			.andExpect(view().name("jugadores/createOrUpdateOwnerForm"));
+	// }
 
     @WithMockUser(value = "spring")
 	@Test
@@ -162,15 +168,24 @@ public class JugadorControllerTest {
 				.andExpect(view().name("redirect:/jugador/{ownerId}"));
 	}
 
-    @WithMockUser(value = "spring")
+    // @WithMockUser(value = "spring")
+	// @Test
+	// void testProcessUpdateOwnerFormHasErrors() throws Exception {
+	// 	mockMvc.perform(post("/jugador/{ownerId}/edit", TEST_JUGADOR_ID).with(csrf()).param("firstName", "Jose")
+	// 			.param("lastName", "Villa")).andExpect(status().isOk())
+	// 			.andExpect(model().attributeHasErrors("jugador"))
+	// 			.andExpect(model().attributeHasFieldErrors("jugador", "address"))
+	// 			.andExpect(model().attributeHasFieldErrors("jugador", "telephone"))
+	// 			.andExpect(view().name("jugadores/createOrUpdateOwnerForm"));
+	// }
+
+	@WithMockUser(value = "spring")
 	@Test
-	void testProcessUpdateOwnerFormHasErrors() throws Exception {
-		mockMvc.perform(post("/jugador/{ownerId}/edit", TEST_JUGADOR_ID).with(csrf()).param("firstName", "Jose")
-				.param("lastName", "Villa")).andExpect(status().isOk())
-				.andExpect(model().attributeHasErrors("jugador"))
-				.andExpect(model().attributeHasFieldErrors("jugador", "address"))
-				.andExpect(model().attributeHasFieldErrors("juador", "telephone"))
-				.andExpect(view().name("jugadores/createOrUpdateOwnerForm"));
+	void testShowOwner() throws Exception {
+		mockMvc.perform(get("/jugador/{ownerId}", TEST_JUGADOR_ID)).andExpect(status().isOk())
+				.andExpect(model().attribute("jugador", hasProperty("lastName", is("Biyuela"))))
+				.andExpect(model().attribute("jugador", hasProperty("firstName", is("Pepe"))))
+				.andExpect(view().name("jugadores/ownerDetails"));
 	}
 
 }
