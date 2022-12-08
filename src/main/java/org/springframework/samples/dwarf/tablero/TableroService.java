@@ -1,6 +1,7 @@
 package org.springframework.samples.dwarf.tablero;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.samples.dwarf.carta.Carta;
 import org.springframework.stereotype.Service;
 import java.util.*;
 

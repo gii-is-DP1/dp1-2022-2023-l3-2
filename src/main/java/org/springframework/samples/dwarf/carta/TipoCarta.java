@@ -1,8 +1,7 @@
-package org.springframework.samples.dwarf.tablero;
+package org.springframework.samples.dwarf.carta;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
-
 
 import org.springframework.samples.dwarf.model.NamedEntity;
 
