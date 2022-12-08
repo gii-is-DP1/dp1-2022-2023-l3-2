@@ -15,13 +15,29 @@ import org.springframework.samples.dwarf.carta.Carta;
 public class TableroRepositoryTest {
 
     @Autowired
-    TableroRepository tarepo;
+    TableroRepository tableroRepository;
 
     @Test
-    public void initialDataFindAllCartasTest() {
-        List<Carta> cartas = tarepo.findAllCartas();
+    public void testFindAllCartas() {
+        List<Carta> cartas = tableroRepository.findAllCartas();
         assertNotNull(cartas);
         assertFalse(cartas.isEmpty());
         assertEquals(63, cartas.size());
+    }
+
+    @Test
+    public void testFindCartaById() {
+        Integer id = 1;
+        Carta carta = tableroRepository.findCartaById(id);
+        assertNotNull(carta);
+        assertEquals(1, carta.getId());
+    }
+
+    @Test
+    public void testFindCartaByPosicion() {
+        Integer id = 1;
+        List <Carta> cartas = tableroRepository.findByPosicion(id);
+        assertNotNull(cartas);
+        assertEquals(6, cartas.size());
     }
 }

@@ -13,49 +13,52 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import com.mysql.cj.xdevapi.Table;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @ExtendWith(MockitoExtension.class)
 public class TableroServiceTest {
     
-    @Mock
-    TableroRepository tarepo;
+    @Autowired
+    protected TableroService tableroService;
 
+    @Mock
+    TableroRepository tableroRepository;
 
     Tablero tablero;
+    Mazo mazo;
 
     @BeforeEach
-    public void config(){
+    public void config() {
         tablero = new Tablero();
-
-        Mazo mazo = new Mazo();
+        mazo = new Mazo();
         List<Mazo> mazos = new ArrayList<>();
         mazos.add(mazo);
         tablero.setMazos(mazos);
-        when(tarepo.findById(any(Integer.class))).thenReturn(tablero);
+        when(tableroRepository.findById(any(Integer.class))).thenReturn(tablero);
     }
+
     // No funciona por que no tiene restricciones ni excepcion.
     @Test
-    public void saveTestUnsucessful(){
-        Tablero table = new Tablero();
-        table.setName("prueba");
-        table.setId(1);
-        TableroService tableroService = new TableroService(tarepo);
-        assertThrows(Exception.class, () -> tableroService.saveTablero(table));
+    public void saveTestUnsucessful() {
+        Tablero tablero2 = new Tablero();
+        tablero2.setName("tablero prueba");
+        tablero2.setId(1);
+        TableroService tableroService = new TableroService(tableroRepository);
+        assertThrows(Exception.class, () -> tableroService.saveTablero(tablero2));
     }
-    // No funciona por que no tiene restricciones ni excepcion.
+
     @Test
-    public void saveTestSucessful(){
-        Tablero table = new Tablero();
-        table.setName("prueba");
-        table.setId(1);
-        TableroService tableroService = new TableroService(tarepo);
+    public void saveTestSucessful() {
+        Tablero tablero2 = new Tablero();
+        tablero2.setName("tablero prueba");
+        tablero2.setId(1);
+        TableroService tableroService = new TableroService(tableroRepository);
         try{
-            tableroService.saveTablero(table);
+            tableroService.saveTablero(tablero2);
         }catch(Exception e) {
-            
+            fail("This expeception should not be thrown!");
         }
     }
+
 
 }
