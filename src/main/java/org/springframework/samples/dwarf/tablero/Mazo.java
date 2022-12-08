@@ -7,6 +7,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
+import org.springframework.samples.dwarf.carta.Carta;
 import org.springframework.samples.dwarf.model.NamedEntity;
 
 import lombok.Getter;

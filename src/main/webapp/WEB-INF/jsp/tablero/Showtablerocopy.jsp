@@ -216,6 +216,7 @@
             transition: transform .1s;
         }
     </style>
+    <a href="/partida/${id_partida}/comienza"><button>COMIENZA</button></a>
     <c:if test="${jugadores.get(0).posicionFinal != null}">
         <div class="blur">
 

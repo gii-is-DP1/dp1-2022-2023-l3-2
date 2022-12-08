@@ -17,6 +17,7 @@ import javax.websocket.server.PathParam;
 
 import org.springframework.security.core.userdetails.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.samples.dwarf.carta.Carta;
 import org.springframework.samples.dwarf.jugador.Jugador;
 import org.springframework.samples.dwarf.jugador.JugadorService;
 
@@ -337,192 +338,28 @@ public class TableroController {
     @GetMapping("{partidaId}/recursos")
     public String rondaRecursos(@PathVariable("partidaId") Integer id) {
         Tablero tabla = taservice.findById(id);
-        /*
-         * Carta primera = tabla.getJugadores().stream().filter(jugador ->
-         * jugador.getEnano())
-         */
+
         tabla.getJugadores().stream().filter(j -> j.isTurno()).toList().get(0).setTurno(false);
         tabla.getJugadores().get(0).setTurno(true);
 
-        // Manejo cartas no comunes
-
-        boolean farmeo = true;
-
-        final List<Integer> ORCOS = Arrays.asList(11, 20, 30, 49);
-        if (ORCOS.stream().anyMatch(cartaId -> tabla.estaEnTablero(cartaId) && !tabla.tieneEnanoEncima(cartaId))) {
-            farmeo = false;
-        }
-
-        // ========================
-
-        final List<Integer> ALLOY_STEEL = Arrays.asList(10, 15, 19, 21, 23, 29, 44, 54);
-        for (Jugador j : tabla.getJugadores()) {
-            for (Enano e : j.getEnano()) {
-                if (e.getPosicion() != 12) {
-                    Carta primera = e.getMazo().getFirstCarta();
-                    if (primera.getTipo().getName().equals("extraccion")) {
-
-                        if (primera.getDevuelve() != null || primera.getEntrada() != null) {
-
-                            if (primera.getDevuelve().equals("hierro") && farmeo) {
-                                j.setHierro(j.getHierro() + primera.getCantidaddevuelve());
-                            }
-                            if (primera.getDevuelve().equals("oro") && farmeo) {
-                                j.setOro(j.getOro() + primera.getCantidaddevuelve());
-                            }
-                            if (primera.getDevuelve().equals("medalla") && farmeo) {
-                                j.setMedalla(j.getMedalla() + primera.getCantidaddevuelve());
-                            }
-                            if (primera.getDevuelve().equals("acero") && farmeo) {
-                                j.setAcero(j.getAcero() + primera.getCantidaddevuelve());
-                            }
-                            if (primera.getDevuelve().equals("objeto") && farmeo) {
-                                j.setObjeto(j.getObjeto() + primera.getCantidaddevuelve());
-                            }
-                        }
-
-                        if (ALLOY_STEEL.contains(primera.getId())) {
-                            if (j.getHierro() >= 3) {
-                                j.setHierro(j.getHierro() - 3);
-                                j.setAcero(j.getAcero() + 2);
-                            }
-                        }
-                        e.setPosicion(12);
-                        e.setMazo(null);
+        boolean farmeo2 = true;
+        int accion = 1;
+        farmeo2 = tabla.analizarDefensas();
+        while (accion <= 4) {
+            for (Jugador j : tabla.getJugadores()) {
+                for (Enano e : j.getEnano()) {
+                    if (e.getPosicion() != 12) {
+                        Carta primera = e.getMazo().getFirstCarta();
+                        if (accion == 2)
+                            primera.accion2(tabla, j, e);
+                        if (accion == 3 && farmeo2)
+                            primera.accion3(tabla, j, e);
+                        if (accion == 4)
+                            primera.accion4(tabla, j, e);
                     }
                 }
             }
-        }
-        for (Jugador j : tabla.getJugadores()) {
-            for (Enano e : j.getEnano()) {
-                if (e.getPosicion() != 12) {
-                    Carta primera = e.getMazo().getFirstCarta();
-                    if (primera.getTipo().getName().equals("extraccion")) {
-
-                        if (primera.getDevuelve().equals("hierro") && farmeo) {
-                            j.setHierro(j.getHierro() + primera.getCantidaddevuelve());
-                        }
-                        if (primera.getDevuelve().equals("oro") && farmeo) {
-                            j.setOro(j.getOro() + primera.getCantidaddevuelve());
-                        }
-                        if (primera.getDevuelve().equals("medalla") && farmeo) {
-                            j.setMedalla(j.getMedalla() + primera.getCantidaddevuelve());
-                        }
-                        if (primera.getDevuelve().equals("acero") && farmeo) {
-                            j.setAcero(j.getAcero() + primera.getCantidaddevuelve());
-                        }
-                        if (primera.getDevuelve().equals("objeto") && farmeo) {
-                            j.setObjeto(j.getObjeto() + primera.getCantidaddevuelve());
-                        }
-                        e.setPosicion(12);
-                        e.setMazo(null);
-                    }
-                }
-            }
-        }
-        for (Jugador j : tabla.getJugadores()) {
-            for (Enano e : j.getEnano()) {
-                if (e.getPosicion() != 12) {
-                    Carta primera = e.getMazo().getFirstCarta();
-                    List<Integer> cartasForjaEspeciales = Arrays.asList(16, 25, 26, 45, 51);
-                    // Condiciones especiales para las cartas de forja que piden materiales ditintos
-                    if (cartasForjaEspeciales.contains(primera.getId())) {
-                        if (primera.getId() == 16 && j.getAcero() >= 2 && j.getOro() >= 1) {
-                            j.setAcero(j.getAcero() - 2);
-                            j.setOro(j.getOro() - 1);
-                            j.setObjeto(j.getObjeto() + 1);
-                            break;
-                        }
-                        if (primera.getId() == 25 && j.getAcero() >= 1 && j.getOro() >= 1 && j.getHierro() >= 1) {
-                            j.setAcero(j.getAcero() - 1);
-                            j.setOro(j.getOro() - 1);
-                            j.setHierro(j.getHierro() - 1);
-                            j.setObjeto(j.getObjeto() + 1);
-                            break;
-                        }
-                        if (primera.getId() == 26 && j.getAcero() >= 1 && j.getOro() >= 2) {
-                            j.setAcero(j.getAcero() - 1);
-                            j.setOro(j.getOro() - 2);
-                            j.setObjeto(j.getObjeto() + 1);
-                            break;
-                        }
-                        if (primera.getId() == 45 && j.getAcero() >= 2 && j.getHierro() >= 1) {
-                            j.setHierro(j.getHierro() - 1);
-                            j.setAcero(j.getAcero() - 2);
-                            j.setObjeto(j.getObjeto() + 1);
-                            break;
-                        }
-                        if (primera.getId() == 51 && j.getAcero() >= 2 && j.getOro() >= 1) {
-                            j.setAcero(j.getAcero() - 2);
-                            j.setOro(j.getOro() - 1);
-                            j.setObjeto(j.getObjeto() + 1);
-                            break;
-                        }
-                    } else if (primera.getTipo().getName().equals("forja")) {
-
-                        if (primera.getEntrada().equals("hierro") && primera.getCantidadentrada() <= j.getHierro()) {
-                            j.setHierro(j.getHierro() - primera.getCantidadentrada());
-                            j.setObjeto(j.getObjeto() + primera.getCantidaddevuelve());
-                        }
-                        if (primera.getEntrada().equals("oro") && primera.getCantidadentrada() <= j.getOro()) {
-                            j.setOro(j.getOro() - primera.getCantidadentrada());
-                            j.setObjeto(j.getObjeto() + primera.getCantidaddevuelve());
-                        }
-                        if (primera.getEntrada().equals("medalla") && primera.getCantidadentrada() <= j.getMedalla()) {
-                            j.setMedalla(j.getMedalla() - primera.getCantidadentrada());
-                            j.setObjeto(j.getObjeto() + primera.getCantidaddevuelve());
-                        }
-                        if (primera.getEntrada().equals("acero") && primera.getCantidadentrada() <= j.getAcero()) {
-                            j.setAcero(j.getAcero() - primera.getCantidadentrada());
-                            j.setObjeto(j.getObjeto() + primera.getCantidaddevuelve());
-                        }
-                        if (primera.getEntrada().equals("objeto") && primera.getCantidadentrada() <= j.getObjeto()) {
-                            j.setObjeto(j.getObjeto() - primera.getCantidadentrada());
-                            j.setObjeto(j.getObjeto() + primera.getCantidaddevuelve());
-                        }
-                        e.setPosicion(12);
-                        e.setMazo(null);
-                    }
-                }
-            }
-        }
-
-        final List<Integer> GRAN_DRAGONES = Arrays.asList(13, 48);
-        if (GRAN_DRAGONES.stream()
-                .anyMatch(cartaId -> tabla.estaEnTablero(cartaId) && !tabla.tieneEnanoEncima(cartaId))) {
-            // Si no se defiende le quita 1 de oro a cada jugador
-            tabla.getJugadores().forEach(jugador -> {
-                if (jugador.getOro() > 0)
-                    jugador.setOro(jugador.getOro() - 1);
-            });
-        }
-
-        final List<Integer> DRAGONES = Arrays.asList(22, 27, 35);
-        if (DRAGONES.stream().anyMatch(cartaId -> tabla.estaEnTablero(cartaId) && !tabla.tieneEnanoEncima(cartaId))) {
-            // Si no se defiende le quita 1 de oro a cada jugador
-            tabla.getJugadores().forEach(jugador -> {
-                if (jugador.getOro() > 0)
-                    jugador.setOro(jugador.getOro() - 1);
-            });
-        }
-        final List<Integer> KNOCKERS = Arrays.asList(14, 42, 43, 53);
-        if (KNOCKERS.stream().anyMatch(cartaId -> tabla.estaEnTablero(cartaId) && !tabla.tieneEnanoEncima(cartaId))) {
-            // Si no se defiende le quita 1 de hierro a cada jugador
-            tabla.getJugadores().forEach(jugador -> {
-                if (jugador.getHierro() > 0)
-                    jugador.setHierro(jugador.getHierro() - 1);
-            });
-        }
-
-        final List<Integer> SIDHES = Arrays.asList(37, 38, 47);
-        if (SIDHES.stream().anyMatch(cartaId -> tabla.estaEnTablero(cartaId) && !tabla.tieneEnanoEncima(cartaId))) {
-            // Si no se defiende cambia 2 oro por 2 hierro
-            tabla.getJugadores().forEach(jugador -> {
-                if (jugador.getOro() >= 2) {
-                    jugador.setOro(jugador.getOro() - 2);
-                    jugador.setHierro(jugador.getHierro() + 2);
-                }
-            });
+            accion++;
         }
 
         // Sumamos 1 ronda

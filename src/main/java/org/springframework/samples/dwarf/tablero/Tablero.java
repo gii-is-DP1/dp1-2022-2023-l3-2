@@ -73,4 +73,52 @@ public class Tablero extends NamedEntity {
         jugadores.stream().forEach(jugador -> jugador.setTurno(false));
         getJugadorByUsername(username).setTurno(true);
     }
+
+    public boolean analizarDefensas() {
+        final List<Integer> ORCOS = Arrays.asList(11, 20, 30, 49);
+        boolean farmeo = !ORCOS.stream()
+                .anyMatch(cartaId -> this.estaEnTablero(cartaId) && !this.tieneEnanoEncima(cartaId));
+
+        final List<Integer> GRAN_DRAGONES = Arrays.asList(13, 48);
+        if (GRAN_DRAGONES.stream()
+                .anyMatch(cartaId -> this.estaEnTablero(cartaId) && !this.tieneEnanoEncima(cartaId))) {
+            // Si no se defiende le quita 1 de oro a cada jugador
+            this.getJugadores().forEach(jugador -> {
+                if (jugador.getOro() > 0)
+                    jugador.setOro(jugador.getOro() - 1);
+            });
+        }
+
+        final List<Integer> DRAGONES = Arrays.asList(22, 27, 35);
+        if (DRAGONES.stream()
+                .anyMatch(cartaId -> this.estaEnTablero(cartaId) && !this.tieneEnanoEncima(cartaId))) {
+            // Si no se defiende le quita 1 de oro a cada jugador
+            this.getJugadores().forEach(jugador -> {
+                if (jugador.getOro() > 0)
+                    jugador.setOro(jugador.getOro() - 1);
+            });
+        }
+        final List<Integer> KNOCKERS = Arrays.asList(14, 42, 43, 53);
+        if (KNOCKERS.stream()
+                .anyMatch(cartaId -> this.estaEnTablero(cartaId) && !this.tieneEnanoEncima(cartaId))) {
+            // Si no se defiende le quita 1 de hierro a cada jugador
+            this.getJugadores().forEach(jugador -> {
+                if (jugador.getHierro() > 0)
+                    jugador.setHierro(jugador.getHierro() - 1);
+            });
+        }
+
+        final List<Integer> SIDHES = Arrays.asList(37, 38, 47);
+        if (SIDHES.stream().anyMatch(cartaId -> this.estaEnTablero(cartaId) && !this.tieneEnanoEncima(cartaId))) {
+            // Si no se defiende cambia 2 oro por 2 hierro
+            this.getJugadores().forEach(jugador -> {
+                if (jugador.getOro() >= 2) {
+                    jugador.setOro(jugador.getOro() - 2);
+                    jugador.setHierro(jugador.getHierro() + 2);
+                }
+            });
+        }
+
+        return farmeo;
+    }
 }

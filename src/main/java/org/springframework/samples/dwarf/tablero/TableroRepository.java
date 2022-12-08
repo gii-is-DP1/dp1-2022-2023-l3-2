@@ -2,6 +2,7 @@ package org.springframework.samples.dwarf.tablero;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
+import org.springframework.samples.dwarf.carta.Carta;
 
 import java.util.List;
 
