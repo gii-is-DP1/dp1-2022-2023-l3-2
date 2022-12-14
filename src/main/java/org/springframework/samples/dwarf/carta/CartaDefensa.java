@@ -1,8 +1,5 @@
 package org.springframework.samples.dwarf.carta;
 
-import java.util.Arrays;
-import java.util.List;
-
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
