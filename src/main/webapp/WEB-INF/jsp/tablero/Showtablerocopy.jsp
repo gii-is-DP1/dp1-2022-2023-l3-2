@@ -251,9 +251,9 @@
     <div class="chat_container">
         <h2>CHAT</h2>
         <div id="chat_lines">
-            <c:forEach items="${chat}" var="chatLine">
+            <!-- <c:forEach items="${chat}" var="chatLine">
                 <p>(${chatLine.username}): ${chatLine.mensaje}</p>
-            </c:forEach>
+            </c:forEach> -->
         </div>
 
         <form:form modelAttribute="chatLine" action="/partida/${id_partida}/chatline" class="form-horizontal" id="add-owner-form" >
@@ -403,6 +403,30 @@
         // Scroll chat hacia abajo por defecto
         var objDiv = document.getElementById("chat_lines");
         objDiv.scrollTop = objDiv.scrollHeight;
+    </script>
+
+    <script>
+        function renderChat() {
+
+            fetch('http://localhost:8080/partida/1/chatline')
+                .then(res => res.json())
+                .then(obj => {
+                    chatLines1 = obj.messages;
+
+                    const chat = document.getElementById("chat_lines");
+                    let htmlString = "";
+                    for(const chatLine1 of chatLines1) {
+                        htmlString += "<p>" + chatLine1 + "</p>";
+                    }
+                    chat.innerHTML = htmlString;
+
+                    chat.scrollTop = chat.scrollHeight;
+                })
+
+
+        }
+        renderChat();
+        setInterval('renderChat()', 500);
     </script>
 
 </petclinic:layout>
