@@ -1,6 +1,7 @@
 package org.springframework.samples.dwarf.lobby;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping("/lobby")
@@ -124,6 +126,46 @@ public class LobbyController {
         lobby.setNumUsuarios(lobby.getNumUsuarios() + 1);
 
         return "redirect:/lobby/" + lobby.getId();
+    }
+
+    @Transactional
+    @GetMapping("/{lobbyId}/add-user")
+    public String addUserAlternative(@PathVariable("lobbyId") Integer id, @RequestParam String exactUsername) {
+        Lobby lobby = lobbyService.findById(id);
+
+        // Lobby no puede tener mas de 3 users
+        if (lobby.getUsuarios().size() > 2) {
+            return "redirect:/lobby/" + lobby.getId();
+        }
+
+        User userSearched = userService.findUserByString(exactUsername).get(0);
+
+        // No puedes añadir un usuario que ya está
+        if (lobby.getUsuarios().stream().anyMatch(usr -> usr.getUsername().equals(userSearched.getUsername()))) {
+            return "redirect:/lobby/" + lobby.getId();
+        }
+
+        lobby.getUsuarios().add(userSearched);
+
+        lobby.setNumUsuarios(lobby.getNumUsuarios() + 1);
+
+        return "redirect:/lobby/" + lobby.getId();
+    }
+
+    @GetMapping("/users")
+    @ResponseBody
+    public String getChatLines(@RequestParam String q) {
+
+        List<String> usersSearched = userService.findUserByString(q).stream()
+                .map(usr -> "\"" + usr.getUsername() + "\"").toList();
+
+        String JSON = "{\"data\": [";
+
+        JSON += String.join(",", usersSearched);
+
+        JSON += "]}";
+
+        return JSON;
     }
 
     @Transactional
