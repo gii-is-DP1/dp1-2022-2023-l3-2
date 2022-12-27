@@ -125,13 +125,20 @@ public class Tablero extends NamedEntity {
     public String getChatLinesInJSON() {
         String JSON = "{\"messages\": [";
 
-        List<String> rawMessages = new ArrayList<>();
+        List<String> rawObjects = new ArrayList<>();
+        // for (ChatLine chatLine : this.getChat()) {
+
+        // rawMessages.add(String.format("\"(%s): %s\"", chatLine.getUsername(),
+        // chatLine.getMensaje()));
+        // }
+
         for (ChatLine chatLine : this.getChat()) {
 
-            rawMessages.add(String.format("\"(%s): %s\"", chatLine.getUsername(), chatLine.getMensaje()));
+            rawObjects.add(String.format("{\"username\": \"%s\", \"message\": \"%s\"}", chatLine.getUsername(),
+                    chatLine.getMensaje()));
         }
 
-        JSON += String.join(",", rawMessages);
+        JSON += String.join(",", rawObjects);
 
         JSON += "]}";
 
