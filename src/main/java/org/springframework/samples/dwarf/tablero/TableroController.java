@@ -63,58 +63,79 @@ public class TableroController {
 
     @Transactional
     @PostMapping("/")
-    public String processTablero(@Valid Tablero tabla, BindingResult result) {
-        if (result.hasErrors()) {
-            return tablero;
-        } else {
-            List<Mazo> mazos = new ArrayList<>();
-            for (int i = 1; i < 14; i++) {
-                if (i <= 9) {
-                    Carta carta = taservice.findCartaById(i);
-                    List<Carta> cartas = new ArrayList<>();
-                    Mazo mazo = new Mazo();
+    public String processTablero(
+            @RequestParam String name, @RequestParam(required = false) String username1,
+            @RequestParam(required = false) String username2,
+            @RequestParam(required = false) String username3) {
+
+        Tablero tabla = new Tablero();
+        tabla.setName(name);
+
+        List<Mazo> mazos = new ArrayList<>();
+        for (int i = 1; i < 14; i++) {
+            if (i <= 9) {
+                Carta carta = taservice.findCartaById(i);
+                List<Carta> cartas = new ArrayList<>();
+                Mazo mazo = new Mazo();
+                cartas.add(carta);
+                mazo.setPosicion(i);
+                mazo.setCartas(cartas);
+                mazos.add(mazo);
+            } else if (i < 13) {
+                List<Carta> cartasEspeciales = taservice.findByPosicion(i);
+                Mazo mazo = new Mazo();
+                mazo.setCartas(cartasEspeciales);
+                mazo.setPosicion(i);
+                mazos.add(mazo);
+            } else {
+                Mazo mazo = new Mazo();
+                List<Carta> cartas = new ArrayList<>();
+
+                for (int j = 10; j < 55; j++) {
+                    Carta carta = new Carta();
+                    carta = taservice.findCartaById(j);
                     cartas.add(carta);
-                    mazo.setPosicion(i);
-                    mazo.setCartas(cartas);
-                    mazos.add(mazo);
-                } else if (i < 13) {
-                    List<Carta> cartasEspeciales = taservice.findByPosicion(i);
-                    Mazo mazo = new Mazo();
-                    mazo.setCartas(cartasEspeciales);
-                    mazo.setPosicion(i);
-                    mazos.add(mazo);
-                } else {
-                    Mazo mazo = new Mazo();
-                    List<Carta> cartas = new ArrayList<>();
-
-                    for (int j = 10; j < 55; j++) {
-                        Carta carta = new Carta();
-                        carta = taservice.findCartaById(j);
-                        cartas.add(carta);
-                    }
-                    mazo.setPosicion(i);
-                    mazo.setCartas(cartas);
-                    mazos.add(mazo);
                 }
+                mazo.setPosicion(i);
+                mazo.setCartas(cartas);
+                mazos.add(mazo);
             }
-
-            tabla.setRonda(1);
-            tabla.setMazos(mazos);
-            tabla.setJugadores(jugadorService.findAll());
-
-            // Seteamos los turnos iniciales
-            for (int i = 0; i < tabla.getJugadores().size(); i++) {
-                if (i == 0) {
-                    tabla.getJugadores().get(i).setTurno(true);
-                } else {
-                    tabla.getJugadores().get(i).setTurno(false);
-                }
-            }
-
-            taservice.saveTablero(tabla);
-
-            return "redirect:/partida/" + tabla.getId() + "/comienza";
         }
+
+        tabla.setRonda(1);
+        tabla.setMazos(mazos);
+
+        List<Jugador> jugadores = new ArrayList<>();
+        if (username1 != null) {
+            Jugador j = jugadorService.createJugadorByUsername(username1, true);
+            jugadores.add(j);
+        }
+        if (username2 != null) {
+            Jugador j = jugadorService.createJugadorByUsername(username2, false);
+            jugadores.add(j);
+        }
+        if (username3 != null) {
+            Jugador j = jugadorService.createJugadorByUsername(username3, false);
+            jugadores.add(j);
+        }
+
+        // tabla.setJugadores(jugadorService.findAll());
+
+        tabla.setJugadores(jugadores);
+
+        // Seteamos los turnos iniciales
+        for (int i = 0; i < tabla.getJugadores().size(); i++) {
+            if (i == 0) {
+                tabla.getJugadores().get(i).setTurno(true);
+            } else {
+                tabla.getJugadores().get(i).setTurno(false);
+            }
+        }
+
+        taservice.saveTablero(tabla);
+
+        return "redirect:/partida/" + tabla.getId() + "/comienza";
+
     }
 
     @Transactional

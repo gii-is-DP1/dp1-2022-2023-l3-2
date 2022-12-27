@@ -6,6 +6,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import org.springframework.samples.dwarf.tablero.Tablero;
 import org.springframework.samples.dwarf.user.User;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,6 +66,8 @@ public class LobbyController {
 
         lobby.setNumUsuarios(1);
 
+        lobby.setAdmin(currentUser.getUsername());
+
         lobbyService.saveLobby(lobby);
 
         return "redirect:/lobby/" + lobby.getId();
@@ -80,6 +83,17 @@ public class LobbyController {
         model.addAttribute("usuarios", lobby.getUsuarios());
         model.addAttribute("user", new User());
 
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        org.springframework.security.core.userdetails.User currentUser = (org.springframework.security.core.userdetails.User) authentication
+                .getPrincipal();
+
+        model.addAttribute("isAdmin", currentUser.getUsername().equals(lobby.getAdmin()));
+        model.addAttribute("lobbyAdmin", lobby.getAdmin());
+
+        model.addAttribute("usernames", lobby.getUsuarios().stream().map(user -> user.getUsername()).toList());
+
+        model.addAttribute("tablero", new Tablero());
+
         return showLobby;
     }
 
@@ -93,7 +107,19 @@ public class LobbyController {
             return "redirect:/lobby" + lobby.getId();
         }
 
-        lobby.getUsuarios().add(userService.findUserByString(user.getUsername()).get(0));
+        // Lobby no puede tener mas de 3 users
+        if (lobby.getUsuarios().size() > 2) {
+            return "redirect:/lobby/" + lobby.getId();
+        }
+
+        User userSearched = userService.findUserByString(user.getUsername()).get(0);
+
+        // No puedes añadir un usuario que ya está
+        if (lobby.getUsuarios().stream().anyMatch(usr -> usr.getUsername().equals(userSearched.getUsername()))) {
+            return "redirect:/lobby/" + lobby.getId();
+        }
+
+        lobby.getUsuarios().add(userSearched);
 
         lobby.setNumUsuarios(lobby.getNumUsuarios() + 1);
 
@@ -111,5 +137,12 @@ public class LobbyController {
         lobby.getUsuarios().remove(user);
 
         return "redirect:/lobby/" + lobby.getId();
+    }
+
+    @Transactional
+    @GetMapping("/{lobbyId}/start-match")
+    public String startMatch(@PathVariable("lobbyId") Integer id, Model model, @RequestParam String name) {
+
+        return null;
     }
 }

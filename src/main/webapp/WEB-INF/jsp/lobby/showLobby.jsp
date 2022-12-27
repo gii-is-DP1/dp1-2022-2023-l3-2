@@ -27,8 +27,11 @@
 
                     <td>
                         <a href="/users/${usuario.username}">${usuario.username}</a>
-                        <a href="/lobby/${lobbyId}/delete-user?username=${usuario.username}">Borrar</a>
-
+                        <c:if test="${isAdmin && !lobbyAdmin.equals(usuario.username)}">
+                            <a href="/lobby/${lobbyId}/delete-user?username=${usuario.username}">
+                                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                            </a>
+                        </c:if>
                     </td>
                     <td>
                         Pendiente
@@ -56,6 +59,44 @@
         </div>
 
     </form:form>
+
+    <c:if test="${usernames.size() > 1}">
+        <h2>Tablero</h2>
+        <c:if test="${usernames.size() == 2}">
+            <form:form modelAttribute="tablero" class="form-horizontal" id="add-owner-form" action="/partida/?username1=${usernames.get(0)}&username2=${usernames.get(1)}" method="POST">
+                <div class="form-group has-feedback">
+                    <petclinic:inputField label="Name" name="name" />
+
+
+
+
+                </div>
+                <div class="col-sm-offset-2 col-sm-10">
+
+                    <button class="btn btn-default" type="submit">Crear Partida</button>
+
+                </div>
+            </form:form>
+        </c:if>
+        <c:if test="${usernames.size() == 3}">
+            <form:form modelAttribute="tablero" class="form-horizontal" id="add-owner-form" action="/partida/?username1=${usernames.get(0)}&username2=${usernames.get(1)}&username3=${usernames.get(2)}" method="POST">
+                <div class="form-group has-feedback">
+                    <petclinic:inputField label="Name" name="name" />
+
+
+
+
+                </div>
+                <div class="col-sm-offset-2 col-sm-10">
+
+                    <button class="btn btn-default" type="submit">Crear Partida</button>
+
+                </div>
+            </form:form>
+        </c:if>
+    </c:if>
+
+
 
 
 </petclinic:layout>
