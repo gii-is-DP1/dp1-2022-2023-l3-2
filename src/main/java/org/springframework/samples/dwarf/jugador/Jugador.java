@@ -94,4 +94,22 @@ public class Jugador extends Person {
         this.user = user;
     }
 
+    public static Jugador crearJugadorInicial(Boolean primerJugador) {
+
+        Jugador jugador = new Jugador();
+
+        jugador.setFirstName("First Name");
+        jugador.setLastName("Last Name");
+        jugador.setAcero(0);
+        jugador.setHierro(0);
+        jugador.setMedalla(0);
+        jugador.setObjeto(0);
+        jugador.setOro(0);
+        jugador.setPrimerjugador(primerJugador);
+        jugador.setTurno(false); // Se setea despues automaticamente
+        jugador.setEsespectador(false);
+
+        return jugador;
+    }
+
 }

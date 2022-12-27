@@ -33,35 +33,43 @@ import org.springframework.samples.dwarf.model.BaseEntity;
  */
 public interface JugadorRepository extends Repository<Jugador, Integer> {
 
-	/**
-	 * Save an <code>Owner</code> to the data store, either inserting or updating it.
-	 * @param owner the <code>Owner</code> to save
-	 * @see BaseEntity#isNew
-	 */
-	void save(Jugador owner) throws DataAccessException;
+    /**
+     * Save an <code>Owner</code> to the data store, either inserting or updating
+     * it.
+     *
+     * @param owner the <code>Owner</code> to save
+     * @see BaseEntity#isNew
+     */
+    void save(Jugador owner) throws DataAccessException;
 
-	/**
-	 * Retrieve <code>Owner</code>s from the data store by last name, returning all owners
-	 * whose last name <i>starts</i> with the given name.
-	 * @param lastName Value to search for
-	 * @return a <code>Collection</code> of matching <code>Owner</code>s (or an empty
-	 * <code>Collection</code> if none found)
-	 */	
-	
-	public Collection<Jugador> findByLastName(@Param("lastName") String lastName);
+    /**
+     * Retrieve <code>Owner</code>s from the data store by last name, returning all
+     * owners
+     * whose last name <i>starts</i> with the given name.
+     *
+     * @param lastName Value to search for
+     * @return a <code>Collection</code> of matching <code>Owner</code>s (or an
+     *         empty
+     *         <code>Collection</code> if none found)
+     */
 
-	public Collection<Jugador> findAll();
+    public Collection<Jugador> findByLastName(@Param("lastName") String lastName);
 
-	/**
-	 * Retrieve an <code>Owner</code> from the data store by id.
-	 * @param id the id to search for
-	 * @return the <code>Owner</code> if found
-	 * @throws org.springframework.dao.DataRetrievalFailureException if not found
-	 */	
+    public Collection<Jugador> findAll();
 
-	public Jugador findById(@Param("id") int id);
+    /**
+     * Retrieve an <code>Owner</code> from the data store by id.
+     *
+     * @param id the id to search for
+     * @return the <code>Owner</code> if found
+     * @throws org.springframework.dao.DataRetrievalFailureException if not found
+     */
 
-	public List<Jugador> findByUserUsername(String name);
+    public Jugador findById(@Param("id") int id);
 
+    public List<Jugador> findByUserUsername(String name);
+
+    // public void createJugadorByUsername(String username, Boolean primerJugador)
+    // throws DataAccessException;
 
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.validation.constraints.NotNull;
 import javax.persistence.JoinColumn;
 
 import org.springframework.samples.dwarf.user.User;
@@ -23,4 +24,6 @@ public class Lobby extends NamedEntity {
     private List<User> usuarios;
 
     private Integer numUsuarios;
+
+    private String admin;
 }
