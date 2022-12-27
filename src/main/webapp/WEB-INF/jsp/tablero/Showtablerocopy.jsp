@@ -411,7 +411,9 @@
 
             const loggedUsername = document.querySelector("#main-navbar > ul.nav.navbar-nav.navbar-right > li > a > strong").textContent;
 
-            fetch('http://localhost:8080/partida/1/chatline')
+            const idPartida = [[${id_partida}]]
+
+            fetch('http://localhost:8080/partida/' + idPartida + '/chatline')
                 .then(res => res.json())
                 .then(obj => {
                     chatLines1 = obj.messages;
