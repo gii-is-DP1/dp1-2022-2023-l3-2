@@ -80,6 +80,7 @@
         .chat_container>div {
             width: 90%;
             overflow-y: scroll;
+            padding: 0 20px;
             height: 300px;
         }
 
@@ -408,6 +409,8 @@
     <script>
         function renderChat() {
 
+            const loggedUsername = document.querySelector("#main-navbar > ul.nav.navbar-nav.navbar-right > li > a > strong").textContent;
+
             fetch('http://localhost:8080/partida/1/chatline')
                 .then(res => res.json())
                 .then(obj => {
@@ -416,7 +419,11 @@
                     const chat = document.getElementById("chat_lines");
                     let htmlString = "";
                     for(const chatLine1 of chatLines1) {
-                        htmlString += "<p>" + chatLine1 + "</p>";
+                        if(chatLine1.username !== loggedUsername) {
+                            htmlString += "<p style=\"text-align: right\">(" + chatLine1.username + "): " + chatLine1.message + "</p>";
+                            continue
+                        }
+                        htmlString += "<p>(" + chatLine1.username + "): " + chatLine1.message + "</p>";
                     }
                     chat.innerHTML = htmlString;
 
