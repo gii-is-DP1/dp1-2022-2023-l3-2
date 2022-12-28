@@ -109,7 +109,7 @@ public class LobbyController {
         }
 
         // Lobby no puede tener mas de 3 users
-        if (lobby.getUsuarios().size() > 3) {
+        if (lobby.getUsuarios().size() > 2) {
             return "redirect:/lobby/" + lobby.getId();
         }
 
@@ -133,7 +133,7 @@ public class LobbyController {
         Lobby lobby = lobbyService.findById(id);
 
         // Lobby no puede tener mas de 3 users
-        if (lobby.getUsuarios().size() > 3) {
+        if (lobby.getUsuarios().size() > 2) {
             return "redirect:/lobby/" + lobby.getId();
         }
 
