@@ -51,7 +51,6 @@ public class LobbyController {
     @Transactional
     @PostMapping("/")
     public String processTablero(@Valid Lobby lobby, BindingResult result) {
-
         if (result.hasErrors()) {
             return lobbyForm;
         }
@@ -110,7 +109,7 @@ public class LobbyController {
         }
 
         // Lobby no puede tener mas de 3 users
-        if (lobby.getUsuarios().size() > 2) {
+        if (lobby.getUsuarios().size() > 3) {
             return "redirect:/lobby/" + lobby.getId();
         }
 
@@ -134,7 +133,7 @@ public class LobbyController {
         Lobby lobby = lobbyService.findById(id);
 
         // Lobby no puede tener mas de 3 users
-        if (lobby.getUsuarios().size() > 2) {
+        if (lobby.getUsuarios().size() > 3) {
             return "redirect:/lobby/" + lobby.getId();
         }
 

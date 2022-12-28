@@ -76,4 +76,10 @@ public class Carta extends BaseEntity implements CartaInterfaz, Serializable {
 
     }
 
+    @Override
+    public void accion5(Tablero tablero, Jugador j, Enano e) {
+        // TODO Auto-generated method stub
+
+    }
+
 }
