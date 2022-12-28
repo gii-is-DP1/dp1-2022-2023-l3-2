@@ -58,14 +58,16 @@ public class UserController {
     private final UserService userService;
     private final LogroService logroService;
     private final InvitacionAmistadService invitacionAmistadService;
+    private final AuthoritiesService authoritiesService;
 
     @Autowired
     public UserController(JugadorService clinicService, UserService userService, LogroService logroService,
-            InvitacionAmistadService invitacionAmistadService) {
+            InvitacionAmistadService invitacionAmistadService, AuthoritiesService authoritiesService) {
         this.ownerService = clinicService;
         this.userService = userService;
         this.logroService = logroService;
         this.invitacionAmistadService = invitacionAmistadService;
+        this.authoritiesService = authoritiesService;
     }
 
     @InitBinder
@@ -212,4 +214,24 @@ public class UserController {
         return view_user;
     }
 
+    @GetMapping("users/new")
+    public String createNewUser(Map<String, Object> model) {
+        User user = new User();
+        model.put("user", user);
+        return "users/creatForm";
+    }
+
+    @PostMapping("users/new")
+    public String createNewUser(@Valid User user, BindingResult result) {
+        if (result.hasErrors()) {
+            return "redirect:/users/new";
+        } else {
+            userService.saveUser(user);
+            Authorities authority = new Authorities();
+            authority.setAuthority("jugador");
+            authority.setUser(user);
+            authoritiesService.saveAuthorities(authority);
+            return "redirect:/";
+        }
+    }
 }

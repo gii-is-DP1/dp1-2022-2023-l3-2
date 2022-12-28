@@ -72,7 +72,7 @@ public class JugadorController {
 		}
 		else {
 			//creating owner, user and authorities
-			this.ownerService.saveOwner(owner);
+			this.ownerService.saveJugador(owner);
 			
 			return "redirect:/jugador/" + owner.getId();
 		}
@@ -126,7 +126,7 @@ public class JugadorController {
 		}
 		else {
 			owner.setId(ownerId);
-			this.ownerService.saveOwner(owner);
+			this.ownerService.saveJugador(owner);
 			return "redirect:/jugador/{ownerId}";
 		}
 	}

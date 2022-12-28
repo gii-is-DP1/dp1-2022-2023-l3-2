@@ -102,7 +102,7 @@
                 action="/partida/?username1=${usernames.get(0)}&username2=${usernames.get(1)}"
                 method="POST">
                 <div class="form-group has-feedback">
-                    <petclinic:inputField label="Name" name="name" />
+                    <input label="Name" name="name" required="true" minlength="3" maxlength="50"/>
 
 
 
