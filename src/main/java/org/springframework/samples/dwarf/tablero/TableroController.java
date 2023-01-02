@@ -328,7 +328,7 @@ public class TableroController {
                                             .map(j -> j.getObjeto()).toList().get(0) >= 4
                                     && mazo.getPosicion() == posicion) {
                                 e.setMazo(mazo);
-                                jugadorActual.setEnanosDisponibles(jugadorActual.getEnanosDisponibles() - 2);
+                                jugadorActual.setEnanosDisponibles(jugadorActual.getEnanosDisponibles() - 1);
 
                                 break;
                             } else if (!(10 <= mazo.getPosicion() && 13 > mazo.getPosicion())
