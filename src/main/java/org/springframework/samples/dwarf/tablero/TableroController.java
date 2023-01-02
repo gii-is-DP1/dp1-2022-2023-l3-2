@@ -301,28 +301,46 @@ public class TableroController {
                         .filter(jugador -> jugador.getUser().getUsername().equals(username))
                         .toList().get(0);
 
+
                 if (tabla.getMazos().get(posicion - 1).getFirstCarta().getTipo().getName().equals("ayuda")) {
                     // jugador con username igual al query
 
                     jugadorActual.setEnanosDisponibles(jugadorActual.getEnanosDisponibles() + 2);
                 }
-
-                // Colocamos el primer enano disponible del jugador en la posicion
                 List<Enano> enanosJugador = tabla.getJugadores().stream()
                         .filter(jugador -> jugador.getUser().getUsername().equals(username))
                         .toList().get(0).getEnano();
+                // Colocar enanos sobre todo el tablero (para las cartas especiales y no
+                // especiales)
+
                 for (Enano e : enanosJugador) {
                     if (e.getPosicion() == 12) {
                         e.setPosicion(posicion);
-                        for (Mazo m : tabla.getMazos()) {
-                            if (posicion == m.getPosicion())
-                                e.setMazo(m);
+                        for (Mazo mazo : tabla.getMazos()) {
+                            if (10 <= mazo.getPosicion() && 13 > mazo.getPosicion() && enanosJugador.size() >= 2
+                                    && mazo.getPosicion() == posicion) {
+                                e.setMazo(mazo);
+                                jugadorActual.setEnanosDisponibles(jugadorActual.getEnanosDisponibles() - 2);
+                                break;
+                            } else if (10 <= mazo.getPosicion() && 13 > mazo.getPosicion() && enanosJugador.size() >= 1
+                                    && tabla.getJugadores().stream()
+                                            .filter(jugador -> jugador.getUser().getUsername().equals(username))
+                                            .map(j -> j.getObjeto()).toList().get(0) >= 4
+                                    && mazo.getPosicion() == posicion) {
+                                e.setMazo(mazo);
+                                jugadorActual.setEnanosDisponibles(jugadorActual.getEnanosDisponibles() - 2);
+
+                                break;
+                            } else if (!(10 <= mazo.getPosicion() && 13 > mazo.getPosicion())
+                                    && posicion == mazo.getPosicion()) {
+                                e.setMazo(mazo);
+                                jugadorActual.setEnanosDisponibles(jugadorActual.getEnanosDisponibles() - 1);
+
+                                break;
+
+                            }
                         }
-
-                        jugadorActual.setEnanosDisponibles(jugadorActual.getEnanosDisponibles() - 1);
-
                         break;
-
                     }
                 }
 
@@ -370,7 +388,7 @@ public class TableroController {
         boolean farmeo2 = true;
         int accion = 1;
         farmeo2 = tabla.analizarDefensas();
-        while (accion <= 4) {
+        while (accion <= 5) {
             for (Jugador j : tabla.getJugadores()) {
                 for (Enano e : j.getEnano()) {
                     if (e.getPosicion() != 12) {
@@ -381,6 +399,8 @@ public class TableroController {
                             primera.accion3(tabla, j, e);
                         if (accion == 4)
                             primera.accion4(tabla, j, e);
+                        if (accion == 5)
+                            primera.accion5(tabla, j, e);
                     }
                 }
             }
