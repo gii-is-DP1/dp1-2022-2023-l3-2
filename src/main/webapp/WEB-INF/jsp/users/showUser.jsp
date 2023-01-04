@@ -5,14 +5,20 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="sec"
+	uri="http://www.springframework.org/security/tags"%>
 
 <petclinic:layout pageName="Usuario">
     <h2>
          Usuario:  ${usuario.username}
     </h2>
+    
+    
 
+        
 
     <br>
+
     Tabla de Jugadores
     <table id="jugadoresTable" class="table table-striped" style="width: 1100px;">
         <thead>

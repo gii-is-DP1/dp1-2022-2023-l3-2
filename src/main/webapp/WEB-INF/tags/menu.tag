@@ -60,7 +60,7 @@
 			<ul class="nav navbar-nav navbar-right">
 				<sec:authorize access="!isAuthenticated()">
 					<li><a href="<c:url value="/login" />">Login</a></li>
-					<li><a href="<c:url value="/users/new" />">Register</a></li>
+					<li><a href="<c:url value="/usersnew" />">Register</a></li>
 				</sec:authorize>
 				<sec:authorize access="isAuthenticated()">
 					<li class="dropdown"><a href="#" class="dropdown-toggle"
@@ -86,10 +86,18 @@
 													class="btn btn-primary btn-block btn-sm">Logout</a>
 											</p>
 										</div>
+										
 									</div>
 								</div>
 							</li>
 							<li class="divider"></li>
+							<br/>
+										<div>
+										<p class="text-left">
+												<a href="<c:url value="/users/mod" />"
+													class="btn btn-primary btn-block btn-sm">Modificar perfil</a>
+											</p>
+										</div>
 <!--
                             <li>
 								<div class="navbar-login navbar-login-session">
