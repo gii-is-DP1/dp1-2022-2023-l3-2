@@ -13,11 +13,11 @@
          Usuario:  ${usuario.username}
     </h2>
     
-    
-
+    <h3>Avatar</h3>
+    <img src="${imagen}" width="120p"></img>
         
 
-    <br>
+    <br/>
 
     Tabla de Jugadores
     <table id="jugadoresTable" class="table table-striped" style="width: 1100px;">
@@ -89,20 +89,21 @@
         </tbody>
     </table>
 
-    <form:form modelAttribute="user" action="/users/friend" method="post" class="form-horizontal"
-               id="search-jugador-form">
+    <form:form modelAttribute="user" action="/users/friend" method="post"
+        class="form-horizontal" id="search-jugador-form">
         <div class="form-group">
             <div class="control-group" id="username">
                 <label class="col-sm-2 control-label">Username </label>
                 <div class="col-sm-10">
-                    <form:input class="form-control" path="username" size="30" maxlength="80"/>
-                    <span class="help-inline"><form:errors path="*"/></span>
+                    <form:input class="form-control" path="username" size="30"
+                        maxlength="80" id="user-input"/>
+                    
                 </div>
             </div>
         </div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
-                <button type="submit" class="btn btn-default">Add Friend</button>
+                <button type="submit" class="btn btn-default">Add User</button>
             </div>
         </div>
 
@@ -126,3 +127,23 @@
 
 
 </petclinic:layout>
+<script>
+
+    const input = document.getElementById("user-input")
+    const lobbyId = [[${lobbyId}]]
+
+    input.addEventListener("keyup", (e) => {
+        fetch(`http://localhost:8080/lobby/users?` + new URLSearchParams({ q: e.target.value }).toString())
+                .then(res => res.json())
+                .then(obj => {
+                    const usernames = obj.data
+                    const dropdown = document.getElementById("input-dropdown")
+                    let html = ""
+
+                    for (const username of usernames) {
+                        html += '<li><a href="/users/friend'
+                    }
+                    dropdown.innerHTML = html
+                })
+    })
+</script>

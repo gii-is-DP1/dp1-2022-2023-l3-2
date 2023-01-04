@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.samples.dwarf.tablero.Tablero;
+import org.springframework.samples.dwarf.user.InvitacionAmistadService;
 import org.springframework.samples.dwarf.user.User;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,11 +35,14 @@ public class LobbyController {
 
     private LobbyService lobbyService;
     private UserService userService;
+    private InvitacionAmistadService invitacionAmistadService;
 
     @Autowired
-    public LobbyController(LobbyService lobbyService, UserService userService) {
+    public LobbyController(LobbyService lobbyService, UserService userService,
+            InvitacionAmistadService invitacionAmistadService) {
         this.lobbyService = lobbyService;
         this.userService = userService;
+        this.invitacionAmistadService = invitacionAmistadService;
     }
 
     @GetMapping("/")
@@ -117,6 +121,11 @@ public class LobbyController {
 
         // No puedes añadir un usuario que ya está
         if (lobby.getUsuarios().stream().anyMatch(usr -> usr.getUsername().equals(userSearched.getUsername()))) {
+            return "redirect:/lobby/" + lobby.getId();
+        }
+        // No es su amigo
+        if (!invitacionAmistadService.findFriendsUser(userService.findUser(lobby.getAdmin()).get())
+                .contains(userSearched)) {
             return "redirect:/lobby/" + lobby.getId();
         }
 

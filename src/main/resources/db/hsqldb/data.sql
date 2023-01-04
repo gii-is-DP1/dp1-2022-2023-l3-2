@@ -3,7 +3,7 @@ INSERT INTO users(username,password,enabled) VALUES ('admin1','4dm1n',TRUE);
 INSERT INTO authorities(id,username,authority) VALUES (1,'admin1','admin');
 -- One owner user, named owner1 with passwor 0wn3r
 INSERT INTO users(username,password,enabled) VALUES ('owner1','0wn3r',TRUE);
-INSERT INTO users(username,password,enabled) VALUES ('alegarsan11', '1234',TRUE);
+INSERT INTO users(username,password,enabled, imgperfil) VALUES ('alegarsan11', '1234',TRUE,'https://previews.123rf.com/images/yupiramos/yupiramos1708/yupiramos170831273/84892638-icono-del-avatar-hombre-sobre-ilustraci%C3%B3n-de-vectores-de-fondo-blanco.jpg');
 INSERT INTO users(username,password,enabled) VALUES ('jualeomad', '1234',TRUE);
 INSERT INTO users(username,password,enabled) VALUES ('marescram3', '1234',TRUE);
 INSERT INTO users(username,password,enabled) VALUES ('dandiasua', '1234',TRUE);
