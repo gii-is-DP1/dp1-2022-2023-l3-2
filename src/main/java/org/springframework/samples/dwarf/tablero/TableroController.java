@@ -3,6 +3,7 @@ package org.springframework.samples.dwarf.tablero;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -45,6 +46,7 @@ public class TableroController {
     private String tablero = "tablero/tablero";
     private String tablero1 = "tablero/Showtablerocopy";
     private String eleccionMateriales = "tablero/eleccionMateriales";
+    private String showListaPartidas = "tablero/showListaPartidas";
 
     private TableroService taservice;
     private JugadorService jugadorService;
@@ -135,11 +137,21 @@ public class TableroController {
         }
 
         tabla.setDefensaTotal(false);
+        tabla.setCreatedAt(new Date());
 
         taservice.saveTablero(tabla);
 
         return "redirect:/partida/" + tabla.getId() + "/comienza";
 
+    }
+
+    @GetMapping("/all")
+    public String showPartidasList(Model model) {
+        List<Tablero> partidas = taservice.findAll();
+
+        model.addAttribute("partidas", partidas);
+
+        return showListaPartidas;
     }
 
     @Transactional

@@ -15,6 +15,10 @@ public class TableroService {
         this.repo = repo;
     }
 
+    public List<Tablero> findAll() {
+        return repo.findAll();
+    }
+
     public Tablero findById(Integer id) {
         return repo.findById(id);
     }
