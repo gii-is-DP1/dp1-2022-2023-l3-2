@@ -60,15 +60,18 @@ public class UserController {
     private final LogroService logroService;
     private final InvitacionAmistadService invitacionAmistadService;
     private final AuthoritiesService authoritiesService;
+    private final EstadisticaService estadisticaService;
 
     @Autowired
     public UserController(JugadorService clinicService, UserService userService, LogroService logroService,
-            InvitacionAmistadService invitacionAmistadService, AuthoritiesService authoritiesService) {
+            InvitacionAmistadService invitacionAmistadService, AuthoritiesService authoritiesService,
+            EstadisticaService estadisticaService) {
         this.ownerService = clinicService;
         this.userService = userService;
         this.logroService = logroService;
         this.invitacionAmistadService = invitacionAmistadService;
         this.authoritiesService = authoritiesService;
+        this.estadisticaService = estadisticaService;
     }
 
     @InitBinder
@@ -138,6 +141,7 @@ public class UserController {
         } else {
             // creating owner, user, and authority
 
+
             String enviaUsername = "";
             User recibe = userService.findUser(user.username).get();
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -148,15 +152,23 @@ public class UserController {
                             .getPrincipal();
 
                     enviaUsername = currentUser.getUsername();
+
                 }
             }
-
+            // amiga que ya esta
+            if (invitacionAmistadService.findFriendsUser(userService.findUser(enviaUsername).get())
+                    .contains(user.username)) {
+                System.out.println(invitacionAmistadService
+                        .findFriendsUser(userService.findUser(enviaUsername).get())
+                        + "#".repeat(200));
+                return "redirect:/users/" + enviaUsername;
+            }
             InvitacionAmistad invitacionAmistad = new InvitacionAmistad();
             invitacionAmistad.setUserenvia(userService.findUser(enviaUsername).get());
             invitacionAmistad.setUserrecibe(recibe);
 
             invitacionAmistadService.saveInvitacionAmistad(invitacionAmistad);
-            model.put("usuarios", userService.findUserByString(user.username));
+            model.put("usuarios", invitacionAmistadService.findFriendsUser(userService.findUser(enviaUsername).get()));
             return "redirect:/users/" + enviaUsername;
         }
     }
@@ -207,7 +219,7 @@ public class UserController {
                 .map(invitacion -> invitacion.getUserrecibe()).toList();
 
         model.put("usuarios", usuarios);
-
+        model.put("imagen", usuario.imgperfil);
         model.put("user", new User());
         model.put("usuario", usuario);
         model.put("jugadores", jugadores);
@@ -235,6 +247,11 @@ public class UserController {
             }
 
             userService.saveUser(user);
+            Estadistica estats = new Estadistica();
+            estats.setUsuario(user);
+            estats.setPartidasGanadas(0);
+            estats.setPartidasPerdidas(0);
+            estadisticaService.saveEstadistica(estats);
             Authorities authority = new Authorities();
             authority.setAuthority("jugador");
             authority.setUser(user);

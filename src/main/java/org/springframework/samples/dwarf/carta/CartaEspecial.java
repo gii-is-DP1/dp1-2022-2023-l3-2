@@ -38,7 +38,7 @@ public class CartaEspecial extends Carta {
                 }
             }
             if (primera.getId() == 57) {
-                // Un objeto por 5 unidades de oro o hierro o Acero INCOMPLETO
+                // Un objeto por 5 unidades de oro o hierro o Acero INCOMPLETO ??
                 if (j.getObjeto() >= 1) {
                     j.setObjeto(j.getObjeto() - 1);
                     tablero.getMazos().stream().filter(mazo -> mazo.getFirstCarta().equals(primera)).toList().get(0)

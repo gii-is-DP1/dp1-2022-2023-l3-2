@@ -21,6 +21,11 @@ public class InvitacionAmistadService {
     }
 
     @Transactional
+    public List<String> findFriendsUser(User user) {
+        return invitacionrepo.findByUserenvia(user).stream().map(i -> i.getUserrecibe().username).toList();
+    }
+
+    @Transactional
     public List<InvitacionAmistad> findFriends(User user){
         return invitacionrepo.findByUserenvia(user);
     }

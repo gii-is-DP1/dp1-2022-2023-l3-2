@@ -27,7 +27,7 @@ public class User {
 
     boolean enabled;
 
-    String imgPerfil;
+    String imgperfil;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private Set<Authorities> authorities;

@@ -120,7 +120,7 @@
                 action="/partida/?username1=${usernames.get(0)}&username2=${usernames.get(1)}&username3=${usernames.get(2)}"
                 method="POST">
                 <div class="form-group has-feedback">
-                    <petclinic:inputField label="Name" name="name" />
+                    <input label="Name" name="name" required="true" minlength="3" maxlength="50"/>
 
 
 
@@ -139,23 +139,4 @@
 
 
 </petclinic:layout>
-<script>
 
-    const input = document.getElementById("user-input")
-    const lobbyId = [[${lobbyId}]]
-
-    input.addEventListener("keyup", (e) => {
-        fetch(`http://localhost:8080/lobby/users?` + new URLSearchParams({ q: e.target.value }).toString())
-                .then(res => res.json())
-                .then(obj => {
-                    const usernames = obj.data
-                    const dropdown = document.getElementById("input-dropdown")
-                    let html = ""
-
-                    for (const username of usernames) {
-                        html += '<li><a href="/lobby/' + lobbyId + '/add-user?exactUsername=' + username + '">' + username + '</a></li>'
-                    }
-                    dropdown.innerHTML = html
-                })
-    })
-</script>
