@@ -216,42 +216,22 @@ public class UserController {
         return view_user;
     }
 
-    @GetMapping("users/new")
+    @GetMapping("usersnew")
     public String createNewUser(Map<String, Object> model) {
         User user = new User();
         model.put("user", user);
         return "users/creatForm";
     }
 
-    @PostMapping("users/new")
+    @PostMapping("usersnew")
     public String createNewUser(@Valid User user, BindingResult result, RedirectAttributes redatt) {
         if (result.hasErrors()) {
             return "redirect:/users/new";
         } else {
 
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            if (authentication != null) {
-                if (authentication.isAuthenticated()) {
-                    org.springframework.security.core.userdetails.User currentUser = (org.springframework.security.core.userdetails.User) authentication
-                            .getPrincipal();
-                    if (currentUser.getUsername().equals(user.getUsername())) {
-                        userService.saveUser(user);
-                        Authorities authority = new Authorities();
-                        authority.setAuthority("jugador");
-                        authority.setUser(user);
-                        authoritiesService.saveAuthorities(authority);
-                        return "redirect:/";
-                    }
-
-                    redatt.addFlashAttribute("mensaje", "No eres propietario de este usuario");
-                    return "redirect:/users/new";
-
-                }
-            }
-
             if (userService.findUser(user.getUsername()).isPresent()) {
                 redatt.addFlashAttribute("mensaje", "Ya existe un usuario con este nombre");
-                return "redirect:/users/new";
+                return "redirect:/usersnew";
             }
 
             userService.saveUser(user);
@@ -261,5 +241,35 @@ public class UserController {
             authoritiesService.saveAuthorities(authority);
             return "redirect:/";
         }
+    }
+
+    @GetMapping("users/mod")
+    public String modifyUser(Map<String, Object> model) {
+        User user = new User();
+        model.put("user", user);
+        return "users/creatForm";
+    }
+
+    @PostMapping("users/mod")
+    public String modifyUser(@Valid User user, BindingResult result, RedirectAttributes redatt) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication.isAuthenticated()) {
+            org.springframework.security.core.userdetails.User currentUser = (org.springframework.security.core.userdetails.User) authentication
+                    .getPrincipal();
+            if (currentUser.getUsername().equals(user.getUsername())) {
+                userService.saveUser(user);
+                Authorities authority = new Authorities();
+                authority.setAuthority("jugador");
+                authority.setUser(user);
+                authoritiesService.saveAuthorities(authority);
+                return "redirect:/";
+            }
+
+            redatt.addFlashAttribute("mensaje", "No eres propietario de este usuario");
+            return "redirect:/users/new";
+
+        }
+        return "redirect:/";
     }
 }
