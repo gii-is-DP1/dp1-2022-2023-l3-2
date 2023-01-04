@@ -15,6 +15,8 @@ public interface TableroRepository extends Repository<Tablero, String> {
 
     Tablero findById(Integer id);
 
+    List<Tablero> findAll();
+
     @Query("SELECT DISTINCT carta FROM Carta carta")
     List<Carta> findAllCartas();
 

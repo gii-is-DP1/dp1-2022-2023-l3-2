@@ -11,11 +11,16 @@ import javax.xml.bind.annotation.XmlElement;
 
 import org.springframework.beans.support.MutableSortDefinition;
 import org.springframework.beans.support.PropertyComparator;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.samples.dwarf.jugador.Jugador;
 import org.springframework.samples.dwarf.model.NamedEntity;
 import javax.persistence.JoinColumn;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Entity
@@ -38,6 +43,9 @@ public class Tablero extends NamedEntity {
     private List<Jugador> jugadores;
 
     private boolean defensaTotal;
+
+    @DateTimeFormat(pattern = "dd-MM-yyyy/HH:mm:ss")
+    private Date createdAt;
 
     public Integer getNumJugadores() {
         return jugadores.size();
@@ -151,5 +159,49 @@ public class Tablero extends NamedEntity {
         JSON += "]}";
 
         return JSON;
+    }
+
+    public Long secondsDiffBetweenTwoDates(Date startDate, Date endDate) {
+        Date startDateObj = startDate;
+        Date endDateObj = endDate;
+        // startDateObj.getTime() method gives date in milli seconds format
+        System.out.println("Time in milli seconds: " + startDateObj.getTime());
+
+        // find time difference in milli seconds
+        long timeDiff = endDateObj.getTime() - startDateObj.getTime();
+        System.out.println("Time difference in Milli seconds: " + timeDiff);
+
+        // time difference in seconds
+        Long secondsDiff = (timeDiff / 1000);
+        System.out.println("Time difference in seconds: " + secondsDiff);
+
+        return secondsDiff;
+
+        // // time difference in minutes
+        // long minDiff = timeDiff / (1000 * 60);
+        // System.out.println("Time difference in minutes: " + minDiff);
+
+        // // time difference in minutes
+        // long hoursDiff = timeDiff / (1000 * 60 * 60);
+        // System.out.println("Time difference in hours: " + hoursDiff);
+
+        // // time difference in minutes
+        // long daysDiff = timeDiff / (1000 * 60 * 60 * 24);
+        // System.out.println("Time difference in days: " + daysDiff);
+    }
+
+    public String secondsToHoursMinutesSeconds(Long totalSecs) {
+        Double hours = totalSecs.doubleValue() / 3600;
+        Double minutes = (totalSecs.doubleValue() % 3600) / 60;
+        Double seconds = totalSecs.doubleValue() % 60;
+
+        return String.format("%02d:%02d:%02d", (int) Math.floor(hours), (int) Math.floor(minutes),
+                (int) Math.floor(seconds));
+    }
+
+    public String getFormattedDateSinceCreatedAt() {
+        System.out.println(
+                "Esta es mi fecha: " + secondsToHoursMinutesSeconds(secondsDiffBetweenTwoDates(createdAt, new Date())));
+        return secondsToHoursMinutesSeconds(secondsDiffBetweenTwoDates(createdAt, new Date()));
     }
 }

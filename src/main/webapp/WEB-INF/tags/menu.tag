@@ -34,7 +34,7 @@
 					<span>Usuarios</span>
 				</petclinic:menuItem>
 
-				<petclinic:menuItem active="${name eq 'tablero'}" url="/partida/"
+				<petclinic:menuItem active="${name eq 'tablero'}" url="/partida/all"
 					title="partidas">
 					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
 					<span>Partidas</span>
@@ -86,7 +86,7 @@
 													class="btn btn-primary btn-block btn-sm">Logout</a>
 											</p>
 										</div>
-										
+
 									</div>
 								</div>
 							</li>
