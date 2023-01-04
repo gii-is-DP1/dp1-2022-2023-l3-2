@@ -19,6 +19,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.samples.dwarf.carta.Carta;
+import org.springframework.samples.dwarf.carta.TipoCarta;
 import org.springframework.samples.dwarf.jugador.Jugador;
 import org.springframework.samples.dwarf.jugador.JugadorService;
 
@@ -43,6 +44,7 @@ public class TableroController {
 
     private String tablero = "tablero/tablero";
     private String tablero1 = "tablero/Showtablerocopy";
+    private String eleccionMateriales = "tablero/eleccionMateriales";
 
     private TableroService taservice;
     private JugadorService jugadorService;
@@ -131,6 +133,8 @@ public class TableroController {
                 tabla.getJugadores().get(i).setTurno(false);
             }
         }
+
+        tabla.setDefensaTotal(false);
 
         taservice.saveTablero(tabla);
 
@@ -294,13 +298,16 @@ public class TableroController {
                 }
 
                 // Si el mazo ya tiene un enano encima no se coloca
-                if (tabla.tieneEnanoEncima(tabla.getMazos().get(posicion - 1).getFirstCarta().getId()))
+                if (tabla.tieneEnanoEncima(tabla.getMazos().get(posicion - 1).getFirstCarta().getId()) && posicion >= 1
+                        && posicion <= 9)
+                    return "redirect:/partida/" + id;
+
+                if (tabla.getMazos().get(posicion - 1).getFirstCarta().getTipo().getName().equals("base"))
                     return "redirect:/partida/" + id;
 
                 Jugador jugadorActual = tabla.getJugadores().stream()
                         .filter(jugador -> jugador.getUser().getUsername().equals(username))
                         .toList().get(0);
-
 
                 if (tabla.getMazos().get(posicion - 1).getFirstCarta().getTipo().getName().equals("ayuda")) {
                     // jugador con username igual al query
@@ -317,12 +324,7 @@ public class TableroController {
                     if (e.getPosicion() == 12) {
                         e.setPosicion(posicion);
                         for (Mazo mazo : tabla.getMazos()) {
-                            if (10 <= mazo.getPosicion() && 13 > mazo.getPosicion() && enanosJugador.size() >= 2
-                                    && mazo.getPosicion() == posicion) {
-                                e.setMazo(mazo);
-                                jugadorActual.setEnanosDisponibles(jugadorActual.getEnanosDisponibles() - 2);
-                                break;
-                            } else if (10 <= mazo.getPosicion() && 13 > mazo.getPosicion() && enanosJugador.size() >= 1
+                            if (10 <= mazo.getPosicion() && 13 > mazo.getPosicion() && enanosJugador.size() >= 1
                                     && tabla.getJugadores().stream()
                                             .filter(jugador -> jugador.getUser().getUsername().equals(username))
                                             .map(j -> j.getObjeto()).toList().get(0) >= 4
@@ -331,6 +333,12 @@ public class TableroController {
                                 jugadorActual.setEnanosDisponibles(jugadorActual.getEnanosDisponibles() - 1);
 
                                 break;
+                            } else if (10 <= mazo.getPosicion() && 13 > mazo.getPosicion() && enanosJugador.size() >= 2
+                                    && mazo.getPosicion() == posicion) {
+                                e.setMazo(mazo);
+                                jugadorActual.setEnanosDisponibles(jugadorActual.getEnanosDisponibles() - 2);
+                                break;
+
                             } else if (!(10 <= mazo.getPosicion() && 13 > mazo.getPosicion())
                                     && posicion == mazo.getPosicion()) {
                                 e.setMazo(mazo);
@@ -343,6 +351,8 @@ public class TableroController {
                         break;
                     }
                 }
+
+                String accion5 = tabla.getMazos().get(posicion - 1).getFirstCarta().accion5(tabla, jugadorActual);
 
                 if (!tabla.getJugadores().stream().anyMatch(jugador -> jugador.getEnanosDisponibles() > 0))
                     return "redirect:/partida/" + id + "/recursos";
@@ -369,6 +379,10 @@ public class TableroController {
                 // Nueva condicion de llamada a recursos
                 // si enanosDisponibles de todos igual a 0
 
+                if (accion5 != null) {
+                    return accion5;
+                }
+
                 return "redirect:/partida/" + id;
 
             }
@@ -383,7 +397,7 @@ public class TableroController {
         Tablero tabla = taservice.findById(id);
 
         tabla.getJugadores().stream().filter(j -> j.isTurno()).toList().get(0).setTurno(false);
-        tabla.getJugadores().get(0).setTurno(true);
+        // tabla.getJugadores().get(0).setTurno(true);
 
         boolean farmeo2 = true;
         int accion = 1;
@@ -399,13 +413,13 @@ public class TableroController {
                             primera.accion3(tabla, j, e);
                         if (accion == 4)
                             primera.accion4(tabla, j, e);
-                        if (accion == 5)
-                            primera.accion5(tabla, j, e);
                     }
                 }
             }
             accion++;
         }
+
+        tabla.getJugadores().stream().filter(j -> j.isPrimerjugador()).toList().get(0).setTurno(true);
 
         // Sumamos 1 ronda
         tabla.setRonda(tabla.getRonda() + 1);
@@ -515,5 +529,33 @@ public class TableroController {
             tabla.getChat().add(chatLine);
             return "redirect:/partida/" + id;
         }
+    }
+
+    @Transactional
+    @GetMapping("{partidaId}/eleccion-materiales")
+    public String eleccionMateriales(@PathVariable("partidaId") Integer id, Model model,
+            @RequestParam("username") String username) {
+
+        model.addAttribute("username", username);
+        model.addAttribute("id_partida", id);
+        return eleccionMateriales;
+    }
+
+    @Transactional
+    @GetMapping("{partidaId}/eleccion-material")
+    public String eleccionMaterial(@PathVariable("partidaId") Integer id, @RequestParam("material") String material,
+            @RequestParam("username") String username) {
+
+        Tablero tablero = taservice.findById(id);
+        Jugador j = tablero.getJugadorByUsername(username);
+
+        if (material.equals("oro"))
+            j.setOro(j.getOro() + 5);
+        if (material.equals("hierro"))
+            j.setHierro(j.getHierro() + 5);
+        if (material.equals("acero"))
+            j.setAcero(j.getAcero() + 5);
+
+        return "redirect:/partida/" + id;
     }
 }

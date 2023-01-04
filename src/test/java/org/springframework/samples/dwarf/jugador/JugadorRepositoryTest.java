@@ -31,12 +31,12 @@ public class JugadorRepositoryTest {
         assertNotNull(j);
     }
 
-    @Test
-    public void testFindByLastName() {
-        String lastName = "Diañez";
-        Collection<Jugador> jugadores = jugadorrepo.findByLastName(lastName);
-        assertNotNull(jugadores);
-        assertFalse(jugadores.isEmpty());
-        assertEquals(1, jugadores.size());
-    }
+    // @Test
+    // public void testFindByLastName() {
+    // String lastName = "Diañez";
+    // Collection<Jugador> jugadores = jugadorrepo.findByLastName(lastName);
+    // assertNotNull(jugadores);
+    // assertFalse(jugadores.isEmpty());
+    // assertEquals(1, jugadores.size());
+    // }
 }

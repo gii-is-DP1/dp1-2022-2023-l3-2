@@ -13,6 +13,6 @@ public interface CartaInterfaz {
 
     public void accion4(Tablero tablero, Jugador j, Enano e);
 
-    public void accion5(Tablero tablero, Jugador j, Enano e);
+    public String accion5(Tablero tablero, Jugador j);
 
 }

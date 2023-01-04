@@ -19,13 +19,15 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "users")
-public class User extends AuditableEntity {
+public class User {
     @Id
     String username;
 
     String password;
 
     boolean enabled;
+
+    String imgPerfil;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private Set<Authorities> authorities;

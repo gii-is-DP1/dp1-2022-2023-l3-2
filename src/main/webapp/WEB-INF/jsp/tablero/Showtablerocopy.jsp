@@ -330,13 +330,13 @@
 
                         <td style="position: relative;">
                             <c:if test="${mazosConEnanoEncima.stream().filter(i -> pos.id.equals(i)).toList().size() != 0}">
-                            <img class="ficha" src="/resources/images/Dimensionadas/${asociacionesColores.get(asociacionesUsernameMazo.get(pos.id))}.png" >
-                            
-                        </c:if>
+                                <img class="ficha" src="/resources/images/Dimensionadas/${asociacionesColores.get(asociacionesUsernameMazo.get(pos.id))}.png" >
+
+                            </c:if>
                             <spring:url value="${pos.getFirstCarta().imagen}" var="dwarf" />
                             <a href="/partida/${id_partida}/coloca?username=${username}&posicion=${pos.posicion}">
-                            <img class="img-responsive" src="${dwarf}" height="160"
-                                width="160" style="margin: auto;"/>
+                                <img class="img-responsive" src="${dwarf}" height="160"
+                                    width="160" style="margin: auto;"/>
                             </a>
                         </td>
 
@@ -354,13 +354,13 @@
                         <c:if test="${jugador.primerjugador}">
                             <li style="list-style-type: none;">
                                 <img src="/resources/images/FichaDeInicio.png" height="18" width="20"/>
-                                <c:out value="${jugador.firstName}" />
+                                <c:out value="${jugador.user.username}" />
                             </li>
                         </c:if>
                         <c:if test="${!jugador.primerjugador}">
                             <li style="list-style-type: none;">
                                 <img src="/resources/images/FichaDeInicioVacia.png" height="18" width="20"/>
-                                <c:out value="${jugador.firstName}" />
+                                <c:out value="${jugador.user.username}" />
                             </li>
                         </c:if>
                         <li style="list-style-type: none;">
