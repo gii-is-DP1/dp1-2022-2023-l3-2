@@ -125,7 +125,7 @@ public class LobbyController {
         }
         // No es su amigo
         if (!invitacionAmistadService.findFriendsUser(userService.findUser(lobby.getAdmin()).get())
-                .contains(userSearched)) {
+                .contains(userSearched.getUsername())) {
             return "redirect:/lobby/" + lobby.getId();
         }
 
@@ -150,6 +150,11 @@ public class LobbyController {
 
         // No puedes añadir un usuario que ya está
         if (lobby.getUsuarios().stream().anyMatch(usr -> usr.getUsername().equals(userSearched.getUsername()))) {
+            return "redirect:/lobby/" + lobby.getId();
+        }
+        // No es amigo
+        if (!invitacionAmistadService.findFriendsUser(userService.findUser(lobby.getAdmin()).get())
+                .contains(userSearched.getUsername())) {
             return "redirect:/lobby/" + lobby.getId();
         }
 
