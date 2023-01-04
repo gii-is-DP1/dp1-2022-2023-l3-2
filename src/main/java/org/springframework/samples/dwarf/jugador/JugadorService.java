@@ -53,11 +53,6 @@ public class JugadorService {
         return ownerRepository.findById(id);
     }
 
-    @Transactional(readOnly = true)
-    public Collection<Jugador> findOwnerByLastName(String lastName) throws DataAccessException {
-        return ownerRepository.findByLastName(lastName);
-    }
-
     @Transactional
     public List<Jugador> findAll() {
         return (List<Jugador>) ownerRepository.findAll();

@@ -53,8 +53,6 @@ public interface JugadorRepository extends Repository<Jugador, Integer> {
      *         <code>Collection</code> if none found)
      */
 
-    public Collection<Jugador> findByLastName(@Param("lastName") String lastName);
-
     public Collection<Jugador> findAll();
 
     /**

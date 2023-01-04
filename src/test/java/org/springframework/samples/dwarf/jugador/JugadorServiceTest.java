@@ -11,15 +11,14 @@ public class JugadorServiceTest {
     @Mock
     JugadorRepository jurepo;
 
-
     Jugador jugador;
 
-    @BeforeEach
-    public void config(){
-        jugador = new Jugador();
+    // @BeforeEach
+    // public void config(){
+    // jugador = new Jugador();
 
-        jugador.setFirstName("PruebaJugador");
-        when(jurepo.findById(any(Integer.class))).thenReturn(jugador);
-    }
-    
+    // jugador.setFirstName("PruebaJugador");
+    // when(jurepo.findById(any(Integer.class))).thenReturn(jugador);
+    // }
+
 }

@@ -40,10 +40,6 @@ INSERT INTO vet_specialties VALUES (4, 2);
 INSERT INTO vet_specialties VALUES (5, 1);
 
 
-INSERT INTO jugadores(id,first_name, last_name, acero,esespectador,hierro,medalla,objeto,oro,primerjugador,username, posicion_final, turno) VALUES
-(1, 'Ernesto', 'Saquete Rios', 0, false,0,0,0,0,true,'ernsaqrio', null,true),
-(2, 'Daniel', 'Diañez',0 ,false,0,0,0,0,false,'dandiasua', null,false),
-(3, 'Rafael David', 'Garcia', 0,false,0,0,0,0,false,'rafgargal', null,false);
 
 INSERT INTO estadistica(id, partidas_ganadas, partidas_perdidas, user_id) VALUES
 (1, 0, 0, 'jualeomad'),
@@ -57,7 +53,8 @@ INSERT INTO tipo_carta(id, name) VALUES
 (1, 'extraccion'),
 (2, 'ayuda'),
 (3, 'forja'),
-(4, 'especial');
+(4, 'especial'),
+(5, 'base');
 
 INSERT INTO tipo_logro(id, name) VALUES
 (0, 'partidas_ganadas'),
@@ -150,3 +147,6 @@ INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve
 INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve, type) VALUES(61, '/resources/images/Dimensionadas/061-A.png', 12, 4, null, null, null, null , 'especial');
 INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve, type) VALUES(62, '/resources/images/Dimensionadas/062-A.png', 12, 4, null, null, null, null , 'especial');
 INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve, type) VALUES(63, '/resources/images/Dimensionadas/063-A.png', 12, 4, null, null, null, null , 'especial');
+INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve, type) VALUES(64, '/resources/images/Dimensionadas/carta_vacia.png', 10, 5, null, null, null, null , 'base');
+INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve, type) VALUES(65, '/resources/images/Dimensionadas/carta_vacia.png', 11, 5, null, null, null, null , 'base');
+INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve, type) VALUES(66, '/resources/images/Dimensionadas/carta_vacia.png', 12, 5, null, null, null, null , 'base');

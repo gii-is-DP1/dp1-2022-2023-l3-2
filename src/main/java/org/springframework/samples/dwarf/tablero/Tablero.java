@@ -37,6 +37,8 @@ public class Tablero extends NamedEntity {
     @JoinTable(name = "jugadores_lobby", joinColumns = @JoinColumn(name = "jugador_id"))
     private List<Jugador> jugadores;
 
+    private boolean defensaTotal;
+
     public Integer getNumJugadores() {
         return jugadores.size();
     }
@@ -75,6 +77,12 @@ public class Tablero extends NamedEntity {
     }
 
     public boolean analizarDefensas() {
+
+        if (this.defensaTotal) {
+            this.setDefensaTotal(false);
+            return true;
+        }
+
         final List<Integer> ORCOS = Arrays.asList(11, 20, 30, 49);
         boolean farmeo = !ORCOS.stream()
                 .anyMatch(cartaId -> this.estaEnTablero(cartaId) && !this.tieneEnanoEncima(cartaId));

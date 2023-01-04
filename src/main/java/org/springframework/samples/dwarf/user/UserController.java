@@ -40,6 +40,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
  * @author Juergen Hoeller
@@ -202,15 +203,16 @@ public class UserController {
 
         }
 
-        List<User> usuarios =  invitacionAmistadService.findFriends(usuario).stream().map(invitacion -> invitacion.getUserrecibe()).toList();
-       
-        model.put("usuarios",usuarios);
-        
+        List<User> usuarios = invitacionAmistadService.findFriends(usuario).stream()
+                .map(invitacion -> invitacion.getUserrecibe()).toList();
+
+        model.put("usuarios", usuarios);
+
         model.put("user", new User());
         model.put("usuario", usuario);
         model.put("jugadores", jugadores);
         model.put("logros", logrosCumplidos);
-        
+
         return view_user;
     }
 
@@ -222,10 +224,36 @@ public class UserController {
     }
 
     @PostMapping("users/new")
-    public String createNewUser(@Valid User user, BindingResult result) {
+    public String createNewUser(@Valid User user, BindingResult result, RedirectAttributes redatt) {
         if (result.hasErrors()) {
             return "redirect:/users/new";
         } else {
+
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            if (authentication != null) {
+                if (authentication.isAuthenticated()) {
+                    org.springframework.security.core.userdetails.User currentUser = (org.springframework.security.core.userdetails.User) authentication
+                            .getPrincipal();
+                    if (currentUser.getUsername().equals(user.getUsername())) {
+                        userService.saveUser(user);
+                        Authorities authority = new Authorities();
+                        authority.setAuthority("jugador");
+                        authority.setUser(user);
+                        authoritiesService.saveAuthorities(authority);
+                        return "redirect:/";
+                    }
+
+                    redatt.addFlashAttribute("mensaje", "No eres propietario de este usuario");
+                    return "redirect:/users/new";
+
+                }
+            }
+
+            if (userService.findUser(user.getUsername()).isPresent()) {
+                redatt.addFlashAttribute("mensaje", "Ya existe un usuario con este nombre");
+                return "redirect:/users/new";
+            }
+
             userService.saveUser(user);
             Authorities authority = new Authorities();
             authority.setAuthority("jugador");

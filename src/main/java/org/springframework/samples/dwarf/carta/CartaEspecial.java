@@ -20,18 +20,14 @@ import lombok.Setter;
 public class CartaEspecial extends Carta {
 
     @Override
-    public void accion5(Tablero tablero, Jugador j, Enano e) {
+    public String accion5(Tablero tablero, Jugador j) {
         List<Integer> idCartasAyuda = List.of(55, 56, 57, 58, 59, 60, 61, 62, 63);
-        Carta primera = e.getMazo().getFirstCarta();
+        Carta primera = this;
         if (idCartasAyuda.contains(primera.getId())) {
             if (primera.getId() == 55) {
-                // Actua como si todas las cartas de defensa se estuvieran defendidas (Poner un
-                // enano encima de todas las posiciones de defensa??) INCOMPLETO
-
+                tablero.setDefensaTotal(true);
             }
             if (primera.getId() == 56) {
-                // Vuelve a meter en la montaña las primeras cartas de los mazos con dos o mas
-                // cartas en el (Situada en su numero de mazo) REVISAR
 
                 for (int i = 0; i < 9; i++) {
                     if (tablero.getMazos().get(i).getCartas().size() >= 2) {
@@ -45,8 +41,13 @@ public class CartaEspecial extends Carta {
                 // Un objeto por 5 unidades de oro o hierro o Acero INCOMPLETO
                 if (j.getObjeto() >= 1) {
                     j.setObjeto(j.getObjeto() - 1);
+                    tablero.getMazos().stream().filter(mazo -> mazo.getFirstCarta().equals(primera)).toList().get(0)
+                            .getCartas().remove(primera);
+                    return "redirect:/partida/" + tablero.getId() + "/eleccion-materiales?username="
+                            + j.getUser().getUsername();
                     // Elegir los elementos
                 }
+                return null;
             }
             if (primera.getId() == 58) {
                 // Elige una carta que previamente haya estado en la cima de un mazo y vuelvela
@@ -121,7 +122,12 @@ public class CartaEspecial extends Carta {
 
                 }
             }
+
+            tablero.getMazos().stream().filter(mazo -> mazo.getFirstCarta().equals(primera)).toList().get(0)
+                    .getCartas().remove(primera);
+
         }
+        return null;
     }
 
 }
