@@ -218,7 +218,10 @@
         }
     </style>
     <a href="/partida/${id_partida}/comienza"><button>COMIENZA</button></a>
+    <h2>${partida.getFormattedDateSinceCreatedAt()}</h2>
     <c:if test="${jugadores.get(0).posicionFinal != null}">
+       
+
         <div class="blur">
 
         </div>

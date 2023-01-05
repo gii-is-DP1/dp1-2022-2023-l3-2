@@ -59,7 +59,11 @@
         </tr>
         </thead>
         <tbody>
+            
+        
         <c:forEach items="${logros}" var="logro">
+            
+            
             <tr>
                 <td>${logro.name}</td>
                 <td>${logro.descripcion}</td>
@@ -68,6 +72,8 @@
                 <td>${logro.tipo.name.replace("_", " ").toUpperCase()}</td>
             </tr>
         </c:forEach>
+ 
+   
         </tbody>
     </table>
     <table id="estadisticas-table" class="table table-striped" style="width: 1100px;">

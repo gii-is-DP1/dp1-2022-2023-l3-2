@@ -108,7 +108,7 @@ public class TableroController {
 
         tabla.setRonda(1);
         tabla.setMazos(mazos);
-
+        tabla.setTerminada(false);
         List<Jugador> jugadores = new ArrayList<>();
         if (username1 != null) {
             Jugador j = jugadorService.createJugadorByUsername(username1, true);
@@ -154,6 +154,21 @@ public class TableroController {
         return showListaPartidas;
     }
 
+    @GetMapping("/en-curso")
+    public String showPartidasEnCurso(Model model, HttpServletResponse response) {
+        response.addHeader("Refresh", "2");
+        List<Tablero> partidas = taservice.findAll();
+        List<Tablero> result = new ArrayList<>();
+        for (Tablero tabla : partidas) {
+            if (!tabla.isTerminada()) {
+                result.add(tabla);
+            }
+        }
+        model.addAttribute("partidas", result);
+
+        return showListaPartidas;
+    }
+
     @Transactional
     @GetMapping("/{partidaId}")
     public String showTablero(@PathVariable("partidaId") Integer id, Model model, HttpServletResponse response) {
@@ -164,6 +179,7 @@ public class TableroController {
         List<Mazo> mazo2 = mazo.subList(3, 6);
         List<Mazo> mazo3 = mazo.subList(6, 9);
         List<Mazo> mazo4 = mazo.subList(9, 12);
+
 
         // PROVISIONAL: ENANO EN MAZO
         List<Enano> todosLosEnanos = new ArrayList<>();
@@ -178,8 +194,8 @@ public class TableroController {
         model.addAttribute("mazosConEnanoEncima", mazosConEnanoEncima);
         model.addAttribute("id_partida", table.getId());
         model.addAttribute("nombrePartida", table.getName());
-
         model.addAttribute("chat", table.getChat());
+        model.addAttribute("partida", table);
         model.addAttribute("chatLine", new ChatLine());
         // ==============================
 
@@ -227,7 +243,7 @@ public class TableroController {
 
         if (table.getJugadores().get(0).getPosicionFinal() == null) {
             for (Jugador j : table.getJugadores()) {
-                if (j.getObjeto() == 4) {
+                if (j.getObjeto() >= 4) {
                     return "redirect:/partida/" + id + "/fin";
                 }
             }
@@ -235,8 +251,15 @@ public class TableroController {
                 return "redirect:/partida/" + id + "/fin";
             }
         }
-
+        /*
+         * Codigo para cronometro
+         * while (table.getJugadores().stream().map(j ->
+         * j.getPosicionFinal()).anyMatch(p -> p == null)) {
+         * table.actualizaCrono();
+         * }
+         */
         return tablero1;
+
     }
 
     @Transactional
@@ -496,6 +519,7 @@ public class TableroController {
         for (int i = 0; i < results.size(); i++) {
             results.get(i).setPosicionFinal(i + 1);
         }
+        tabla.setTerminada(true);
 
         return "redirect:/partida/" + id;
     }
