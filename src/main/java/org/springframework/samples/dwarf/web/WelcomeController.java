@@ -1,10 +1,12 @@
 package org.springframework.samples.dwarf.web;
 
-import java.util.Map;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.samples.dwarf.model.Person;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -48,6 +50,12 @@ public class WelcomeController {
         model.put("persons", persons);
         model.put("group", "DP1-2022-2023-l3-2");
         model.put("title", "DWARF");
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        org.springframework.security.core.userdetails.User currentUser = (org.springframework.security.core.userdetails.User) authentication
+                .getPrincipal();
+
+        model.put("perfil", currentUser.getUsername());
 
         return "welcome";
     }

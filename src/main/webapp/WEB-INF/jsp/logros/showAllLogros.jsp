@@ -23,7 +23,7 @@
             <tr>
                 <td>${logro.name}</td>
                 <td>${logro.descripcion}</td>
-                <td>${logro.dificultad}</td>
+                <td>${"&#11088".repeat(logro.dificultad)}</td>
                 <td>${logro.requisito}</td>
                 <td>${logro.tipo.name.replace("_", " ").toUpperCase()}</td>
                 <!-- logro(id, name, descripcion, dificultad, requisito, tipo) -->

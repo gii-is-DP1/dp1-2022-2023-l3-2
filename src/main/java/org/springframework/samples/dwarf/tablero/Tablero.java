@@ -44,6 +44,8 @@ public class Tablero extends NamedEntity {
 
     private boolean defensaTotal;
 
+    private boolean terminada;
+
     @DateTimeFormat(pattern = "dd-MM-yyyy/HH:mm:ss")
     private Date createdAt;
 

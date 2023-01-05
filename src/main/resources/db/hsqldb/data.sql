@@ -21,26 +21,6 @@ INSERT INTO authorities(id,username,authority) VALUES (9,'ernsaqrio','jugador');
 INSERT INTO users(username,password,enabled) VALUES ('vet1','v3t',TRUE);
 INSERT INTO authorities(id,username,authority) VALUES (3,'vet1','veterinarian');
 
-INSERT INTO vets(id, first_name,last_name) VALUES (1, 'James', 'Carter');
-INSERT INTO vets(id, first_name,last_name) VALUES (2, 'Helen', 'Leary');
-INSERT INTO vets(id, first_name,last_name) VALUES (3, 'Linda', 'Douglas');
-INSERT INTO vets(id, first_name,last_name) VALUES (4, 'Rafael', 'Ortega');
-INSERT INTO vets(id, first_name,last_name) VALUES (5, 'Henry', 'Stevens');
-INSERT INTO vets(id, first_name,last_name) VALUES (6, 'Sharon', 'Jenkins');
-
-INSERT INTO specialties VALUES (1, 'radiology');
-INSERT INTO specialties VALUES (2, 'surgery');
-INSERT INTO specialties VALUES (3, 'dentistry');
-
-
-INSERT INTO vet_specialties VALUES (2, 1);
-INSERT INTO vet_specialties VALUES (3, 2);
-INSERT INTO vet_specialties VALUES (3, 3);
-INSERT INTO vet_specialties VALUES (4, 2);
-INSERT INTO vet_specialties VALUES (5, 1);
-
-
-
 INSERT INTO estadistica(id, partidas_ganadas, partidas_perdidas, user_id) VALUES
 (1, 0, 0, 'jualeomad'),
 (2, 0, 0, 'rafgargal'),
@@ -82,7 +62,9 @@ INSERT INTO logro(id, name, descripcion, dificultad, requisito, tipo) VALUES
 (18, '200 medallas', 'Se consigue al coleccionar 200 medallas', 2, 200, 1),
 (19, '1000 medallas', 'Se consigue al coleccionar 1000 medallas', 3, 1000, 1);
 
-
+INSERT INTO invitacion_amistad(user_id_envia, user_id_recibe) VALUES 
+('alegarsan11', 'rafgargal'),
+('jualeomad', 'rafgargal');
 
 INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve, type) VALUES(1, '/resources/images/Dimensionadas/001.png', 1, 1, null, null, 'hierro',  3   , 'extraccion');
 INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve, type) VALUES(2, '/resources/images/Dimensionadas/002.png', 2, 1, null, null, 'hierro',  3   , 'extraccion');
