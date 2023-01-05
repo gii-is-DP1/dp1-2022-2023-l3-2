@@ -141,7 +141,6 @@ public class UserController {
         } else {
             // creating owner, user, and authority
 
-
             String enviaUsername = "";
             User recibe = userService.findUser(user.username).get();
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -284,7 +283,7 @@ public class UserController {
             }
 
             redatt.addFlashAttribute("mensaje", "No eres propietario de este usuario");
-            return "redirect:/users/new";
+            return "redirect:/users/mod";
 
         }
         return "redirect:/";
