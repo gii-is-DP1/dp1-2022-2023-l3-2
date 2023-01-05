@@ -9,13 +9,21 @@
 	uri="http://www.springframework.org/security/tags"%>
 
 <petclinic:layout pageName="Usuario">
+    <style>
+        #avatar {
+            vertical-align: middle;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+        }
+    </style>
     <h2>
          Usuario:  ${usuario.username}
     </h2>
-    
+
     <h3>Avatar</h3>
-    <img src="${imagen}" width="120p"></img>
-        
+    <img id="avatar" src="${imagen}"></img>
+
 
     <br/>
 
@@ -59,11 +67,11 @@
         </tr>
         </thead>
         <tbody>
-            
-        
+
+
         <c:forEach items="${logros}" var="logro">
-            
-            
+
+
             <tr>
                 <td>${logro.name}</td>
                 <td>${logro.descripcion}</td>
@@ -72,8 +80,8 @@
                 <td>${logro.tipo.name.replace("_", " ").toUpperCase()}</td>
             </tr>
         </c:forEach>
- 
-   
+
+
         </tbody>
     </table>
     <table id="estadisticas-table" class="table table-striped" style="width: 1100px;">
@@ -103,7 +111,7 @@
                 <div class="col-sm-10">
                     <form:input class="form-control" path="username" size="30"
                         maxlength="80" id="user-input"/>
-                    
+
                 </div>
             </div>
         </div>
