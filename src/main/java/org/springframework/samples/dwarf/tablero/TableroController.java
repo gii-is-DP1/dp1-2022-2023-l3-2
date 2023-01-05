@@ -148,8 +148,14 @@ public class TableroController {
     @GetMapping("/all")
     public String showPartidasList(Model model) {
         List<Tablero> partidas = taservice.findAll();
+        List<Tablero> result = new ArrayList<>();
+        for (Tablero tabla : partidas) {
+            if (tabla.isTerminada()) {
+                result.add(tabla);
+            }
+        }
 
-        model.addAttribute("partidas", partidas);
+        model.addAttribute("partidas", result);
 
         return showListaPartidas;
     }
