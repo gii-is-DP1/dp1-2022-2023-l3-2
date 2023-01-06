@@ -1,24 +1,41 @@
 package org.springframework.samples.dwarf.jugador;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+
 import org.junit.jupiter.api.BeforeEach;
-import org.mockito.Mock;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.fail;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.samples.dwarf.user.User;
+import org.springframework.stereotype.Service;
 
+@DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
 public class JugadorServiceTest {
-    @Mock
-    JugadorRepository jurepo;
+    
+    @Autowired
+    protected JugadorService jugadorService;
 
-    Jugador jugador;
+    @BeforeEach
+    public void config(){
+        Jugador jug = new Jugador();
+        User user = new User();
 
-    // @BeforeEach
-    // public void config(){
-    // jugador = new Jugador();
+        user.setUsername("TestUser");
+        user.setEnabled(true);
 
-    // jugador.setFirstName("PruebaJugador");
-    // when(jurepo.findById(any(Integer.class))).thenReturn(jugador);
-    // }
+        jug.setId(999);
+        jug.setUser(user);
+    }
+
+    /* @Test
+    public void shouldFindOwnerById() {
+        Jugador jugador = this.jugadorService.findOwnerById(999);
+		assertThat(jugador.getUser().getUsername().equals("TestUser"));
+		Jugador jugador1 = this.jugadorService.findOwnerById(154);
+		assertThat(jugador1).isNull();
+    } */
 
 }
+

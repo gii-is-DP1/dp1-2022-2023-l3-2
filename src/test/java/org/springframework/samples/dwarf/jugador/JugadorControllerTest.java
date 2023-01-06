@@ -71,37 +71,31 @@ public class JugadorControllerTest {
                 .andExpect(view().name("jugadores/createOrUpdateOwnerForm"));
     }
 
-    // @WithMockUser(value = "spring")
-    // @Test
-    // void testProcessCreationFormSuccess() throws Exception {
-    // mockMvc.perform(post("/jugador/new")
-    // .param("firstName", "Daniel").with(csrf())
-    // .param("lastName", "Diañez")
-    // .param("acero", "0")
-    // .param("enanosDisponibles", "null")
-    // .param("esespectador", "false")
-    // .param("hierro", "0")
-    // .param("medalla", "0")
-    // .param("objeto", "0")
-    // .param("oro", "0")
-    // .param("posicionFinal", "null")
-    // .param("primerjugador", "false")
-    // .param("turno", "false")
-    // .param("user", "dandiasua"))
-    // .andExpect(status().is3xxRedirection());
-    // }
+    /* @WithMockUser(value = "spring")
+    @Test
+    void testProcessCreationFormSuccess() throws Exception {
+        mockMvc.perform(post("/jugador/new")
+        .param("acero", "0")
+        .param("enanosDisponibles", "null")
+        .param("esespectador", "false")
+        .param("hierro", "0")
+        .param("medalla", "0")
+        .param("objeto", "0")
+        .param("oro", "0")
+        .param("posicionFinal", "null")
+        .param("primerjugador", "false")
+        .param("turno", "false")
+        .param("user", "dandiasua"))
+        .andExpect(status().is3xxRedirection());
+    } */
 
-    // @WithMockUser(value = "spring")
-    // @Test
-    // void testProcessCreationFormHasErrors() throws Exception {
-    // mockMvc.perform(post("/jugadores/new").with(csrf()).param("firstName",
-    // "Pepe").param("lastName", "Biyuela")
-    // .param("city",
-    // "London")).andExpect(status().isOk()).andExpect(model().attributeHasErrors("jugador"))
-    // .andExpect(model().attributeHasFieldErrors("jugador", "address"))
-    // .andExpect(model().attributeHasFieldErrors("jugador", "telephone"))
-    // .andExpect(view().name("jugadores/createOrUpdateOwnerForm"));
-    // }
+    /* @WithMockUser(value = "spring")
+    @Test
+    void testProcessCreationFormHasErrors() throws Exception {
+        mockMvc.perform(post("/jugadores/new").with(csrf()))
+        .andExpect(status().isOk()).andExpect(model().attributeHasErrors("jugador"))
+        .andExpect(view().name("jugadores/createOrUpdateOwnerForm"));
+    } */
 
     @WithMockUser(value = "spring")
     @Test
@@ -119,32 +113,20 @@ public class JugadorControllerTest {
     // mockMvc.perform(get("/jugadores")).andExpect(status().isOk()).andExpect(view().name("owners/ownersList"));
     // }
 
-    // @WithMockUser(value = "spring")
-    // @Test
-    // void testProcessFindFormByLastName() throws Exception {
-    // given(this.jugadorService.findOwnerByLastName(pepe.getLastName())).willReturn(Lists.newArrayList(pepe));
-
-    // mockMvc.perform(get("/jugador").param("lastName",
-    // "Biyuela")).andExpect(status().is3xxRedirection())
-    // .andExpect(view().name("redirect:/jugador/" + TEST_JUGADOR_ID));
-    // }
-
-    @WithMockUser(value = "spring")
+    /* @WithMockUser(value = "spring")
     @Test
     void testProcessFindFormNoOwnersFound() throws Exception {
         mockMvc.perform(get("/jugador").param("lastName", "Unknown Surname")).andExpect(status().isOk())
                 .andExpect(model().attributeHasFieldErrors("jugador", "lastName"))
                 .andExpect(model().attributeHasFieldErrorCode("jugador", "lastName", "notFound"))
                 .andExpect(view().name("jugadores/findOwners"));
-    }
+    } */
 
     @WithMockUser(value = "spring")
     @Test
     void testInitUpdateOwnerForm() throws Exception {
         mockMvc.perform(get("/jugador/{ownerId}/edit", TEST_JUGADOR_ID)).andExpect(status().isOk())
                 .andExpect(model().attributeExists("jugador"))
-                .andExpect(model().attribute("jugador", hasProperty("lastName", is("Biyuela"))))
-                .andExpect(model().attribute("jugador", hasProperty("firstName", is("Pepe"))))
                 .andExpect(model().attribute("jugador", hasProperty("acero", is(0))))
                 .andExpect(model().attribute("jugador", hasProperty("hierro", is(0))))
                 .andExpect(model().attribute("jugador", hasProperty("medalla", is(0))))
@@ -167,24 +149,22 @@ public class JugadorControllerTest {
                 .andExpect(view().name("redirect:/jugador/{ownerId}"));
     }
 
-    // @WithMockUser(value = "spring")
-    // @Test
-    // void testProcessUpdateOwnerFormHasErrors() throws Exception {
-    // mockMvc.perform(post("/jugador/{ownerId}/edit",
-    // TEST_JUGADOR_ID).with(csrf()).param("firstName", "Jose")
-    // .param("lastName", "Villa")).andExpect(status().isOk())
-    // .andExpect(model().attributeHasErrors("jugador"))
-    // .andExpect(model().attributeHasFieldErrors("jugador", "address"))
-    // .andExpect(model().attributeHasFieldErrors("jugador", "telephone"))
-    // .andExpect(view().name("jugadores/createOrUpdateOwnerForm"));
-    // }
+    /* @WithMockUser(value = "spring")
+    @Test
+        void testProcessUpdateOwnerFormHasErrors() throws Exception {
+        mockMvc.perform(post("/jugador/{ownerId}/edit",
+        TEST_JUGADOR_ID).with(csrf()))
+        .andExpect(status().isOk())
+        .andExpect(model().attributeHasErrors("jugador"))
+        .andExpect(model().attributeHasFieldErrors("jugador", "address"))
+        .andExpect(model().attributeHasFieldErrors("jugador", "telephone"))
+        .andExpect(view().name("jugadores/createOrUpdateOwnerForm"));
+    } */
 
     @WithMockUser(value = "spring")
     @Test
     void testShowOwner() throws Exception {
         mockMvc.perform(get("/jugador/{ownerId}", TEST_JUGADOR_ID)).andExpect(status().isOk())
-                .andExpect(model().attribute("jugador", hasProperty("lastName", is("Biyuela"))))
-                .andExpect(model().attribute("jugador", hasProperty("firstName", is("Pepe"))))
                 .andExpect(view().name("jugadores/ownerDetails"));
     }
 
