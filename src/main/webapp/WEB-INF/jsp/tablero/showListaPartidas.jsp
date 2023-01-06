@@ -7,7 +7,18 @@
 
 <petclinic:layout pageName="partidas">
 
-    <h2>Partidas</h2>
+    <c:choose>
+        <c:when test="${terminadas == false}">
+            <h2>Partidas en curso</h2>
+            <a href="/partida/all"
+            class="btn btn-primary">Ver partidas terminadas</a>
+        </c:when>
+        <c:otherwise>
+            <h2>Partidas terminadas</h2>
+            <a href="/partida/en-curso"
+            class="btn btn-primary">Ver partidas en curso</a>
+        </c:otherwise>
+    </c:choose>
 
     <table class="table table-striped">
         <thead>

@@ -156,6 +156,7 @@ public class TableroController {
         }
 
         model.addAttribute("partidas", result);
+        model.addAttribute("terminadas", true);
 
         return showListaPartidas;
     }
@@ -171,6 +172,7 @@ public class TableroController {
             }
         }
         model.addAttribute("partidas", result);
+        model.addAttribute("terminadas", false);
 
         return showListaPartidas;
     }
@@ -185,7 +187,6 @@ public class TableroController {
         List<Mazo> mazo2 = mazo.subList(3, 6);
         List<Mazo> mazo3 = mazo.subList(6, 9);
         List<Mazo> mazo4 = mazo.subList(9, 12);
-
 
         // PROVISIONAL: ENANO EN MAZO
         List<Enano> todosLosEnanos = new ArrayList<>();
