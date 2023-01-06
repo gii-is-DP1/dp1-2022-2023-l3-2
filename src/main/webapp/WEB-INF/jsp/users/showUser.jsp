@@ -37,8 +37,8 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <c:forEach items="${jugadores}" var="jugador">
+            <c:forEach items="${jugadores}" var="jugador">
+                <tr>
                     <td>
 
                         <c:out value="${jugador.user.username}"></c:out>
@@ -50,8 +50,8 @@
                     <td>
 
                     </td>
-                </c:forEach>
-            </tr>
+                </tr>
+            </c:forEach>
         </tbody>
     </table>
     <br>
@@ -101,6 +101,41 @@
                 <td>${usuario.estadistica.partidasPerdidas}</td>
             </tr>
         </tbody>
+    </table>
+
+    <h2>Ultimas partidas</h2>
+    <table class="table table-striped" style="width: 1100px;">
+        <thead>
+            <tr>
+                <th style="width: 200px; text-align: center;">Nombre</th>
+                <th style="width: 200px; text-align: center;">Creador</th>
+                <th style="width: 200px; text-align: center;">Jugadores</th>
+                <th style="width: 200px; text-align: center;">Duracion</th>
+            </tr>
+        </thead>
+        <tbody>
+            <c:forEach items="${partidas}" var="partida">
+                <tr>
+                    <td>
+                        <a href="/partida/${partida.id}">${partida.name}</a>
+                    </td>
+                    <td>
+                        <a href="/users/${partida.jugadores.get(0).user.username}">
+                            ${partida.jugadores.get(0).user.username}
+                        </a>
+                    </td>
+                    <td>
+                        <c:forEach items="${partida.jugadores}" var="jugador">
+                            <a href="/users/${jugador.user.username}">${jugador.user.username}</a>
+                        </c:forEach>
+                    </td>
+                    <td>
+                        ${partida.getFormattedDuration()}
+
+                    </td>
+                </tr>
+            </c:forEach>
+            </tbody>
     </table>
 
     <form:form modelAttribute="user" action="/users/friend" method="post"

@@ -34,7 +34,7 @@
 					<span>Usuarios</span>
 				</petclinic:menuItem>
 
-				<petclinic:menuItem active="${name eq 'tablero'}" url="/partida/all"
+				<petclinic:menuItem active="${name eq 'tablero'}" url="/partida/en-curso"
 					title="partidas">
 					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
 					<span>Partidas</span>

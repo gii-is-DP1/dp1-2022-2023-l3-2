@@ -28,6 +28,8 @@ import org.springframework.samples.dwarf.jugador.Jugador;
 import org.springframework.samples.dwarf.jugador.JugadorService;
 import org.springframework.samples.dwarf.logro.Logro;
 import org.springframework.samples.dwarf.logro.LogroService;
+import org.springframework.samples.dwarf.tablero.Tablero;
+import org.springframework.samples.dwarf.tablero.TableroService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -61,17 +63,19 @@ public class UserController {
     private final InvitacionAmistadService invitacionAmistadService;
     private final AuthoritiesService authoritiesService;
     private final EstadisticaService estadisticaService;
+    private final TableroService taservice;
 
     @Autowired
     public UserController(JugadorService clinicService, UserService userService, LogroService logroService,
             InvitacionAmistadService invitacionAmistadService, AuthoritiesService authoritiesService,
-            EstadisticaService estadisticaService) {
+            EstadisticaService estadisticaService, TableroService taservice) {
         this.ownerService = clinicService;
         this.userService = userService;
         this.logroService = logroService;
         this.invitacionAmistadService = invitacionAmistadService;
         this.authoritiesService = authoritiesService;
         this.estadisticaService = estadisticaService;
+        this.taservice = taservice;
     }
 
     @InitBinder
@@ -223,6 +227,9 @@ public class UserController {
         model.put("usuario", usuario);
         model.put("jugadores", jugadores);
         model.put("logros", logrosCumplidos);
+
+        final Integer PARTIDAS_MOSTRADAS = 7;
+        model.put("partidas", taservice.findLastNGamesByUser(usuario, PARTIDAS_MOSTRADAS));
 
         return view_user;
     }

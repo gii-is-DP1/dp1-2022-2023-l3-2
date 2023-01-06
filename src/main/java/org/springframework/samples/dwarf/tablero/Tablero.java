@@ -14,6 +14,8 @@ import org.springframework.beans.support.PropertyComparator;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.samples.dwarf.jugador.Jugador;
 import org.springframework.samples.dwarf.model.NamedEntity;
+import org.springframework.samples.dwarf.user.User;
+
 import javax.persistence.JoinColumn;
 import lombok.Getter;
 import lombok.Setter;
@@ -48,6 +50,9 @@ public class Tablero extends NamedEntity {
 
     @DateTimeFormat(pattern = "dd-MM-yyyy/HH:mm:ss")
     private Date createdAt;
+
+    @DateTimeFormat(pattern = "dd-MM-yyyy/HH:mm:ss")
+    private Date finishedAt;
 
     public Integer getNumJugadores() {
         return jugadores.size();
@@ -201,9 +206,12 @@ public class Tablero extends NamedEntity {
                 (int) Math.floor(seconds));
     }
 
-    public String getFormattedDateSinceCreatedAt() {
-        System.out.println(
-                "Esta es mi fecha: " + secondsToHoursMinutesSeconds(secondsDiffBetweenTwoDates(createdAt, new Date())));
-        return secondsToHoursMinutesSeconds(secondsDiffBetweenTwoDates(createdAt, new Date()));
+    // Dos posibilidades:
+    // 1- Si la partida esta terminada devuelve duracion ed la partida
+    // 2- Si no esta terminada devuelve tiempo real
+    public String getFormattedDuration() {
+        if (this.terminada)
+            return secondsToHoursMinutesSeconds(secondsDiffBetweenTwoDates(this.createdAt, this.finishedAt));
+        return secondsToHoursMinutesSeconds(secondsDiffBetweenTwoDates(this.createdAt, new Date()));
     }
 }

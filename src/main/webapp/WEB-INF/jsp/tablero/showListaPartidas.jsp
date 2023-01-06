@@ -33,7 +33,7 @@
         <c:forEach items="${partidas}" var="partida">
             <tr>
                 <td>
-                    <a href="/partida/${partida.id}">${partida.id}</a>
+                    <a href="/partida/${partida.id}">${partida.id} - ${partida.name}</a>
                 </td>
                 <td>
                     <a href="/users/${partida.jugadores.get(0).user.username}">
@@ -46,7 +46,7 @@
                     </c:forEach>
                 </td>
                 <td>
-                    ${partida.getFormattedDateSinceCreatedAt()}
+                    ${partida.getFormattedDuration()}
 
                 </td>
             </tr>
