@@ -526,7 +526,10 @@ public class TableroController {
         for (int i = 0; i < results.size(); i++) {
             results.get(i).setPosicionFinal(i + 1);
         }
+
+        // Seteamos "terminada" y "finishedAt"
         tabla.setTerminada(true);
+        tabla.setFinishedAt(new Date());
 
         return "redirect:/partida/" + id;
     }

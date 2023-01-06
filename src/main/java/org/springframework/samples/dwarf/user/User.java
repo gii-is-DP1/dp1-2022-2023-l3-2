@@ -13,6 +13,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 
+import org.springframework.samples.dwarf.jugador.Jugador;
+
 import lombok.Getter;
 import lombok.Setter;
 
