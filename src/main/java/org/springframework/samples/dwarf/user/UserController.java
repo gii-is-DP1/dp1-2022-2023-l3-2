@@ -203,7 +203,10 @@ public class UserController {
     @PostMapping(value = "/users/friend")
     public String processAddFriendForm(Map<String, Object> model, @Valid User user, BindingResult result) {
         if (result.hasErrors()) {
-            return "users/findUsers";
+            org.springframework.security.core.userdetails.User currentUser = (org.springframework.security.core.userdetails.User) SecurityContextHolder
+                    .getContext().getAuthentication()
+                    .getPrincipal();
+            return "redirect:/users/" + currentUser.getUsername();
         } else {
             // creating owner, user, and authority
 
@@ -220,12 +223,15 @@ public class UserController {
 
                 }
             }
+            // si no encuentra al usuario
+            if (!userService.findAll().contains(userService.findUser(user.username).get())) {
+                return "redirect:/users/" + enviaUsername;
+            }
+
             // amiga que ya esta
             if (invitacionAmistadService.findFriendsUser(userService.findUser(enviaUsername).get())
                     .contains(user.username)) {
-                System.out.println(invitacionAmistadService
-                        .findFriendsUser(userService.findUser(enviaUsername).get())
-                        + "#".repeat(200));
+
                 return "redirect:/users/" + enviaUsername;
             }
             InvitacionAmistad invitacionAmistad = new InvitacionAmistad();

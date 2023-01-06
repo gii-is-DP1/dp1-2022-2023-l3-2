@@ -176,23 +176,4 @@
 
 
 </petclinic:layout>
-<script>
 
-    const input = document.getElementById("user-input")
-    const lobbyId = [[${lobbyId}]]
-
-    input.addEventListener("keyup", (e) => {
-        fetch(`http://localhost:8080/lobby/users?` + new URLSearchParams({ q: e.target.value }).toString())
-                .then(res => res.json())
-                .then(obj => {
-                    const usernames = obj.data
-                    const dropdown = document.getElementById("input-dropdown")
-                    let html = ""
-
-                    for (const username of usernames) {
-                        html += '<li><a href="/users/friend'
-                    }
-                    dropdown.innerHTML = html
-                })
-    })
-</script>
