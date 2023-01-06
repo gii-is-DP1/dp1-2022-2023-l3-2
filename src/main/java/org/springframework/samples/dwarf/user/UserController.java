@@ -16,6 +16,7 @@
 package org.springframework.samples.dwarf.user;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.IntStream;
@@ -64,11 +65,12 @@ public class UserController {
     private final AuthoritiesService authoritiesService;
     private final EstadisticaService estadisticaService;
     private final TableroService taservice;
+    private final JugadorService jService;
 
     @Autowired
     public UserController(JugadorService clinicService, UserService userService, LogroService logroService,
             InvitacionAmistadService invitacionAmistadService, AuthoritiesService authoritiesService,
-            EstadisticaService estadisticaService, TableroService taservice) {
+            EstadisticaService estadisticaService, TableroService taservice, JugadorService jService) {
         this.ownerService = clinicService;
         this.userService = userService;
         this.logroService = logroService;
@@ -76,6 +78,7 @@ public class UserController {
         this.authoritiesService = authoritiesService;
         this.estadisticaService = estadisticaService;
         this.taservice = taservice;
+        this.jService = jService;
     }
 
     @InitBinder
@@ -83,7 +86,42 @@ public class UserController {
         dataBinder.setDisallowedFields("id");
     }
 
-    @GetMapping(value = "/users")
+    @GetMapping("/users")
+    public String parteDeUsuarios(Map<String, Object> model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        org.springframework.security.core.userdetails.User currentUser = (org.springframework.security.core.userdetails.User) authentication
+                .getPrincipal();
+        List<User> totalUsuarios = new ArrayList<>();
+        Map<User, List<Integer>> totalJugadores = new HashMap<>();
+        Map<User, Integer> acum = new HashMap<>();
+        for (User u : userService.findAll()) {
+            totalUsuarios.add(u);
+
+            List<Integer> ls = new ArrayList<>();
+            totalJugadores.put(u, ls);
+            for (Jugador j : jService.findJugadorUser(u.getUsername())) {
+                totalJugadores.get(u).add(j.getPosicionFinal());
+
+            }
+
+            for (int i = 0; i < totalJugadores.size(); i++) {
+                List<Integer> aux = totalJugadores.get(u);
+                Integer total = 0;
+                if (!aux.isEmpty()) {
+                    total = aux.stream().reduce((t, b) -> t + b).get();
+                }
+
+                acum.put(u, total);
+            }
+        }
+
+        model.put("perfil", currentUser.getUsername());
+        model.put("usuarios", totalUsuarios);
+        model.put("puntuacion", acum);
+        return "users/welcomecopy";
+    }
+
+    @GetMapping(value = "/user")
     public String usersList(Map<String, Object> model, @RequestParam Integer page) {
         List<User> usuarios = userService.findAll();
 
@@ -113,6 +151,30 @@ public class UserController {
             finishIndex += PAGE_SIZE;
         }
 
+        List<User> totalUsuarios = new ArrayList<>();
+        Map<User, List<Integer>> totalJugadores = new HashMap<>();
+        Map<User, Integer> acum = new HashMap<>();
+        for (User u : userService.findAll()) {
+            totalUsuarios.add(u);
+
+            List<Integer> ls = new ArrayList<>();
+            totalJugadores.put(u, ls);
+            for (Jugador j : jService.findJugadorUser(u.getUsername())) {
+                totalJugadores.get(u).add(j.getPosicionFinal());
+
+            }
+
+            for (int i = 0; i < totalJugadores.size(); i++) {
+                List<Integer> aux = totalJugadores.get(u);
+                Integer total = 0;
+                if (!aux.isEmpty()) {
+                    total = aux.stream().reduce((t, b) -> t + b).get();
+                }
+
+                acum.put(u, total);
+            }
+        }
+        model.put("puntuacion", acum);
         model.put("usuarios", partition.get(page));
         model.put("paginaActual", page);
         model.put("paginas", IntStream.rangeClosed(0, partition.size() - 1)
@@ -120,14 +182,14 @@ public class UserController {
         return VIEW_USERS_LIST;
     }
 
-    @GetMapping(value = "/users/find")
+    @GetMapping(value = "/user/find")
     public String initCreationForm(Map<String, Object> model) {
         User user = new User();
         model.put("user", user);
         return "users/findUsers";
     }
 
-    @PostMapping(value = "/users/find")
+    @PostMapping(value = "/user/find")
     public String processCreationForm(Map<String, Object> model, @Valid User user, BindingResult result) {
         if (result.hasErrors()) {
             return "users/findUsers";

@@ -21,25 +21,31 @@
 		</div>
 		<div class="navbar-collapse collapse" id="main-navbar">
 			<ul class="nav navbar-nav">
-
+				
 				<petclinic:menuItem active="${name eq 'home'}" url="/"
 					title="home page">
 					<span class="glyphicon glyphicon-home" aria-hidden="true"></span>
 					<span>Home</span>
 				</petclinic:menuItem>
-
-				<petclinic:menuItem active="${name eq 'owners'}" url="/users/find"
-					title="find owners">
+				
+				<sec:authorize access="isAuthenticated()">
+				<petclinic:menuItem active="${name eq 'usuario'}" url="/users"
+					title="home page">
+					<span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+					<span>Parte de usuario</span>
+				</petclinic:menuItem>
+				</sec:authorize>
+				<petclinic:menuItem active="${name eq 'owners'}" url="/user/find"
+					title="Solo para administradores">
 					<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
 					<span>Usuarios</span>
 				</petclinic:menuItem>
 
 				<petclinic:menuItem active="${name eq 'tablero'}" url="/partida/en-curso"
-					title="partidas">
+					title="Partidas">
 					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
 					<span>Partidas</span>
 				</petclinic:menuItem>
-
                 <petclinic:menuItem active="${name eq 'lobby'}" url="/lobby/"
 					title="Lobby">
 					<span class="glyphicon glyphicon-globe" aria-hidden="true"></span>
@@ -64,7 +70,7 @@
 				</sec:authorize>
 				<sec:authorize access="isAuthenticated()">
 					<li class="dropdown"><a href="#" class="dropdown-toggle"
-						data-toggle="dropdown"> <span class="glyphicon glyphicon-user"></span>�
+						data-toggle="dropdown"> 
 							<strong><sec:authentication property="name" /></strong> <span
 							class="glyphicon glyphicon-chevron-down"></span>
 					</a>

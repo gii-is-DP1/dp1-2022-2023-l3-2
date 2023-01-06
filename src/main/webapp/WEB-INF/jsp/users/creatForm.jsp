@@ -28,7 +28,7 @@
             <h2>Contraseña</h2>
             <input label="Password" name="password" required="true"/>
             <h2>URL imagen</h2>
-            <input label="URL imagen" name="imgperfil" required="false"/>
+            <input label="URL imagen" name="imgperfil"/>
 
         </div>
         <div class="form-group">

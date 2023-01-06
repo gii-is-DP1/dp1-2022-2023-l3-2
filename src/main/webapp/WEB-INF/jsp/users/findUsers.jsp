@@ -28,7 +28,7 @@
             <div class="col-sm-offset-2 col-sm-10">
                 <button type="submit" class="btn btn-default">Find User</button>
             </div>
-            <a href="/users?page=0">
+            <a href="/user?page=0">
                 <div class="col-sm-offset-2 col-sm-10">
                     <div class="btn btn-default">Find All Users</div>
                 </div>
