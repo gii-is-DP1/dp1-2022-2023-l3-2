@@ -349,6 +349,14 @@ public class UserController {
             org.springframework.security.core.userdetails.User currentUser = (org.springframework.security.core.userdetails.User) authentication
                     .getPrincipal();
             if (currentUser.getUsername().equals(user.getUsername())) {
+
+                if (user.getPassword().equals("")) {
+                    user.setPassword(currentUser.getPassword());
+                }
+                if (user.getImgperfil().equals("")) {
+                    User actual = userService.findUser(currentUser.getUsername()).get();
+                    user.setImgperfil(actual.getImgperfil());
+                }
                 userService.saveUser(user);
                 Authorities authority = new Authorities();
                 authority.setAuthority("jugador");

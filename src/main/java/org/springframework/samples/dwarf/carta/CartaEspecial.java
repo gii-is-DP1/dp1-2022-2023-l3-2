@@ -63,13 +63,13 @@ public class CartaEspecial extends Carta {
                         j.setOro(j.getOro() - 1);
                         j.setObjeto(j.getObjeto() + 1);
                     }
-                    if (j.getAcero() - 1 >= 2) {
+                    else if (j.getAcero() - 1 >= 2) {
                         j.setAcero(j.getAcero() - 3);
                         j.setOro(j.getOro() - 1);
                         j.setHierro(j.getHierro() - 1);
                         j.setObjeto(j.getObjeto() + 1);
                     }
-                    if (j.getOro() - 1 >= 2) {
+                    else if (j.getOro() - 1 >= 2) {
                         j.setAcero(j.getAcero() - 1);
                         j.setOro(j.getOro() - 3);
                         j.setHierro(j.getHierro() - 1);
