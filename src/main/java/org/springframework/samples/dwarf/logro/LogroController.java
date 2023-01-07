@@ -1,5 +1,7 @@
 package org.springframework.samples.dwarf.logro;
 
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -37,34 +40,32 @@ public class LogroController {
 
     @Transactional
     @GetMapping("/logros/mod")
-    public String updateLogro(Map<String, Object> model, @RequestParam("logro") Integer id) {
+    public String updateLogro(Map<String, Object> model) {
 
-        Logro logro = new Logro();
         model.put("logro", new Logro());
-        return "logros/modificarlogros";
+        return "logros/modif";
     }
 
-    @Transactional
-    @PostMapping("/logros/mod")
-    public String updateLogro(@Valid Logro logro, BindingResult result, RedirectAttributes redatt,
-            @RequestParam("logro") Integer id) {
+    @ModelAttribute("tipos")
+    public Collection<TipoLogro> tiposLogros() {
+        return this.logroService.tiposDeLogros();
+    }
+
+    @GetMapping("/logros/create")
+    public String createLogro(Map<String, Object> model) {
+
+        model.put("logro", new Logro());
+
+        return "logros/create";
+    }
+
+    @Transactional()
+    @PostMapping("/logros/create")
+    public String createLogro(@Valid Logro logro, BindingResult result, RedirectAttributes redatt) {
         if (result.hasErrors()) {
-            redatt.addFlashAttribute("error", result.hasErrors());
-            return "logros/modificarlogros";
+            redatt.addFlashAttribute("error", result.getAllErrors());
+            return "redirect:/logros/create";
         } else {
-            Logro logroModificar = logroService.findById(id);
-            if (logro.getDificultad() == null) {
-                logro.setDificultad(logroModificar.getDificultad());
-            }
-            if (logro.getName().equals("")) {
-                logro.setName(logroModificar.getName());
-            }
-            if (logro.getDescripcion().equals("")) {
-                logro.setDescripcion(logroModificar.getDescripcion());
-            }
-            if (logro.getTipo().equals(null)) {
-                logro.setTipo(logroModificar.getTipo());
-            }
 
             logroService.save(logro);
 
@@ -73,6 +74,23 @@ public class LogroController {
         }
 
     }
+
+    @Transactional()
+    @PostMapping("/logros/mod")
+    public String updateLogro(@Valid Logro logro, BindingResult result, RedirectAttributes redatt) {
+        if (result.hasErrors()) {
+            redatt.addFlashAttribute("error", result.hasErrors());
+            return "logros/modif";
+        } else {
+
+            logroService.save(logro);
+
+            return "redirect:/logro/";
+
+        }
+
+    }
+
 
     @Transactional
     @GetMapping("/logros/del")

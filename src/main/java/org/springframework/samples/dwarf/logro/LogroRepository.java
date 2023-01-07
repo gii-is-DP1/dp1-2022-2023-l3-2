@@ -24,5 +24,6 @@ public interface LogroRepository extends CrudRepository<Logro, Integer> {
      * void deleteById(Integer id);
      */
 
+
     List<Logro> findAll();
 }

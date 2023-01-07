@@ -27,10 +27,11 @@ public class Logro extends NamedEntity {
     @Min(value=1)
     private Integer dificultad;
 
-    @NotEmpty
+    @NotNull
     private Integer requisito;
 
     @ManyToOne
     @JoinColumn(name = "tipo")
     private TipoLogro tipo;
+
 }
