@@ -4,7 +4,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
-
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <petclinic:layout pageName="Logros">
     <h2>Logros</h2>
 
@@ -16,6 +16,12 @@
             <th style="width: 150px;">Dificultad</th>
             <th style="width: 150px;">Requisito</th>
             <th style="width: 150px;">Tipo</th>
+            <sec:authorize access="hasAuthority('admin')">
+                <th style="width: 150px;">Modificar</th>
+            </sec:authorize>
+            <sec:authorize access="hasAuthority('admin')">
+                <th style="width: 150px;">Eliminar</th>
+            </sec:authorize>
         </tr>
         </thead>
         <tbody>
@@ -36,7 +42,12 @@
                    <c:out value="${owner.user.password}"/>
                 </td>
 -->
-
+                <sec:authorize access="hasAuthority('admin')">
+                    <td><a href="/logros/mod?logro=${logro.id}">Modificar</a></td>
+                </sec:authorize>
+                <sec:authorize access="hasAuthority('admin')">
+                    <td><a href="/logros/del?logro=${logro.id}">Eliminar</a></td>
+                </sec:authorize>
             </tr>
         </c:forEach>
         </tbody>

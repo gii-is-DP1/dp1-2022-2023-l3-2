@@ -2,10 +2,11 @@ package org.springframework.samples.dwarf.logro;
 
 import java.util.List;
 
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.Repository;
 
 @org.springframework.stereotype.Repository
-public interface LogroRepository extends Repository<Logro, Integer> {
+public interface LogroRepository extends CrudRepository<Logro, Integer> {
     /*
      * void save(Tablero tabla) throws DataAccessException;
      *

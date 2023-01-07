@@ -20,4 +20,19 @@ public class LogroService {
     public List<Logro> findAll() {
         return (List<Logro>) logroRepository.findAll();
     }
+
+    @Transactional
+    public void save(Logro logro) {
+        logroRepository.save(logro);
+    }
+
+    @Transactional
+    public Logro findById(Integer id) {
+        return logroRepository.findById(id).get();
+    }
+
+    @Transactional
+    public void delLogro(Integer id) {
+        logroRepository.delete(findById(id));
+    }
 }
