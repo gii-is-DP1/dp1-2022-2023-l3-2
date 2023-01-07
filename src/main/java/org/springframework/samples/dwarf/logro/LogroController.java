@@ -30,21 +30,21 @@ public class LogroController {
     @GetMapping("/logro/")
     public String showAll(Map<String, Object> model) {
         List<Logro> logros = logroService.findAll();
-
         model.put("logros", logros);
 
         return VIEW_LOGROS;
     }
 
-
+    @Transactional
     @GetMapping("/logros/mod")
     public String updateLogro(Map<String, Object> model, @RequestParam("logro") Integer id) {
 
-        model.put("logros", new Logro());
+        Logro logro = new Logro();
+        model.put("logro", new Logro());
         return "logros/modificarlogros";
     }
 
-
+    @Transactional
     @PostMapping("/logros/mod")
     public String updateLogro(@Valid Logro logro, BindingResult result, RedirectAttributes redatt,
             @RequestParam("logro") Integer id) {
@@ -52,7 +52,19 @@ public class LogroController {
             redatt.addFlashAttribute("error", result.hasErrors());
             return "logros/modificarlogros";
         } else {
-
+            Logro logroModificar = logroService.findById(id);
+            if (logro.getDificultad() == null) {
+                logro.setDificultad(logroModificar.getDificultad());
+            }
+            if (logro.getName().equals("")) {
+                logro.setName(logroModificar.getName());
+            }
+            if (logro.getDescripcion().equals("")) {
+                logro.setDescripcion(logroModificar.getDescripcion());
+            }
+            if (logro.getTipo().equals(null)) {
+                logro.setTipo(logroModificar.getTipo());
+            }
 
             logroService.save(logro);
 
