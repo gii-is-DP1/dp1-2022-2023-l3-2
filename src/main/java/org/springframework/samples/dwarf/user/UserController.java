@@ -189,14 +189,14 @@ public class UserController {
         return "users/findUsers";
     }
 
-    @PostMapping(value = "/user/find")
+    @PostMapping(value = "/users/find")
     public String processCreationForm(Map<String, Object> model, @Valid User user, BindingResult result) {
         if (result.hasErrors()) {
-            return "users/findUsers";
+            return "redirect:/user";
         } else {
             // creating owner, user, and authority
             model.put("usuarios", userService.findUserByString(user.username));
-            return VIEW_USERS_LIST;
+            return "redirect:/users/" + user.username;
         }
     }
 
@@ -312,7 +312,7 @@ public class UserController {
     @PostMapping("usersnew")
     public String createNewUser(@Valid User user, BindingResult result, RedirectAttributes redatt) {
         if (result.hasErrors()) {
-            return "redirect:/users/new";
+            return "redirect:/usersnew";
         } else {
 
             if (userService.findUser(user.getUsername()).isPresent()) {

@@ -8,7 +8,7 @@
 	uri="http://www.springframework.org/security/tags"%>
 <!--  >%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%-->
 
-<petclinic:layout pageName="jugador">
+<petclinic:layout pageName="owners">
 
     <h2>Find Users</h2>
 
