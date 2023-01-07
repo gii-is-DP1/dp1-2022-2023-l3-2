@@ -36,13 +36,15 @@ public class LobbyController {
     private LobbyService lobbyService;
     private UserService userService;
     private InvitacionAmistadService invitacionAmistadService;
+    private InvitacionJuegoService invitacionJuegoService;
 
     @Autowired
     public LobbyController(LobbyService lobbyService, UserService userService,
-            InvitacionAmistadService invitacionAmistadService) {
+            InvitacionAmistadService invitacionAmistadService, InvitacionJuegoService invitacionJuegoService) {
         this.lobbyService = lobbyService;
         this.userService = userService;
         this.invitacionAmistadService = invitacionAmistadService;
+        this.invitacionJuegoService = invitacionJuegoService;
     }
 
     @GetMapping("/")
@@ -117,6 +119,7 @@ public class LobbyController {
             return "redirect:/lobby/" + lobby.getId();
         }
 
+
         User userSearched = userService.findUserByString(user.getUsername()).get(0);
 
         // No puedes añadir un usuario que ya está
@@ -130,7 +133,11 @@ public class LobbyController {
         }
 
         lobby.getUsuarios().add(userSearched);
-
+        InvitacionJuego invitacion = new InvitacionJuego();
+        invitacion.setUserrecibe(userSearched);
+        invitacion.setUserenvia(userService.findUser(lobby.getAdmin()).get());
+        invitacion.setLobbyId(lobby.getId());
+        invitacionJuegoService.saveInvitacionAmistad(invitacion);
         lobby.setNumUsuarios(lobby.getNumUsuarios() + 1);
 
         return "redirect:/lobby/" + lobby.getId();
@@ -190,7 +197,13 @@ public class LobbyController {
         User user = userService.findUserByString(username).get(0);
 
         lobby.getUsuarios().remove(user);
-
+        List<InvitacionJuego> invitacionesDeJugadores = invitacionJuegoService
+                .findBoth(userService.findUser(lobby.getAdmin()).get(), user);
+        for (InvitacionJuego invi : invitacionesDeJugadores) {
+            if (lobby.getId() == invi.getLobbyId()) {
+                invitacionJuegoService.delInvi(invi);
+            }
+        }
         return "redirect:/lobby/" + lobby.getId();
     }
 
