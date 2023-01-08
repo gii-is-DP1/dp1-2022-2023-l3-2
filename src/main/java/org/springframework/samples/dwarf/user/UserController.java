@@ -42,6 +42,7 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -295,6 +296,7 @@ public class UserController {
         model.put("usuario", usuario);
         model.put("jugadores", jugadores);
         model.put("logros", logrosCumplidos);
+        model.put("currentUsername", usuario.username);
 
         final Integer PARTIDAS_MOSTRADAS = 7;
         model.put("partidas", taservice.findLastNGamesByUser(usuario, PARTIDAS_MOSTRADAS));
@@ -370,5 +372,75 @@ public class UserController {
 
         }
         return "redirect:/";
+    }
+
+    @GetMapping("/users/{userid}/search-friends")
+    @ResponseBody
+    public String getNotFriends(@PathVariable("userid") String id, @RequestParam String q) {
+
+        User usuario = userService.findUser(id).get();
+
+        if (q.equals(""))
+            return "{\"data\":[]}";
+
+        List<User> usersSearched1 = userService.findUserByString(q);
+
+        // No buscar amigos
+        usersSearched1 = usersSearched1.stream()
+                .filter(usr -> !invitacionAmistadService.findFriendsUser(usuario)
+                        .contains(usr.getUsername()) && !usuario.getUsername().equals(usr.getUsername()))
+                .toList();
+
+        List<String> usersSearched = usersSearched1.stream()
+                .map(usr -> "\"" + usr.getUsername() + "\"").toList();
+
+        String JSON = "{\"data\": [";
+
+        JSON += String.join(",", usersSearched);
+
+        JSON += "]}";
+
+        return JSON;
+    }
+
+    // Con sugerencias javascript
+    @GetMapping(value = "/users/{userid}/add-friend")
+    public String processAddFriend(@PathVariable("userid") String id,
+            @RequestParam("dest-username") String destUsername) {
+
+        // creating owner, user, and authority
+
+        String enviaUsername = "";
+        User recibe = userService.findUser(destUsername).get();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication != null) {
+            if (authentication.isAuthenticated()) {
+                org.springframework.security.core.userdetails.User currentUser = (org.springframework.security.core.userdetails.User) authentication
+                        .getPrincipal();
+
+                enviaUsername = currentUser.getUsername();
+
+            }
+        }
+        // si no encuentra al usuario
+        if (!userService.findAll().contains(userService.findUser(destUsername).get())) {
+            return "redirect:/users/" + enviaUsername;
+        }
+
+        // amiga que ya esta
+        if (invitacionAmistadService.findFriendsUser(userService.findUser(enviaUsername).get())
+                .contains(destUsername)) {
+
+            return "redirect:/users/" + enviaUsername;
+        }
+        InvitacionAmistad invitacionAmistad = new InvitacionAmistad();
+        invitacionAmistad.setUserenvia(userService.findUser(enviaUsername).get());
+        invitacionAmistad.setUserrecibe(recibe);
+
+        invitacionAmistadService.saveInvitacionAmistad(invitacionAmistad);
+
+        return "redirect:/users/" + enviaUsername;
+
     }
 }

@@ -16,6 +16,29 @@
             height: 150px;
             border-radius: 50%;
         }
+        #input-dropdown {
+            width: 200px;
+            background-color: white;
+            list-style: none;
+            padding: 0;
+            margin:0;
+            position: absolute;
+            z-index: 999;
+        }
+        #input-dropdown li {
+            width: 100%;
+            height: 30px;
+            border: 0.5px solid grey;
+        }
+        #input-dropdown a {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
     </style>
     <h2>
          Usuario:  ${usuario.username}
@@ -138,7 +161,7 @@
             </tbody>
     </table>
 
-    <form:form modelAttribute="user" action="/users/friend" method="post"
+    <!-- <form:form modelAttribute="user" action="/users/friend" method="post"
         class="form-horizontal" id="search-jugador-form">
         <div class="form-group">
             <div class="control-group" id="username">
@@ -156,7 +179,24 @@
             </div>
         </div>
 
-    </form:form>
+    </form:form> -->
+
+    <form
+        class="form-horizontal" id="search-jugador-form">
+        <div class="form-group">
+            <div class="control-group" id="username">
+                <label class="col-sm-2 control-label">Add friend</label>
+                <div class="col-sm-10">
+                    <input class="form-control" size="30"
+                        maxlength="80" id="user-input"/>
+                    <ul id="input-dropdown">
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </form>
+
     <table id="jugadoresTable" class="table table-striped">
         <thead>
         <tr>
@@ -174,6 +214,27 @@
         </tbody>
     </table>
 
+    <script>
+        const input = document.getElementById("user-input")
+
+        const BASE_URL = `http://localhost:8080/users/${currentUsername}/search-friends?`
+
+        input.addEventListener("keyup", (e) => {
+            fetch(BASE_URL + new URLSearchParams({ q: e.target.value }).toString())
+                    .then(res => res.json())
+                    .then(obj => {
+                        const usernames = obj.data
+                        const dropdown = document.getElementById("input-dropdown")
+                        let html = ""
+                        console.log(obj)
+                        for (const username of usernames) {
+                            html += '<li><a href="/users/' + `${currentUsername}` + '/add-friend?dest-username=' + username + '">' + username + '</a></li>'
+
+                        }
+                        dropdown.innerHTML = html
+                    })
+        })
+    </script>
 
 </petclinic:layout>
 
