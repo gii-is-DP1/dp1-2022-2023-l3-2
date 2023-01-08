@@ -1,6 +1,8 @@
 package org.springframework.samples.dwarf.logro;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.util.List;
 
@@ -26,12 +28,31 @@ public class LogroServiceTest {
         assertThat(logro1.getDescripcion()).isEqualTo("Se consigue al ganar 10 partidas");
         assertThat(logro1.getDificultad()).isEqualTo(1);
         assertThat(logro1.getRequisito()).isEqualTo(10);
-        //assertThat(logro1.getTipo()).isEqualTo(0);
+        assertThat(logro1.getTipo().getId()).isEqualTo(0);
 		Logro logro5 = EntityUtils.getById(logros, Logro.class, 5);
 		assertThat(logro5.getName()).isEqualTo("100 hierro");
         assertThat(logro5.getDescripcion()).isEqualTo("Se consigue al coleccionar 100 de hierro");
         assertThat(logro5.getDificultad()).isEqualTo(1);
         assertThat(logro5.getRequisito()).isEqualTo(100);
-        //assertThat(logro5.getTipo()).isEqualTo(1);
+        assertThat(logro5.getTipo().getId()).isEqualTo(1);
     }
+
+    @Test
+    public void shouldFindById() {
+        Logro logro = logroService.findById(1);
+
+        assertThat(logro.getName()).isEqualTo("10 victorias");
+        assertThat(logro.getDescripcion()).isEqualTo("Se consigue al ganar 10 partidas");
+        assertThat(logro.getDificultad()).isEqualTo(1);
+        assertThat(logro.getRequisito()).isEqualTo(10);
+        assertThat(logro.getTipo().getId()).isEqualTo(0);
+    }
+
+    /* @Test
+    public void shouldDelLogro() {
+        Logro logro = logroService.findById(2);
+        when(logroService.findById(2)).thenReturn(logro);
+        logroService.delLogro(2);
+        verify(logroService).delLogro(2);
+    } */
 }
