@@ -135,6 +135,23 @@
         </c:if>
     </c:if>
 
+    <script>
+        const input = document.getElementById("user-input")
+        const lobbyId = [[${lobbyId}]]
+        input.addEventListener("keyup", (e) => {
+            fetch(`http://localhost:8080/lobby/users?` + new URLSearchParams({ q: e.target.value, id: lobbyId }).toString())
+                    .then(res => res.json())
+                    .then(obj => {
+                        const usernames = obj.data
+                        const dropdown = document.getElementById("input-dropdown")
+                        let html = ""
+                        for (const username of usernames) {
+                            html += '<li><a href="/lobby/' + lobbyId + '/add-user?exactUsername=' + username + '">' + username + '</a></li>'
+                        }
+                        dropdown.innerHTML = html
+                    })
+        })
+    </script>
 
 
 

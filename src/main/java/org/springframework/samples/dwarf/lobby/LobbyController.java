@@ -119,7 +119,6 @@ public class LobbyController {
             return "redirect:/lobby/" + lobby.getId();
         }
 
-
         User userSearched = userService.findUserByString(user.getUsername()).get(0);
 
         // No puedes añadir un usuario que ya está
@@ -174,9 +173,22 @@ public class LobbyController {
 
     @GetMapping("/users")
     @ResponseBody
-    public String getChatLines(@RequestParam String q) {
+    public String getUsersSearched(@RequestParam("id") Integer lobbyId, @RequestParam String q) {
 
-        List<String> usersSearched = userService.findUserByString(q).stream()
+        if (q.equals(""))
+            return "{\"data\":[]}";
+
+        Lobby lobby = lobbyService.findById(lobbyId);
+
+        List<User> usersSearched1 = userService.findUserByString(q);
+
+        // Solo amigos
+        usersSearched1 = usersSearched1.stream()
+                .filter(usr -> invitacionAmistadService.findFriendsUser(userService.findUser(lobby.getAdmin()).get())
+                        .contains(usr.getUsername()))
+                .toList();
+
+        List<String> usersSearched = usersSearched1.stream()
                 .map(usr -> "\"" + usr.getUsername() + "\"").toList();
 
         String JSON = "{\"data\": [";
@@ -205,12 +217,5 @@ public class LobbyController {
             }
         }
         return "redirect:/lobby/" + lobby.getId();
-    }
-
-    @Transactional
-    @GetMapping("/{lobbyId}/start-match")
-    public String startMatch(@PathVariable("lobbyId") Integer id, Model model, @RequestParam String name) {
-
-        return null;
     }
 }
