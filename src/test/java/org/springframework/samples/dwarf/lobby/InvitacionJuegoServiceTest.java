@@ -27,31 +27,43 @@ public class InvitacionJuegoServiceTest {
     @Autowired
     protected LobbyService lobbyService;
 
+
     @Autowired
     protected UserService userService;
 
     @Autowired
     protected AuthoritiesService authoritiesService;
 
+    private User user1;
+
+    private User user2;
+
     @BeforeEach
     void setup() {
-        User user1 = new User();
+        user1 = new User();
         user1.setUsername("user1");
         user1.setPassword("1234");
         user1.setImgperfil("imagen");
-        user1.setEstadistica(new Estadistica());
-        user1.setEnabled(true);
-        Set<Authorities> authorities1 = new HashSet<>();
-        user1.setAuthorities(authorities1);
 
-        User user2 = new User();
+        user1.setEnabled(true);
+        userService.saveUser(user1);
+        Authorities authorities1 = new Authorities();
+        authorities1.setId(1);
+        authorities1.setAuthority("jugador");
+        authorities1.setUser(user1);
+        authoritiesService.saveAuthorities(authorities1);
+        user2 = new User();
         user2.setUsername("user2");
         user2.setPassword("1234");
-        user1.setImgperfil("imagen");
-        user1.setEstadistica(new Estadistica());
-        user1.setEnabled(true);
-        Set<Authorities> authorities2 = new HashSet<>();
-        user1.setAuthorities(authorities2);
+        user2.setImgperfil("imagen");
+
+        user2.setEnabled(true);
+        userService.saveUser(user2);
+        Authorities authorities2 = new Authorities();
+        authorities2.setId(2);
+        authorities2.setAuthority("jugador");
+        authorities2.setUser(user2);
+        authoritiesService.saveAuthorities(authorities2);
 
         Lobby lobby = new Lobby();
         lobby.setId(1);
@@ -60,27 +72,25 @@ public class InvitacionJuegoServiceTest {
         lobby.setUsuarios(users);
         lobby.setNumUsuarios(2);
         lobby.setAdmin("user1");
-
+        lobbyService.saveLobby(lobby);
         InvitacionJuego inv = new InvitacionJuego();
         inv.setUserenvia(user1);
         inv.setUserrecibe(user2);
         inv.setLobbyId(1);
         inv.setId(1);
+        invitacionJuegoService.saveInvitacionAmistad(inv);
     }
 
     @Test
     public void shouldFindFriendsUser() {
-        User user1 = new User();
-        user1.setUsername("user1");
-        user1.setPassword("1234");
 
         List<String> friends = invitacionJuegoService.findFriendsUser(user1);
-        assertThat(friends.size()).isEqualTo(0);
+        assertThat(friends.size()).isEqualTo(1);
     }
 
-    /* @Test
+    @Test
     public void shouldFindBoth() {
         List<InvitacionJuego> invs = invitacionJuegoService.findBoth(user1, user2);
-        assertThat(invs.size()).isEqualTo(0);
-    } */
+        assertThat(invs.size()).isEqualTo(1);
+    }
 }
