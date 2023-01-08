@@ -252,7 +252,10 @@ public class TableroControllerTest {
     @WithMockUser(value = "spring")
     @Test
     void testRondaColoca() throws Exception {
-
+        mockMvc.perform(get("/partida/{partidaId}/coloca?username=alegarsan11&posicion=2", TEST_TABLERO_ID))
+                .andExpect(status().is(302)).andExpect(view().name("redirect:/partida/1"));
+        mockMvc.perform(get("/partida/{partidaId}/coloca?username=rafgargal&posicion=2", TEST_TABLERO_ID))
+                .andExpect(status().is(302)).andExpect(view().name("redirect:/partida/1"));
     }
 
     @WithMockUser(value = "spring")

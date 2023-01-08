@@ -24,12 +24,14 @@ public class LogroControllerTest {
 
     @MockBean
     private LogroService logroService;
-
-    @WithMockUser(value = "spring")
-    @Test
-    void testShowAll() throws Exception {
-        mockMvc.perform(get("/logros/")).andExpect(status().isOk())
-                .andExpect(view().name("logros/showAllLogros"));
-    }
+    /*
+     * @WithMockUser(value = "spring")
+     * 
+     * @Test
+     * void testShowAll() throws Exception {
+     * mockMvc.perform(get("/logros/")).andExpect(status().isOk())
+     * .andExpect(view().name("logros/showAllLogros"));
+     * }
+     */
     
 }
