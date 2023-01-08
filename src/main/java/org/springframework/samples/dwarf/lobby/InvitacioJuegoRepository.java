@@ -13,7 +13,7 @@ public interface InvitacioJuegoRepository extends CrudRepository<InvitacionJuego
 
     List<InvitacionJuego> findByUserenvia(User user);
 
-    @Query("SELECT invi FROM InvitacionJuego invi WHERE invi.userenvia =: userenvia AND invi.userrecibe =: userrecibe")
+    @Query("SELECT invi FROM InvitacionJuego invi WHERE invi.userenvia =:userenvia AND invi.userrecibe =:userrecibe")
     List<InvitacionJuego> findBoth(User userenvia, User userrecibe);
 
 }
