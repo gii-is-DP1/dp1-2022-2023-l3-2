@@ -369,7 +369,7 @@ public class TableroController {
                             if (10 <= mazo.getPosicion() && 13 > mazo.getPosicion() && enanosJugador.size() >= 1
                                     && tabla.getJugadores().stream()
                                             .filter(jugador -> jugador.getUser().getUsername().equals(username))
-                                            .map(j -> j.getObjeto()).toList().get(0) >= 4
+                                            .map(j -> j.getMedalla()).toList().get(0) >= 4
                                     && mazo.getPosicion() == posicion) {
                                 e.setMazo(mazo);
                                 jugadorActual.setEnanosDisponibles(jugadorActual.getEnanosDisponibles() - 1);
