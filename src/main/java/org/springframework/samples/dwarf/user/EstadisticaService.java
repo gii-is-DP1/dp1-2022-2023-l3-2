@@ -1,5 +1,8 @@
 package org.springframework.samples.dwarf.user;
 
+import java.util.Comparator;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.dwarf.jugador.Jugador;
@@ -44,6 +47,24 @@ public class EstadisticaService {
             else
                 estadistica.setPartidasPerdidas(estadistica.getPartidasPerdidas() + 1);
         }
+    }
+
+    public Integer getGamesMaxDuration(List<Tablero> partidas) {
+        return partidas.stream()
+                .mapToInt(tab -> Tablero.secondsDiffBetweenTwoDates(tab.getCreatedAt(), tab.getFinishedAt()).intValue())
+                .max().orElse(0);
+    }
+
+    public Integer getGamesMinDuration(List<Tablero> partidas) {
+        return partidas.stream()
+                .mapToInt(tab -> Tablero.secondsDiffBetweenTwoDates(tab.getCreatedAt(), tab.getFinishedAt()).intValue())
+                .min().orElse(0);
+    }
+
+    public Double getGamesAverageDuration(List<Tablero> partidas) {
+        return partidas.stream()
+                .mapToInt(tab -> Tablero.secondsDiffBetweenTwoDates(tab.getCreatedAt(), tab.getFinishedAt()).intValue())
+                .average().orElse(0);
     }
 
 }

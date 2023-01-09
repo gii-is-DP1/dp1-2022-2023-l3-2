@@ -24,6 +24,10 @@ public class TableroService {
         return repo.findAll();
     }
 
+    public List<Tablero> findAllFinished() {
+        return repo.findAllFinished();
+    }
+
     public Tablero findById(Integer id) {
         return repo.findById(id);
     }
@@ -64,5 +68,9 @@ public class TableroService {
                 .sorted(Comparator.comparing(Tablero::getFinishedAt).reversed())
                 .limit(n)
                 .toList();
+    }
+
+    public List<Tablero> findLastNGames(Integer n) {
+        return repo.findLastGames().stream().filter(tab -> tab.isTerminada()).limit(n).toList();
     }
 }

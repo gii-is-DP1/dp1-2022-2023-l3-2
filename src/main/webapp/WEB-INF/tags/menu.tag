@@ -21,13 +21,13 @@
 		</div>
 		<div class="navbar-collapse collapse" id="main-navbar">
 			<ul class="nav navbar-nav">
-				
+
 				<petclinic:menuItem active="${name eq 'home'}" url="/"
 					title="home page">
 					<span class="glyphicon glyphicon-home" aria-hidden="true"></span>
 					<span>Home</span>
 				</petclinic:menuItem>
-				
+
 				<sec:authorize access="isAuthenticated()">
 				<petclinic:menuItem active="${name eq 'usuario'}" url="/users"
 					title="home page">
@@ -52,6 +52,12 @@
 					<span>Lobbies</span>
 				</petclinic:menuItem>
 
+                <petclinic:menuItem active="${name eq 'estadistica'}" url="/estadistica"
+					title="Estadistica">
+					<span class="glyphicon glyphicon-stats" aria-hidden="true"></span>
+					<span>Estadisticas</span>
+				</petclinic:menuItem>
+
 				<petclinic:menuItem active="${name eq 'error'}" url="/oups"
 					title="trigger a RuntimeException to see how it is handled">
 					<span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>
@@ -70,7 +76,7 @@
 				</sec:authorize>
 				<sec:authorize access="isAuthenticated()">
 					<li class="dropdown"><a href="#" class="dropdown-toggle"
-						data-toggle="dropdown"> 
+						data-toggle="dropdown">
 							<strong><sec:authentication property="name" /></strong> <span
 							class="glyphicon glyphicon-chevron-down"></span>
 					</a>
