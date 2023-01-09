@@ -18,6 +18,9 @@ public interface TableroRepository extends Repository<Tablero, String> {
 
     List<Tablero> findAll();
 
+    @Query("SELECT tablero FROM Tablero tablero WHERE tablero.finishedAt IS NOT NULL")
+    List<Tablero> findAllFinished();
+
     @Query("SELECT DISTINCT carta FROM Carta carta")
     List<Carta> findAllCartas();
 
@@ -28,6 +31,9 @@ public interface TableroRepository extends Repository<Tablero, String> {
     List<Carta> findByPosicion(Integer posicion);
 
     // List<Tablero> findLastNGamesByUser(User user);
+
+    @Query("SELECT tablero FROM Tablero tablero ORDER BY tablero.finishedAt DESC")
+    List<Tablero> findLastGames();
 
     void deleteById(Integer id);
 }

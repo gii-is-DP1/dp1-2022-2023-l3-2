@@ -170,7 +170,7 @@ public class Tablero extends NamedEntity {
         return JSON;
     }
 
-    public Long secondsDiffBetweenTwoDates(Date startDate, Date endDate) {
+    public static Long secondsDiffBetweenTwoDates(Date startDate, Date endDate) {
         Date startDateObj = startDate;
         Date endDateObj = endDate;
         // startDateObj.getTime() method gives date in milli seconds format
