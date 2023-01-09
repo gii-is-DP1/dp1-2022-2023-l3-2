@@ -23,7 +23,7 @@ import org.springframework.samples.dwarf.carta.Carta;
 import org.springframework.samples.dwarf.carta.TipoCarta;
 import org.springframework.samples.dwarf.jugador.Jugador;
 import org.springframework.samples.dwarf.jugador.JugadorService;
-
+import org.springframework.samples.dwarf.user.EstadisticaService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -50,11 +50,14 @@ public class TableroController {
 
     private TableroService taservice;
     private JugadorService jugadorService;
+    private EstadisticaService estadisticaService;
 
     @Autowired
-    public TableroController(TableroService service, JugadorService jugadorService) {
+    public TableroController(TableroService service, JugadorService jugadorService,
+            EstadisticaService estadisticaService) {
         this.taservice = service;
         this.jugadorService = jugadorService;
+        this.estadisticaService = estadisticaService;
     }
 
     @Transactional
@@ -530,6 +533,9 @@ public class TableroController {
         // Seteamos "terminada" y "finishedAt"
         tabla.setTerminada(true);
         tabla.setFinishedAt(new Date());
+
+        // Actualizamos estadistica de los usuarios
+        estadisticaService.actualizarEstadistica(tabla);
 
         return "redirect:/partida/" + id;
     }

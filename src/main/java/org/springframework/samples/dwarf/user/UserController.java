@@ -190,6 +190,7 @@ public class UserController {
         model.put("jugadores", jugadores);
         model.put("logros", logrosCumplidos);
         model.put("currentUsername", usuario.username);
+        model.put("promedios", usuario.getEstadistica().getPromedios());
 
         final Integer PARTIDAS_MOSTRADAS = 7;
         model.put("partidas", taservice.findLastNGamesByUser(usuario, PARTIDAS_MOSTRADAS));
