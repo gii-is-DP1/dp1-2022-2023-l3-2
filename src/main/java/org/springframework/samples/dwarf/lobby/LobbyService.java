@@ -3,6 +3,7 @@ package org.springframework.samples.dwarf.lobby;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.samples.dwarf.user.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,6 +34,11 @@ public class LobbyService {
     @Transactional(readOnly = true)
     public List<Lobby> findAll() {
         return (List<Lobby>) lobbyRepo.findAll();
+    }
+
+    @Transactional(readOnly = true)
+    public List<Lobby> findByUser(User user) {
+        return lobbyRepo.findByUser(user);
     }
 
 }

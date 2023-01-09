@@ -4,7 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.dwarf.carta.Carta;
 import org.springframework.samples.dwarf.user.User;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.*;
+
+import javax.transaction.TransactionScoped;
 
 @Service
 public class TableroService {
@@ -40,8 +44,16 @@ public class TableroService {
         return repo.findByPosicion(posicion);
     }
 
+    @Transactional
     public void deleteById(Integer id) {
         repo.deleteById(id);
+    }
+
+    public List<Tablero> findByUser(User user) {
+        List<Tablero> all = findAll();
+        return all.stream().filter(
+                tab -> tab.getJugadores().stream().anyMatch(j -> j.getUser().getUsername().equals(user.getUsername())))
+                .toList();
     }
 
     // NO HECHO CON QUERY

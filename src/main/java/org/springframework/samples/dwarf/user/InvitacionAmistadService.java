@@ -26,7 +26,17 @@ public class InvitacionAmistadService {
     }
 
     @Transactional
-    public List<InvitacionAmistad> findFriends(User user){
+    public List<InvitacionAmistad> findFriends(User user) {
         return invitacionrepo.findByUserenvia(user);
+    }
+
+    @Transactional(readOnly = true)
+    public List<InvitacionAmistad> findInvitacionesByUser(User user) {
+        return invitacionrepo.findInvitacionesByUser(user);
+    }
+
+    @Transactional
+    public void deleteInvitacionAmistad(InvitacionAmistad invitacion) {
+        invitacionrepo.delete(invitacion);
     }
 }

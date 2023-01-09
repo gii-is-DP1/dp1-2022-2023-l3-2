@@ -25,6 +25,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.dwarf.jugador.Jugador;
 import org.springframework.samples.dwarf.jugador.JugadorService;
+import org.springframework.samples.dwarf.lobby.InvitacionJuegoService;
+import org.springframework.samples.dwarf.lobby.LobbyService;
+import org.springframework.samples.dwarf.tablero.TableroService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,11 +42,21 @@ public class UserService {
 
     private UserRepository userRepository;
     private JugadorService jService;
+    private InvitacionAmistadService invitacionAmistadService;
+    private InvitacionJuegoService invitacionJuegoService;
+    private LobbyService lobbyService;
+    private TableroService taservice;
 
     @Autowired
-    public UserService(UserRepository userRepository, JugadorService jService) {
+    public UserService(UserRepository userRepository, JugadorService jService,
+            InvitacionAmistadService invitacionAmistadService, LobbyService lobbyService, TableroService taservice,
+            InvitacionJuegoService invitacionJuegoService) {
         this.userRepository = userRepository;
         this.jService = jService;
+        this.invitacionAmistadService = invitacionAmistadService;
+        this.lobbyService = lobbyService;
+        this.taservice = taservice;
+        this.invitacionJuegoService = invitacionJuegoService;
     }
 
     @Transactional
@@ -52,6 +65,41 @@ public class UserService {
         userRepository.save(user);
     }
 
+    @Transactional
+    public void deleteUser(User user) {
+        invitacionAmistadService.findInvitacionesByUser(user).stream()
+                .forEach(invi -> invitacionAmistadService.deleteInvitacionAmistad(invi));
+
+        invitacionJuegoService.findInvitacionesByUser(user).stream()
+                .forEach(invi -> invitacionJuegoService.delInvi(invi));
+
+        lobbyService.findByUser(user).stream().forEach(lobby -> {
+            lobby.getUsuarios().clear();
+            if (lobby.getAdmin().equals(user.getUsername())) {
+                lobbyService.deleteById(lobby.getId());
+            } else {
+                lobby.getUsuarios().remove(user);
+                lobby.setNumUsuarios(lobby.getNumUsuarios() - 1);
+            }
+        });
+
+        taservice.findByUser(user).stream().forEach(tab -> {
+            tab.getJugadores().clear();
+            taservice.deleteById(tab.getId());
+        });
+
+        jService.findJugadorUser(user.getUsername()).stream().forEach(j -> jService.deleteJugador(j));
+
+        userRepository.delete(user);
+
+    }
+
+    @Transactional
+    public void deleteUserById(String username) {
+        deleteUser(findUser(username).get());
+    }
+
+    @Transactional(readOnly = true)
     public List<User> findAll() {
         Iterable<User> users = userRepository.findAll();
         List<User> usersList = new ArrayList<>();
@@ -61,19 +109,23 @@ public class UserService {
         return usersList;
     }
 
+    @Transactional(readOnly = true)
     public Optional<User> findUser(String username) {
         return userRepository.findById(username);
     }
 
+    @Transactional(readOnly = true)
     public List<User> findUserByString(String username) {
         return this.findAll().stream().filter(user -> user.getUsername().contains(username)).toList();
     }
 
     // Hay que hacerlo con QUERY
+    @Transactional(readOnly = true)
     public List<User> findByRol(String rol) {
         return findAll().stream().filter(usr -> usr.hasRole("jugador")).toList();
     }
 
+    @Transactional(readOnly = true)
     public List<List<User>> getPages(List<User> usuarios) {
         final int PAGE_SIZE = 5;
         int pageNumber = 0;
@@ -103,6 +155,7 @@ public class UserService {
         return partition;
     }
 
+    @Transactional(readOnly = true)
     public Map<User, Integer> getPuntuaciones() {
         List<User> usuarios = findByRol("jugador");
         List<User> totalUsuarios = new ArrayList<>();

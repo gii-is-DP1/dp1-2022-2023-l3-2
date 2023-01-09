@@ -42,7 +42,7 @@ public class Tablero extends NamedEntity {
     @JoinTable(name = "chat_tablero", joinColumns = @JoinColumn(name = "tablero"))
     private List<ChatLine> chat;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "jugadores_lobby", joinColumns = @JoinColumn(name = "jugador_id"))
     private List<Jugador> jugadores;
 

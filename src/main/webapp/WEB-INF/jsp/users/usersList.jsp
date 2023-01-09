@@ -12,8 +12,8 @@
         <thead>
         <tr>
             <th style="width: 150px;">Username</th>
-        
-       
+
+
             <th style="width: 150px;">Puntuacion</th>
         </tr>
         </thead>
@@ -21,10 +21,11 @@
         <c:forEach items="${usuarios}" var="usuario">
             <tr>
                 <td>
-                    <a href="/users/${usuario.username}">${usuario.username}</a>
+                    <a href="/users/${usuario.username}">${usuario.username}</a> <a href="/users/${usuario.username}/delete"><span class="glyphicon glyphicon-trash"
+                        aria-hidden="true"></span></a>
                 </td>
-                
-                
+
+
 <td>
                     <c:out value="${puntuacion.get(usuario)}"></c:out>
                 </td>

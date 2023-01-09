@@ -35,4 +35,9 @@ public class InvitacionJuegoService {
     public void delInvi(InvitacionJuego invi) {
         invitacionrepo.delete(invi);
     }
+
+    @Transactional(readOnly = true)
+    public List<InvitacionJuego> findInvitacionesByUser(User user) {
+        return invitacionrepo.findInvitacionesByUser(user);
+    }
 }

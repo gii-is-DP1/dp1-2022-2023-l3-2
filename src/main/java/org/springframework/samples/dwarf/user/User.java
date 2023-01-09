@@ -35,7 +35,7 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private Set<Authorities> authorities;
 
-    @OneToOne(mappedBy = "usuario")
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "usuario")
     private Estadistica estadistica;
 
     public boolean hasRole(String role) {
