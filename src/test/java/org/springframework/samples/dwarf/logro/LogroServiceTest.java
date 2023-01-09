@@ -2,8 +2,6 @@ package org.springframework.samples.dwarf.logro;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 import java.util.List;
 
@@ -11,6 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.samples.dwarf.user.User;
+import org.springframework.samples.dwarf.user.UserService;
 import org.springframework.samples.dwarf.util.EntityUtils;
 import org.springframework.stereotype.Service;
 
@@ -54,4 +54,11 @@ public class LogroServiceTest {
         logroService.delLogro(2);
         assertEquals(18, logroService.findAll().size());
     }
+
+    @Test
+    public void shouldFindLogrosByUsername() {
+        List<Logro> logrosConseguidos = logroService.findLogrosByUsername("rafgargal");
+        assertEquals(0, logrosConseguidos.size());
+    }
+
 }
