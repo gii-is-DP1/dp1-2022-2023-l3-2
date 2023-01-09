@@ -92,98 +92,21 @@ public class UserController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         org.springframework.security.core.userdetails.User currentUser = (org.springframework.security.core.userdetails.User) authentication
                 .getPrincipal();
-        List<User> totalUsuarios = new ArrayList<>();
-        Map<User, List<Integer>> totalJugadores = new HashMap<>();
-        Map<User, Integer> acum = new HashMap<>();
-        for (User u : userService.findAll()) {
-
-            if (!u.hasRole("jugador"))
-                continue;
-
-            totalUsuarios.add(u);
-
-            List<Integer> ls = new ArrayList<>();
-            totalJugadores.put(u, ls);
-            for (Jugador j : jService.findJugadorUser(u.getUsername())) {
-                // Un jugador de una partida en curso tiene posicion final null
-                if (j.getPosicionFinal() != null)
-                    totalJugadores.get(u).add(j.getPosicionFinal());
-            }
-
-            for (int i = 0; i < totalJugadores.size(); i++) {
-                List<Integer> aux = totalJugadores.get(u);
-                Integer total = 0;
-                if (!aux.isEmpty()) {
-                    total = aux.stream().reduce((t, b) -> t + b).get();
-                }
-
-                acum.put(u, total);
-            }
-        }
 
         model.put("perfil", currentUser.getUsername());
-        model.put("usuarios", totalUsuarios);
-        model.put("puntuacion", acum);
+        model.put("usuarios", userService.findByRol("jugador"));
+        model.put("puntuacion", userService.getPuntuaciones());
         return "users/welcomecopy";
     }
 
     @GetMapping(value = "/user")
     public String usersList(Map<String, Object> model, @RequestParam Integer page) {
-        List<User> usuarios = userService.findAll();
+        List<User> usuarios = userService.findByRol("jugador");
 
-        final int PAGE_SIZE = 5;
-        int pageNumber = 0;
-
-        if (usuarios.size() % PAGE_SIZE != 0) {
-            pageNumber = (usuarios.size() / PAGE_SIZE) + 1;
-        } else {
-            pageNumber = usuarios.size() / PAGE_SIZE;
-        }
-
-        List<List<User>> partition = new ArrayList<>();
-        for (int i = 0; i < pageNumber; i++) {
-            partition.add(new ArrayList<>());
-        }
-
-        int startIndex = 0;
-        int finishIndex = PAGE_SIZE;
-        for (int i = 0; i < partition.size(); i++) {
-            if (finishIndex > usuarios.size()) {
-                partition.set(i, usuarios.subList(startIndex, usuarios.size()));
-                break;
-            }
-            partition.set(i, usuarios.subList(startIndex, finishIndex));
-            startIndex += PAGE_SIZE;
-            finishIndex += PAGE_SIZE;
-        }
-
-        List<User> totalUsuarios = new ArrayList<>();
-        Map<User, List<Integer>> totalJugadores = new HashMap<>();
-        Map<User, Integer> acum = new HashMap<>();
-        for (User u : userService.findAll()) {
-            totalUsuarios.add(u);
-
-            List<Integer> ls = new ArrayList<>();
-            totalJugadores.put(u, ls);
-            for (Jugador j : jService.findJugadorUser(u.getUsername())) {
-                totalJugadores.get(u).add(j.getPosicionFinal());
-
-            }
-
-            for (int i = 0; i < totalJugadores.size(); i++) {
-                List<Integer> aux = totalJugadores.get(u);
-                Integer total = 0;
-                if (!aux.isEmpty()) {
-                    total = aux.stream().reduce((t, b) -> t + b).get();
-                }
-
-                acum.put(u, total);
-            }
-        }
-        model.put("puntuacion", acum);
-        model.put("usuarios", partition.get(page));
+        model.put("puntuacion", userService.getPuntuaciones());
+        model.put("usuarios", userService.getPages(usuarios).get(page));
         model.put("paginaActual", page);
-        model.put("paginas", IntStream.rangeClosed(0, partition.size() - 1)
+        model.put("paginas", IntStream.rangeClosed(0, userService.getPages(usuarios).size() - 1)
                 .boxed().toList());
         return VIEW_USERS_LIST;
     }
