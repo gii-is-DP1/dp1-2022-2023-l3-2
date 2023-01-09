@@ -29,6 +29,11 @@ INSERT INTO estadistica(id, partidas_ganadas, partidas_perdidas, user_id) VALUES
 
 INSERT INTO jugadores VALUES(1,0,2,FALSE,0,0,0,0,null,TRUE,TRUE,'alegarsan11');
 
+INSERT INTO lobby VALUES
+(9999,'lobby prueba','alegarsan11',1);
+
+INSERT INTO usuarios_lobby VALUES
+(9999,'alegarsan11');
 
 INSERT INTO tipo_carta(id, name) VALUES
 (0, 'defensa'),

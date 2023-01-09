@@ -1,6 +1,7 @@
 package org.springframework.samples.dwarf.logro;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -48,11 +49,9 @@ public class LogroServiceTest {
         assertThat(logro.getTipo().getId()).isEqualTo(0);
     }
 
-    /* @Test
+    @Test
     public void shouldDelLogro() {
-        Logro logro = logroService.findById(2);
-        when(logroService.findById(2)).thenReturn(logro);
         logroService.delLogro(2);
-        verify(logroService).delLogro(2);
-    } */
+        assertEquals(18, logroService.findAll().size());
+    }
 }
