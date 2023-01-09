@@ -2,6 +2,7 @@ package org.springframework.samples.dwarf.tablero;
 
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.BDDMockito.given;
 
 import org.assertj.core.util.Lists;
@@ -84,17 +85,23 @@ public class TableroControllerTest {
         alegarsan.setId(1);
 
         alegarsan.setAcero(0);
-        alegarsan.setEnano(List.of(new Enano(), new Enano()));
+        Enano e = new Enano();
+        e.setId(1);
+        e.setPosicion(12);
+        Enano e2 = new Enano();
+        e2.setId(2);
+        e2.setPosicion(12);
+        alegarsan.setEnano(List.of(e, e2));
         alegarsan.setEnanosDisponibles(2);
         alegarsan.setEsespectador(false);
         alegarsan.setHierro(0);
         alegarsan.setMedalla(0);
         alegarsan.setObjeto(0);
-        alegarsan.setPosicionFinal(null);
+
         alegarsan.setOro(0);
         alegarsan.setPrimerjugador(true);
         alegarsan.setTurno(true);
-        User ale = new User();
+        org.springframework.samples.dwarf.user.User ale = new User();
         ale.setUsername("alegarsan11");
         ale.setPassword("fffff");
         userService.saveUser(ale);
@@ -109,17 +116,23 @@ public class TableroControllerTest {
         rafgargal.setId(2);
 
         rafgargal.setAcero(0);
-        rafgargal.setEnano(List.of(new Enano(), new Enano()));
+        Enano e3 = new Enano();
+        e3.setId(3);
+        e3.setPosicion(12);
+        Enano e4 = new Enano();
+        e4.setId(4);
+        e4.setPosicion(12);
+        rafgargal.setEnano(List.of(e3, e4));
         rafgargal.setEnanosDisponibles(2);
         rafgargal.setEsespectador(false);
         rafgargal.setHierro(0);
         rafgargal.setMedalla(0);
         rafgargal.setObjeto(0);
-        rafgargal.setPosicionFinal(null);
+
         rafgargal.setOro(0);
         rafgargal.setPrimerjugador(false);
         rafgargal.setTurno(false);
-        User rafa = new User();
+        org.springframework.samples.dwarf.user.User rafa = new User();
         rafa.setUsername("rafgargal");
         rafa.setPassword("jajajajajaj");
         userService.saveUser(rafa);
@@ -127,6 +140,7 @@ public class TableroControllerTest {
         authorityAuthorities.setAuthority("jugador");
         authorityAuthorities.setUser(rafa);
         authoritiesService.saveAuthorities(authority);
+
 
         rafgargal.setUser(rafa);
         jugadorService.saveJugador(rafgargal);
@@ -137,25 +151,27 @@ public class TableroControllerTest {
         jugadores.add(jugadorService.findOwnerById(2));
         tableroPrueba.setJugadores(jugadores);
 
+
         Carta cartaPruebas = new Carta();
-        cartaPruebas.setId(70);
-        cartaPruebas.setCantidaddevuelve(0);
+        cartaPruebas.setId(1);
+        cartaPruebas.setCantidaddevuelve(3);
         cartaPruebas.setCantidadentrada(0);
         cartaPruebas.setDevuelve("hierro");
-        cartaPruebas.setEntrada("hierro");
+        cartaPruebas.setEntrada("");
         cartaPruebas.setImagen("");
         TipoCarta tipo = new TipoCarta();
         tipo.setId(1);
-        tipo.setName("base");
+        tipo.setName("extraccion");
         tipoCartaService.saveTipoCarta(tipo);
         cartaPruebas.setTipo(tipo);
         cartaPruebas.setPosicion(1);
         cartaService.saveCarta(cartaPruebas);
-        given(taService.findCartaById(70)).willReturn(cartaPruebas);
+
+        given(taService.findCartaById(anyInt())).willReturn(cartaPruebas);
         List<Mazo> mazos = new ArrayList<>();
         for (int i = 1; i < 14; i++) {
             if (i <= 9) {
-                Carta carta = taService.findCartaById(70);
+                Carta carta = taService.findCartaById(67);
                 List<Carta> cartas = new ArrayList<>();
                 Mazo mazo = new Mazo();
                 mazo.setId(i);
@@ -167,7 +183,7 @@ public class TableroControllerTest {
                 mazos.add(mazo);
 
             } else if (i < 13) {
-                Carta carta = taService.findCartaById(70);
+                Carta carta = taService.findCartaById(67);
                 List<Carta> cartas = new ArrayList<>();
                 Mazo mazo = new Mazo();
                 cartas.add(carta);
@@ -179,12 +195,16 @@ public class TableroControllerTest {
 
             } else {
                 Mazo mazo = new Mazo();
-                Carta carta = taService.findCartaById(70);
                 List<Carta> cartas = new ArrayList<>();
-                cartas.add(carta);
+                for (int j = 10; j < 55; j++) {
+                    Carta carta = new Carta();
+                    carta = taService.findCartaById(67);
+                    cartas.add(carta);
+                }
+
                 mazo.setPosicion(i);
                 mazo.setCartas(cartas);
-                mazo.setName(null);
+                mazo.setName("mazo");
                 mazoService.saveMazo(mazo);
                 mazos.add(mazo);
 
@@ -203,9 +223,10 @@ public class TableroControllerTest {
 
         tableroPrueba.setTerminada(false);
         tableroPrueba.setDefensaTotal(false);
-        tableroPrueba.setCreatedAt(new Date(2022));
+        tableroPrueba.setCreatedAt(new Date());
         tableroPrueba.setFinishedAt(new Date());
-
+        System.out.println(tableroPrueba.getMazos().stream().map(j -> j.getCartas()).toList());
+        taService.saveTablero(tableroPrueba);
         given(this.taService.findById(1)).willReturn(tableroPrueba);
 
     }
@@ -252,7 +273,7 @@ public class TableroControllerTest {
     @WithMockUser(value = "spring")
     @Test
     void testRondaColoca() throws Exception {
-        mockMvc.perform(get("/partida/{partidaId}/coloca?username=alegarsan11&posicion=2", TEST_TABLERO_ID))
+        mockMvc.perform(get("/partida/{partidaId}/coloca?username=alegarsan11&posicion=1", TEST_TABLERO_ID))
                 .andExpect(status().is(302)).andExpect(view().name("redirect:/partida/1"));
         mockMvc.perform(get("/partida/{partidaId}/coloca?username=rafgargal&posicion=2", TEST_TABLERO_ID))
                 .andExpect(status().is(302)).andExpect(view().name("redirect:/partida/1"));
@@ -262,6 +283,8 @@ public class TableroControllerTest {
     @Test
     void testRondaRecursos() throws Exception {
 
+        mockMvc.perform(get("/partida/{partidaId}/recursos", TEST_TABLERO_ID))
+                .andExpect(status().is(302)).andExpect(view().name("redirect:/partida/1/comienza"));
     }
 
     @WithMockUser(value = "spring")

@@ -19,6 +19,7 @@ import org.springframework.samples.dwarf.user.User;
 import javax.persistence.JoinColumn;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -28,6 +29,7 @@ import java.util.*;
 @Entity
 @Getter
 @Setter
+@ToString
 public class Tablero extends NamedEntity {
 
     Integer ronda;
