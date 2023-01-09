@@ -29,11 +29,9 @@ INSERT INTO estadistica(id, partidas_ganadas, partidas_perdidas, user_id) VALUES
 
 INSERT INTO jugadores VALUES(1,0,2,FALSE,0,0,0,0,null,TRUE,TRUE,'alegarsan11');
 
-INSERT INTO lobby VALUES
-(9999,'lobby prueba','alegarsan11',1);
 
-INSERT INTO usuarios_lobby VALUES
-(9999,'alegarsan11');
+
+
 
 INSERT INTO tipo_carta(id, name) VALUES
 (0, 'defensa'),
@@ -70,7 +68,7 @@ INSERT INTO logro(id, name, descripcion, dificultad, requisito, tipo) VALUES
 (19, '1000 medallas', 'Se consigue al coleccionar 1000 medallas', 3, 1000, 1);
 
 INSERT INTO invitacion_amistad(user_id_envia, user_id_recibe) VALUES
-('alegarsan11', 'rafgargal'),
+
 ('jualeomad', 'rafgargal');
 
 INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve, type) VALUES(1, '/resources/images/Dimensionadas/001.png', 1, 1, null, null, 'hierro',  3   , 'extraccion');
