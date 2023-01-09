@@ -27,7 +27,7 @@ INSERT INTO estadistica(id, partidas_ganadas, partidas_perdidas, user_id) VALUES
 (3, 0, 0, 'dandiasua'),
 (4, 0, 0, 'alegarsan11');
 
--- INSERT INTO jugadores VALUES(1,0,2,FALSE,0,0,0,0,null,TRUE,TRUE,'alegarsan11');
+INSERT INTO jugadores VALUES(1,0,2,FALSE,0,0,0,0,null,TRUE,TRUE,'alegarsan11');
 
 
 INSERT INTO tipo_carta(id, name) VALUES
