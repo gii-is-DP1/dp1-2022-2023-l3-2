@@ -31,6 +31,7 @@ import org.springframework.samples.dwarf.model.BaseEntity;
  * @author Michael Isvy
  * @since 15.1.2013
  */
+@org.springframework.stereotype.Repository
 public interface JugadorRepository extends Repository<Jugador, Integer> {
 
     /**

@@ -290,12 +290,24 @@ public class TableroControllerTest {
     @WithMockUser(value = "spring")
     @Test
     void testFinPartida() throws Exception {
-
+        mockMvc.perform(get("/partida/{partidaId}/fin", TEST_TABLERO_ID)).andExpect(status().is(302))
+                .andExpect(view().name("redirect:/partida/1"));
     }
 
     @WithMockUser(value = "spring")
     @Test
     void testBorrarPartida() throws Exception {
+
+    }
+
+
+    @WithMockUser(value = "spring")
+    @Test
+    void testShowAllAndEnCurso() throws Exception {
+        mockMvc.perform(get("/partida/all")).andExpect(status().is(200))
+                .andExpect(view().name("tablero/showListaPartidas"));
+        mockMvc.perform(get("/partida/en-curso")).andExpect(status().is(200))
+                .andExpect(view().name("tablero/showListaPartidas"));
 
     }
 
