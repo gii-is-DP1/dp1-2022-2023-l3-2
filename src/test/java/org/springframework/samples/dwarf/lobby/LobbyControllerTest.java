@@ -18,12 +18,16 @@ import org.springframework.samples.dwarf.user.UserService;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import java.util.List;
+import java.util.Optional;
 
 @WebMvcTest(controllers = LobbyController.class, excludeFilters = @Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class), excludeAutoConfiguration = SecurityConfiguration.class)
 public class LobbyControllerTest {
@@ -45,58 +49,49 @@ public class LobbyControllerTest {
     @MockBean
     InvitacionAmistadService invitacionAmistadService;
 
-    private User user1;
 
-    private User user2;
 
     @BeforeEach
     void setup() {
-        user1 = new User();
-        user1.setUsername("user1");
-        user1.setPassword("1234");
-        user1.setImgperfil("imagen");
 
-        user1.setEnabled(true);
-        userService.saveUser(user1);
-        Authorities authorities1 = new Authorities();
-        authorities1.setId(1);
-        authorities1.setAuthority("jugador");
-        authorities1.setUser(user1);
-        authoritiesService.saveAuthorities(authorities1);
-        user2 = new User();
-        user2.setUsername("user2");
-        user2.setPassword("1234");
-        user2.setImgperfil("imagen");
+        org.springframework.samples.dwarf.user.User ale = new User();
+        ale.setUsername("alegarsan11");
+        ale.setPassword("fffff");
+        userService.saveUser(ale);
+        Authorities authority = new Authorities();
+        authority.setAuthority("jugador");
+        authority.setUser(ale);
+        authoritiesService.saveAuthorities(authority);
 
-        user2.setEnabled(true);
-        userService.saveUser(user2);
-        Authorities authorities2 = new Authorities();
-        authorities2.setId(2);
-        authorities2.setAuthority("jugador");
-        authorities2.setUser(user2);
-        authoritiesService.saveAuthorities(authorities2);
+        org.springframework.samples.dwarf.user.User rafa = new User();
+        rafa.setUsername("rafgargal");
+        rafa.setPassword("fffff");
+        userService.saveUser(rafa);
+        authority.setUser(rafa);
+        authoritiesService.saveAuthorities(authority);
 
         Lobby lobby = new Lobby();
         lobby.setId(1);
         lobby.setName("lobby prueba");
-        List<User> users = List.of(user1);
+        List<User> users = List.of(ale);
         lobby.setUsuarios(users);
         lobby.setNumUsuarios(1);
         lobby.setAdmin("user1");
         lobbyService.saveLobby(lobby);
         InvitacionJuego inv = new InvitacionJuego();
-        inv.setUserenvia(user1);
-        inv.setUserrecibe(user2);
+        inv.setUserenvia(ale);
+        inv.setUserrecibe(rafa);
         inv.setLobbyId(1);
         inv.setId(1);
         invitacionJuegoService.saveInvitacionAmistad(inv);
         given(lobbyService.findById(1)).willReturn(lobby);
         InvitacionAmistad amigos = new InvitacionAmistad();
         amigos.setId(1);
-        amigos.setUserenvia(user1);
-        amigos.setUserrecibe(user2);
-        System.out.println(user2);
-        given(userService.findUserByString("user2")).willReturn(List.of(user2));
+        amigos.setUserenvia(ale);
+        amigos.setUserrecibe(rafa);
+        invitacionAmistadService.saveInvitacionAmistad(amigos);
+        Optional<User> aOptional = Optional.of(rafa);
+        given(this.userService.findUser("rafgargal")).willReturn(aOptional);
 
     }
 
@@ -116,4 +111,27 @@ public class LobbyControllerTest {
                 .andExpect(view().name("lobby/showLobby"));
     }
 
+    @WithMockUser(value = "spring")
+    @Test
+    void testAddUser() throws Exception {
+        mockMvc.perform(post("/lobby/1/add-user").with(csrf())).andExpect(status().is(302))
+                .andExpect(view().name("redirect:/lobby/1"));
+    }
+
+    @WithMockUser(value = "spring")
+    @Test
+    void testAddUser2() throws Exception {
+        mockMvc.perform(get("/lobby/1/add-user?exactUsername=user2")).andExpect(status().is(302))
+                .andExpect(view().name("redirect:/lobby/1"));
+    }
+
+    @WithMockUser(value = "spring")
+    @Test
+    void testDelUser() throws Exception {
+        mockMvc.perform(get("/lobby/1/add-user?exactUsername=user2")).andExpect(status().is(302))
+                .andExpect(view().name("redirect:/lobby/1"));
+        mockMvc.perform(get("/lobby/1/delete-user?username=user2")).andExpect(status().is(302))
+                .andExpect(view().name("redirect:/lobby/1"));
+
+    }
 }

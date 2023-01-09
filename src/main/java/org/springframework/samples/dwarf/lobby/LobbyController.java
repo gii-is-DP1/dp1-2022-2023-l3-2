@@ -3,6 +3,7 @@ package org.springframework.samples.dwarf.lobby;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -119,7 +120,12 @@ public class LobbyController {
             return "redirect:/lobby/" + lobby.getId();
         }
 
-        User userSearched = userService.findUserByString(user.getUsername()).get(0);
+        Optional<User> user1 = userService.findUser(user.getUsername());
+
+        if (!user1.isPresent()) {
+            return "redirect:/lobby/" + lobby.getId();
+        }
+        User userSearched = user1.get();
 
         // No puedes añadir un usuario que ya está
         if (lobby.getUsuarios().stream().anyMatch(usr -> usr.getUsername().equals(userSearched.getUsername()))) {
@@ -152,8 +158,12 @@ public class LobbyController {
             return "redirect:/lobby/" + lobby.getId();
         }
 
-        User userSearched = userService.findUserByString(exactUsername).get(0);
+        Optional<User> user = userService.findUser(exactUsername);
 
+        if (!user.isPresent()) {
+            return "redirect:/lobby/" + lobby.getId();
+        }
+        User userSearched = user.get();
         // No puedes añadir un usuario que ya está
         if (lobby.getUsuarios().stream().anyMatch(usr -> usr.getUsername().equals(userSearched.getUsername()))) {
             return "redirect:/lobby/" + lobby.getId();
@@ -206,7 +216,12 @@ public class LobbyController {
 
         Lobby lobby = lobbyService.findById(id);
 
-        User user = userService.findUserByString(username).get(0);
+        Optional<User> user1 = userService.findUser(username);
+
+        if (!user1.isPresent()) {
+            return "redirect:/lobby/" + lobby.getId();
+        }
+        User user = user1.get();
 
         lobby.getUsuarios().remove(user);
         List<InvitacionJuego> invitacionesDeJugadores = invitacionJuegoService
