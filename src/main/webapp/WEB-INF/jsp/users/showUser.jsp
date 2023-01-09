@@ -107,11 +107,11 @@
 
         </tbody>
     </table>
-    <table id="estadisticas-table" class="table table-striped" style="width: 1100px;">
+    <table id="estadisticas-table" class="table table-striped" style="width: 600px;">
         <thead>
             <tr>
-                <th style="width: 200px; text-align: center;">Nombre estadistica</th>
-                <th style="width: 200px; text-align: center;">Valor</th>
+                <th style="text-align: center;">Nombre estadistica</th>
+                <th style="text-align: center;">Valor</th>
             </tr>
         </thead>
         <tbody>
@@ -122,6 +122,30 @@
             <tr>
                 <td>Partidas perdidas</td>
                 <td>${usuario.estadistica.partidasPerdidas}</td>
+            </tr>
+            <tr>
+                <td>Partidas jugadas</td>
+                <td>${usuario.estadistica.partidasPerdidas + usuario.estadistica.partidasGanadas}</td>
+            </tr>
+            <tr>
+                <td>Oro total</td>
+                <td>${usuario.estadistica.oro} - (${promedios.oro} por partida)</td>
+            </tr>
+            <tr>
+                <td>Objetos totales</td>
+                <td>${usuario.estadistica.objetos} - (${promedios.objetos} por partida)</td>
+            </tr>
+            <tr>
+                <td>Acero total</td>
+                <td>${usuario.estadistica.acero} - (${promedios.acero} por partida)</td>
+            </tr>
+            <tr>
+                <td>Medallas totales</td>
+                <td>${usuario.estadistica.medallas} - (${promedios.medallas} por partida)</td>
+            </tr>
+            <tr>
+                <td>Hierro total</td>
+                <td>${usuario.estadistica.hierro} - (${promedios.hierro} por partida)</td>
             </tr>
         </tbody>
     </table>

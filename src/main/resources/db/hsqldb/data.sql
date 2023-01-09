@@ -21,11 +21,11 @@ INSERT INTO authorities(id,username,authority) VALUES (9,'ernsaqrio','jugador');
 INSERT INTO users(username,password,enabled) VALUES ('vet1','v3t',TRUE);
 INSERT INTO authorities(id,username,authority) VALUES (3,'vet1','veterinarian');
 
-INSERT INTO estadistica(id, partidas_ganadas, partidas_perdidas, user_id) VALUES
-(1, 0, 0, 'jualeomad'),
-(2, 0, 0, 'rafgargal'),
-(3, 0, 0, 'dandiasua'),
-(4, 0, 0, 'alegarsan11');
+INSERT INTO estadistica(id, partidas_ganadas, partidas_perdidas, puntos, hierro, acero, oro, objetos, medallas, user_id) VALUES
+(1, 0, 0, 0, 0, 0, 0, 0, 0, 'jualeomad'),
+(2, 0, 0, 0, 0, 0, 0, 0, 0, 'rafgargal'),
+(3, 0, 0, 0, 0, 0, 0, 0, 0, 'dandiasua'),
+(4, 0, 0, 0, 0, 0, 0, 0, 0, 'alegarsan11');
 
 INSERT INTO jugadores VALUES(1,0,2,FALSE,0,0,0,0,null,TRUE,TRUE,'alegarsan11');
 
