@@ -12,6 +12,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.samples.dwarf.carta.Carta;
 import org.springframework.samples.dwarf.jugador.Jugador;
 import org.springframework.samples.dwarf.jugador.JugadorService;
+import org.springframework.samples.dwarf.user.UserService;
 import org.springframework.stereotype.Service;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
@@ -21,6 +22,8 @@ public class TableroServiceTest {
     protected TableroService tableroService;
     @Autowired
     protected JugadorService jugadorService;
+    @Autowired
+    protected UserService userService;
 
     Tablero tablero;
     Mazo mazo;
@@ -49,8 +52,10 @@ public class TableroServiceTest {
                 tableroService.findLastNGamesByUser(jugadorService.findJugadorUser("alegarsan11").get(0).getUser(), 1)
                         .size(),
                 1);
+        System.out.println();
         tableroService.deleteById(1);
-        assertEquals(tableroService.findAll().size(), 0);
+        System.out.println();
+        assertEquals(tableroService.findAll(), List.of());
 
     }
 
