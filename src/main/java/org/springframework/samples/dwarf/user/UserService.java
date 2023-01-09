@@ -16,11 +16,15 @@
 package org.springframework.samples.dwarf.user;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.samples.dwarf.jugador.Jugador;
+import org.springframework.samples.dwarf.jugador.JugadorService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,10 +38,12 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService {
 
     private UserRepository userRepository;
+    private JugadorService jService;
 
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, JugadorService jService) {
         this.userRepository = userRepository;
+        this.jService = jService;
     }
 
     @Transactional
@@ -61,6 +67,69 @@ public class UserService {
 
     public List<User> findUserByString(String username) {
         return this.findAll().stream().filter(user -> user.getUsername().contains(username)).toList();
-    };
+    }
 
+    // Hay que hacerlo con QUERY
+    public List<User> findByRol(String rol) {
+        return findAll().stream().filter(usr -> usr.hasRole("jugador")).toList();
+    }
+
+    public List<List<User>> getPages(List<User> usuarios) {
+        final int PAGE_SIZE = 5;
+        int pageNumber = 0;
+
+        if (usuarios.size() % PAGE_SIZE != 0) {
+            pageNumber = (usuarios.size() / PAGE_SIZE) + 1;
+        } else {
+            pageNumber = usuarios.size() / PAGE_SIZE;
+        }
+
+        List<List<User>> partition = new ArrayList<>();
+        for (int i = 0; i < pageNumber; i++) {
+            partition.add(new ArrayList<>());
+        }
+
+        int startIndex = 0;
+        int finishIndex = PAGE_SIZE;
+        for (int i = 0; i < partition.size(); i++) {
+            if (finishIndex > usuarios.size()) {
+                partition.set(i, usuarios.subList(startIndex, usuarios.size()));
+                break;
+            }
+            partition.set(i, usuarios.subList(startIndex, finishIndex));
+            startIndex += PAGE_SIZE;
+            finishIndex += PAGE_SIZE;
+        }
+        return partition;
+    }
+
+    public Map<User, Integer> getPuntuaciones() {
+        List<User> usuarios = findByRol("jugador");
+        List<User> totalUsuarios = new ArrayList<>();
+        Map<User, List<Integer>> totalJugadores = new HashMap<>();
+        Map<User, Integer> acum = new HashMap<>();
+        for (User u : usuarios) {
+
+            totalUsuarios.add(u);
+
+            List<Integer> ls = new ArrayList<>();
+            totalJugadores.put(u, ls);
+            for (Jugador j : jService.findJugadorUser(u.getUsername())) {
+                if (j.getPosicionFinal() != null)
+                    totalJugadores.get(u).add(j.getPosicionFinal());
+
+            }
+
+            for (int i = 0; i < totalJugadores.size(); i++) {
+                List<Integer> aux = totalJugadores.get(u);
+                Integer total = 0;
+                if (!aux.isEmpty()) {
+                    total = aux.stream().reduce((t, b) -> t + b).get();
+                }
+
+                acum.put(u, total);
+            }
+        }
+        return acum;
+    }
 }
