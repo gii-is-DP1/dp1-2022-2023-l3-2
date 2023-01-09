@@ -37,4 +37,8 @@ public class User {
 
     @OneToOne(mappedBy = "usuario")
     private Estadistica estadistica;
+
+    public boolean hasRole(String role) {
+        return this.authorities.stream().anyMatch(auth -> auth.getAuthority().equals(role));
+    }
 }

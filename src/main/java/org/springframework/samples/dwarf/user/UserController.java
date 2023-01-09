@@ -96,13 +96,18 @@ public class UserController {
         Map<User, List<Integer>> totalJugadores = new HashMap<>();
         Map<User, Integer> acum = new HashMap<>();
         for (User u : userService.findAll()) {
+
+            if (!u.hasRole("jugador"))
+                continue;
+
             totalUsuarios.add(u);
 
             List<Integer> ls = new ArrayList<>();
             totalJugadores.put(u, ls);
             for (Jugador j : jService.findJugadorUser(u.getUsername())) {
-                totalJugadores.get(u).add(j.getPosicionFinal());
-
+                // Un jugador de una partida en curso tiene posicion final null
+                if (j.getPosicionFinal() != null)
+                    totalJugadores.get(u).add(j.getPosicionFinal());
             }
 
             for (int i = 0; i < totalJugadores.size(); i++) {
@@ -250,42 +255,7 @@ public class UserController {
         User usuario = userService.findUser(id).get();
         List<Jugador> jugadores = ownerService.findJugadorUser(id);
 
-        List<Logro> logrosAll = logroService.findAll();
-        List<Logro> logrosCumplidos = new ArrayList<>();
-
-        for (Logro logro : logrosAll) {
-            if (logro.getTipo().getName().equals("partidas_ganadas")) {
-                if (usuario.getEstadistica().getPartidasGanadas() >= logro.getRequisito())
-                    logrosCumplidos.add(logro);
-            }
-            if (logro.getTipo().getName().equals("recursos_conseguidos")) {
-
-                Integer hierro = 0;
-                Integer acero = 0;
-                Integer objetos = 0;
-                Integer medallas = 0;
-                Integer oro = 0;
-                for (Jugador j : jugadores) {
-                    hierro += j.getHierro();
-                    acero += j.getAcero();
-                    objetos += j.getObjeto();
-                    medallas += j.getMedalla();
-                    oro += j.getOro();
-                }
-
-                if (logro.getName().contains("hierro") && hierro >= logro.getRequisito())
-                    logrosCumplidos.add(logro);
-                if (logro.getName().contains("acero") && acero >= logro.getRequisito())
-                    logrosCumplidos.add(logro);
-                if (logro.getName().contains("objetos") && objetos >= logro.getRequisito())
-                    logrosCumplidos.add(logro);
-                if (logro.getName().contains("medallas") && medallas >= logro.getRequisito())
-                    logrosCumplidos.add(logro);
-                if (logro.getName().contains("oro") && oro >= logro.getRequisito())
-                    logrosCumplidos.add(logro);
-            }
-
-        }
+        List<Logro> logrosCumplidos = logroService.findLogrosByUsername(id);
 
         List<User> usuarios = invitacionAmistadService.findFriends(usuario).stream()
                 .map(invitacion -> invitacion.getUserrecibe()).toList();
