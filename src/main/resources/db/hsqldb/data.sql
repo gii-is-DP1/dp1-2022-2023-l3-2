@@ -27,7 +27,7 @@ INSERT INTO estadistica(id, partidas_ganadas, partidas_perdidas, user_id) VALUES
 (3, 0, 0, 'dandiasua'),
 (4, 0, 0, 'alegarsan11');
 
-INSERT INTO jugadores VALUES(1,0,2,FALSE,0,0,0,0,null,TRUE,TRUE,'alegarsan11');
+-- INSERT INTO jugadores VALUES(1,0,2,FALSE,0,0,0,0,null,TRUE,TRUE,'alegarsan11');
 
 
 INSERT INTO tipo_carta(id, name) VALUES
@@ -64,7 +64,7 @@ INSERT INTO logro(id, name, descripcion, dificultad, requisito, tipo) VALUES
 (18, '200 medallas', 'Se consigue al coleccionar 200 medallas', 2, 200, 1),
 (19, '1000 medallas', 'Se consigue al coleccionar 1000 medallas', 3, 1000, 1);
 
-INSERT INTO invitacion_amistad(user_id_envia, user_id_recibe) VALUES 
+INSERT INTO invitacion_amistad(user_id_envia, user_id_recibe) VALUES
 ('alegarsan11', 'rafgargal'),
 ('jualeomad', 'rafgargal');
 
