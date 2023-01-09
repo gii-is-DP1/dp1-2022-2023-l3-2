@@ -10,7 +10,9 @@ import org.springframework.stereotype.Repository;
 public interface InvitacioAmistadRepository extends CrudRepository<InvitacionAmistad, Integer> {
     InvitacionAmistad save(InvitacionAmistad invitacion);
 
-   
     List<InvitacionAmistad> findByUserenvia(User user);
+
+    @Query("SELECT u FROM InvitacionAmistad u WHERE u.userenvia=:user OR u.userrecibe=:user")
+    List<InvitacionAmistad> findInvitacionesByUser(User user);
 
 }

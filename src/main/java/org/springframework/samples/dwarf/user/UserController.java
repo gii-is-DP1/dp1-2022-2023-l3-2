@@ -197,6 +197,12 @@ public class UserController {
         return view_user;
     }
 
+    @GetMapping(value = "/users/{userid}/delete")
+    public String deleteUser(@PathVariable("userid") String id) {
+        userService.deleteUserById(id);
+        return "redirect:/user/find";
+    }
+
     @GetMapping("usersnew")
     public String createNewUser(Map<String, Object> model) {
         User user = new User();

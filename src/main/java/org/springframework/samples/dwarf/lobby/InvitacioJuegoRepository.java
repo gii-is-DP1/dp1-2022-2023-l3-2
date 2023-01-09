@@ -16,4 +16,7 @@ public interface InvitacioJuegoRepository extends CrudRepository<InvitacionJuego
     @Query("SELECT invi FROM InvitacionJuego invi WHERE invi.userenvia =:userenvia AND invi.userrecibe =:userrecibe")
     List<InvitacionJuego> findBoth(User userenvia, User userrecibe);
 
+    @Query("SELECT u FROM InvitacionJuego u WHERE u.userenvia=:user OR u.userrecibe=:user")
+    List<InvitacionJuego> findInvitacionesByUser(User user);
+
 }

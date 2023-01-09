@@ -85,4 +85,9 @@ public class JugadorService {
         return jugador;
     }
 
+    @Transactional
+    public void deleteJugador(Jugador j) {
+        ownerRepository.delete(j);
+    }
+
 }

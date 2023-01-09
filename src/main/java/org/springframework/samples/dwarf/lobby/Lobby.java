@@ -2,6 +2,7 @@ package org.springframework.samples.dwarf.lobby;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -19,7 +20,7 @@ import lombok.Setter;
 @Entity
 public class Lobby extends NamedEntity {
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "usuarios_lobby", joinColumns = @JoinColumn(name = "user_id"))
     private List<User> usuarios;
 

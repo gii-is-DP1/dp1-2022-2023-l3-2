@@ -43,6 +43,8 @@ public interface JugadorRepository extends Repository<Jugador, Integer> {
      */
     void save(Jugador owner) throws DataAccessException;
 
+    void delete(Jugador jugador);
+
     /**
      * Retrieve <code>Owner</code>s from the data store by last name, returning all
      * owners
