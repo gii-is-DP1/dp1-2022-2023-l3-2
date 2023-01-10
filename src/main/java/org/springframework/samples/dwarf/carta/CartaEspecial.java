@@ -38,7 +38,7 @@ public class CartaEspecial extends Carta {
                 }
             }
             if (primera.getId() == 57) {
-                // Un objeto por 5 unidades de oro o hierro o Acero INCOMPLETO ??
+
                 if (j.getObjeto() >= 1) {
                     j.setObjeto(j.getObjeto() - 1);
                     tablero.getMazos().stream().filter(mazo -> mazo.getFirstCarta().equals(primera)).toList().get(0)
@@ -50,12 +50,12 @@ public class CartaEspecial extends Carta {
                 return null;
             }
             if (primera.getId() == 58) {
-                // Elige una carta que previamente haya estado en la cima de un mazo y vuelvela
-                // a situar alli INCOMPLETO
+
+                return "redirect:/partida/" + tablero.getId() + "/eleccion-cartas?username="
+                        + j.getUser().getUsername();
             }
             if (primera.getId() == 59) {
-                // ofrece 1 hierro 1 oro y 1 acero mas 2 unidades de los materiales anteriores
-                // que desees por 1 objeto REVISAR
+
                 if (j.getAcero() >= 1 && j.getOro() >= 1 && j.getHierro() >= 1) {
                     if (j.getHierro() - 1 >= 2) {
                         j.setAcero(j.getAcero() - 1);
@@ -79,22 +79,19 @@ public class CartaEspecial extends Carta {
                 }
             }
             if (primera.getId() == 60) {
-                // Situa un enano en un mazo libre y situa la primera carta del mazo en la
-                // baraja de nuevo INCOMPLETO
-                List<Enano> enanos = j.getEnano();
-                Enano enano = new Enano();
-                enano.setPosicion(12);
-                enanos.add(enano);
-                j.setEnano(enanos);
+                if (j.getObjeto() >= 1) {
+                    j.setObjeto(j.getObjeto() - 1);
+                    tablero.getMazos().stream().filter(mazo -> mazo.getFirstCarta().equals(primera)).toList().get(0)
+                            .getCartas().remove(primera);
+                    return "redirect:/partida/" + tablero.getId() + "/eleccion-materiales?username="
+                            + j.getUser().getUsername();
+                    // Elegir los elementos
+                }
+                return null;
             }
             if (primera.getId() == 61) {
-                // Situas un enano en una posicion que este ocupado por otro enano (Realizado
-                // solo hasta añadir 1 enano mas) INCOMPLETO
-                List<Enano> enanos = j.getEnano();
-                Enano enano = new Enano();
-                enano.setPosicion(12);
-                enanos.add(enano);
-                j.setEnano(enanos);
+                return "redirect:/partida/" + tablero.getId() + "/eleccion-cartas?username="
+                        + j.getUser().getUsername();
             }
             if (primera.getId() == 62) {
                 // situa la primera carta de los mazos principales en el principio del mazo
