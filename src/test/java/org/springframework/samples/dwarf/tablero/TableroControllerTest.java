@@ -22,6 +22,7 @@ import org.springframework.samples.dwarf.jugador.Jugador;
 import org.springframework.samples.dwarf.jugador.JugadorService;
 import org.springframework.samples.dwarf.user.Authorities;
 import org.springframework.samples.dwarf.user.AuthoritiesService;
+import org.springframework.samples.dwarf.user.EstadisticaService;
 import org.springframework.samples.dwarf.user.User;
 import org.springframework.samples.dwarf.user.UserService;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
@@ -51,6 +52,8 @@ public class TableroControllerTest {
 
     @MockBean
     private TableroService taService;
+    @MockBean
+    private EstadisticaService estadisticaService;
     @MockBean
     private MazoService mazoService;
     @MockBean
