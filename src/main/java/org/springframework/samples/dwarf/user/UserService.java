@@ -31,6 +31,9 @@ import org.springframework.samples.dwarf.tablero.TableroService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.Authentication;
+
 /**
  * Mostly used as a facade for all Petclinic controllers Also a placeholder
  * for @Transactional and @Cacheable annotations
@@ -63,6 +66,21 @@ public class UserService {
     public void saveUser(User user) throws DataAccessException {
         user.setEnabled(true);
         userRepository.save(user);
+    }
+
+    @Transactional(readOnly = true)
+    public User findAuthenticatedUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null) {
+            if (authentication.isAuthenticated()) {
+                org.springframework.security.core.userdetails.User currentUser = (org.springframework.security.core.userdetails.User) authentication
+                        .getPrincipal();
+
+                return findUser(currentUser.getUsername()).get();
+            }
+        }
+        return null;
+
     }
 
     @Transactional
