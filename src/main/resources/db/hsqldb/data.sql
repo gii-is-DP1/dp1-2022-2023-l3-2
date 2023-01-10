@@ -25,7 +25,9 @@ INSERT INTO estadistica(id, partidas_ganadas, partidas_perdidas, puntos, hierro,
 (1, 0, 0, 0, 0, 0, 0, 0, 0, 'jualeomad'),
 (2, 0, 0, 0, 0, 0, 0, 0, 0, 'rafgargal'),
 (3, 0, 0, 0, 0, 0, 0, 0, 0, 'dandiasua'),
-(4, 0, 0, 0, 0, 0, 0, 0, 0, 'alegarsan11');
+(4, 0, 0, 0, 0, 0, 0, 0, 0, 'alegarsan11'),
+(5, 0, 0, 0, 0, 0, 0, 0, 0, 'marescram3'),
+(6, 0, 0, 0, 0, 0, 0, 0, 0, 'ernsaqrio');
 
 INSERT INTO jugadores VALUES(1,0,2,FALSE,0,0,0,0,null,TRUE,TRUE,'alegarsan11');
 

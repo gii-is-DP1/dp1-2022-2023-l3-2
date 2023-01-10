@@ -88,14 +88,17 @@ public class UserController {
     }
 
     @GetMapping("/users")
-    public String parteDeUsuarios(Map<String, Object> model) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        org.springframework.security.core.userdetails.User currentUser = (org.springframework.security.core.userdetails.User) authentication
-                .getPrincipal();
+    public String parteDeUsuarios(Map<String, Object> model, @RequestParam Integer page) {
+        User currentUser = userService.findAuthenticatedUser();
+
+        List<List<User>> pages = userService.getPages(userService.findJugadoresSortedByPuntuacion());
 
         model.put("perfil", currentUser.getUsername());
-        model.put("usuarios", userService.findByRol("jugador"));
-        model.put("puntuacion", userService.getPuntuaciones());
+        model.put("usuarios", pages.get(page));
+        model.put("paginaActual", page);
+        model.put("paginas", IntStream.rangeClosed(0, pages.size() - 1)
+                .boxed().toList());
+
         return "users/welcomecopy";
     }
 

@@ -144,6 +144,11 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
+    public List<User> findJugadoresSortedByPuntuacion() {
+        return userRepository.findAllSortedByPuntuacion().stream().filter(usr -> usr.hasRole("jugador")).toList();
+    }
+
+    @Transactional(readOnly = true)
     public List<List<User>> getPages(List<User> usuarios) {
         final int PAGE_SIZE = 5;
         int pageNumber = 0;
