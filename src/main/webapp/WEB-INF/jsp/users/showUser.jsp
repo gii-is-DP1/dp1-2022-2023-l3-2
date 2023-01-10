@@ -116,6 +116,10 @@
         </thead>
         <tbody>
             <tr>
+                <td>Puntuacion total</td>
+                <td>${usuario.estadistica.puntos}</td>
+            </tr>
+            <tr>
                 <td>Partidas ganadas</td>
                 <td>${usuario.estadistica.partidasGanadas}</td>
             </tr>
