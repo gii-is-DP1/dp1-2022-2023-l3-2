@@ -29,7 +29,7 @@
 				</petclinic:menuItem>
 
 				<sec:authorize access="isAuthenticated()">
-				<petclinic:menuItem active="${name eq 'usuario'}" url="/users"
+				<petclinic:menuItem active="${name eq 'usuario'}" url="/users?page=0"
 					title="home page">
 					<span class="glyphicon glyphicon-user" aria-hidden="true"></span>
 					<span>Parte de usuario</span>

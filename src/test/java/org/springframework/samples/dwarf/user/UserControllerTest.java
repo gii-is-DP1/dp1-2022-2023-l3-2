@@ -26,9 +26,7 @@ import java.util.Set;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 
-@WebMvcTest(controllers = UserController.class, 
-    excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class),
-    excludeAutoConfiguration = SecurityConfiguration.class)
+@WebMvcTest(controllers = UserController.class, excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class), excludeAutoConfiguration = SecurityConfiguration.class)
 public class UserControllerTest {
 
     @Autowired
@@ -98,16 +96,19 @@ public class UserControllerTest {
                 .andExpect(view().name("users/welcomecopy"));
     }
 
-    /* @WithMockUser(value = "spring")
-    @Test
-    void testUsersList() throws Exception {
-        mockMvc.perform(get("/user")).andExpect(status().isOk())
-                .andExpect(model().attributeExists("puntuacion"))
-                .andExpect(model().attributeExists("usuarios"))
-                .andExpect(model().attributeExists("paginaActual"))
-                .andExpect(model().attributeExists("paginas"))
-                .andExpect(view().name("users/usersList"));
-    } */
+    /*
+     * @WithMockUser(value = "spring")
+     *
+     * @Test
+     * void testUsersList() throws Exception {
+     * mockMvc.perform(get("/user")).andExpect(status().isOk())
+     * .andExpect(model().attributeExists("puntuacion"))
+     * .andExpect(model().attributeExists("usuarios"))
+     * .andExpect(model().attributeExists("paginaActual"))
+     * .andExpect(model().attributeExists("paginas"))
+     * .andExpect(view().name("users/usersList"));
+     * }
+     */
 
     @WithMockUser(value = "spring")
     @Test
@@ -121,26 +122,29 @@ public class UserControllerTest {
     @Test
     void testProcessCreationFormSuccess() throws Exception {
         mockMvc.perform(post("/users/find").with(csrf())
-                .param("username","user1")
-                .param("password","1234")
-                .param("enabled","true")
-                .param("imgperfil","img"))
+                .param("username", "user1")
+                .param("password", "1234")
+                .param("enabled", "true")
+                .param("imgperfil", "img"))
                 .andExpect(status().is3xxRedirection());
     }
 
-    /* @WithMockUser(value = "spring")
-    @Test
-    void testProcessCreationFormHasErrors() throws Exception {
-        mockMvc.perform(post("/users/find").with(csrf())
-                .param("username","user1")
-                .param("password","1234")
-                .param("enabled","si")
-                .param("imgperfil","img"))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(model().attributeHasErrors("user"))
-                .andExpect(model().attributeHasFieldErrors("user", "enabled"))
-                .andExpect(view().name("redirect:/user"));
-    } */
+    /*
+     * @WithMockUser(value = "spring")
+     *
+     * @Test
+     * void testProcessCreationFormHasErrors() throws Exception {
+     * mockMvc.perform(post("/users/find").with(csrf())
+     * .param("username","user1")
+     * .param("password","1234")
+     * .param("enabled","si")
+     * .param("imgperfil","img"))
+     * .andExpect(status().is3xxRedirection())
+     * .andExpect(model().attributeHasErrors("user"))
+     * .andExpect(model().attributeHasFieldErrors("user", "enabled"))
+     * .andExpect(view().name("redirect:/user"));
+     * }
+     */
 
     @WithMockUser(value = "spring")
     @Test
@@ -153,16 +157,18 @@ public class UserControllerTest {
     @Test
     void testShowUser() throws Exception {
         mockMvc.perform(get("/users/{userid}", user1.getUsername())).andExpect(status().isOk());
-                /* .andExpect(model().attributeExists("usuarios"))
-                .andExpect(model().attributeExists("imagen"))
-                .andExpect(model().attributeExists("user"))
-                .andExpect(model().attributeExists("usuario"))
-                .andExpect(model().attributeExists("jugadores"))
-                .andExpect(model().attributeExists("logros"))
-                .andExpect(model().attributeExists("currentUsername"))
-                .andExpect(model().attributeExists("promedios"))
-                .andExpect(model().attributeExists("partidas"))
-                .andExpect(view().name("users/showUser")); */
+        /*
+         * .andExpect(model().attributeExists("usuarios"))
+         * .andExpect(model().attributeExists("imagen"))
+         * .andExpect(model().attributeExists("user"))
+         * .andExpect(model().attributeExists("usuario"))
+         * .andExpect(model().attributeExists("jugadores"))
+         * .andExpect(model().attributeExists("logros"))
+         * .andExpect(model().attributeExists("currentUsername"))
+         * .andExpect(model().attributeExists("promedios"))
+         * .andExpect(model().attributeExists("partidas"))
+         * .andExpect(view().name("users/showUser"));
+         */
     }
 
     @WithMockUser(value = "spring")
@@ -184,10 +190,10 @@ public class UserControllerTest {
     @Test
     void testCreateNewUser1() throws Exception {
         mockMvc.perform(post("/usersnew").with(csrf())
-                .param("username","user1")
-                .param("password","1234")
-                .param("enabled","true")
-                .param("imgperfil","img"))
+                .param("username", "user1")
+                .param("password", "1234")
+                .param("enabled", "true")
+                .param("imgperfil", "img"))
                 .andExpect(status().is3xxRedirection());
     }
 
@@ -203,7 +209,7 @@ public class UserControllerTest {
     @Test
     void testModifyUser1() throws Exception {
         mockMvc.perform(post("/users/mod").with(csrf())
-                .param("password","9876"))
+                .param("password", "9876"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/users/mod"));
     }
