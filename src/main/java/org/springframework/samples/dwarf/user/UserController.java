@@ -103,8 +103,16 @@ public class UserController {
     }
 
     @GetMapping(value = "/user")
-    public String usersList(Map<String, Object> model, @RequestParam Integer page) {
-        List<User> usuarios = userService.findByRol("jugador");
+    public String usersList(Map<String, Object> model, @RequestParam Integer page,
+            @RequestParam(required = false) String search) {
+
+        List<User> usuarios;
+
+        if (search == null) {
+            usuarios = userService.findByRol("jugador");
+        } else {
+            usuarios = userService.findUserByString(search);
+        }
 
         model.put("puntuacion", userService.getPuntuaciones());
         model.put("usuarios", userService.getPages(usuarios).get(page));
@@ -122,13 +130,23 @@ public class UserController {
     }
 
     @PostMapping(value = "/users/find")
-    public String processCreationForm(Map<String, Object> model, @Valid User user, BindingResult result) {
+    public String processCreationForm(Map<String, Object> model, @Valid User user, BindingResult result,
+            RedirectAttributes redatt) {
         if (result.hasErrors()) {
             return "redirect:/user";
         } else {
             // creating owner, user, and authority
-            model.put("usuarios", userService.findUserByString(user.username));
-            return "redirect:/users/" + user.username;
+            List<User> usersSearched = userService.findUserByString(user.username);
+            if (usersSearched.size() == 0) {
+                redatt.addFlashAttribute("mensaje", "No hay resultados para la busqueda");
+                return "redirect:/user/find";
+            }
+
+            if (usersSearched.size() == 1) {
+                return "redirect:/users/" + usersSearched.get(0).getUsername();
+            }
+            // model.put("usuarios", userService.findUserByString(user.username));
+            return "redirect:/user?page=0&search=" + user.username;
         }
     }
 

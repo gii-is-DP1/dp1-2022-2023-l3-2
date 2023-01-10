@@ -6,6 +6,7 @@
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="sec"
 	uri="http://www.springframework.org/security/tags"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!--  >%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%-->
 
 <petclinic:layout pageName="owners">
@@ -36,6 +37,25 @@
         </div>
 
     </form:form>
+
+    <style>
+        .alert {
+            width: 400px;
+            height: 50px;
+            padding: 5px 20px;
+            border: 1px red;
+            background-color: rgb(255, 205, 205);
+            color: rgb(255, 105, 105);
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+        }
+    </style>
+    <c:if test="${mensaje != null}">
+        <div class="alert">
+            ${mensaje}
+        </div>
+    </c:if>
 
     <br/>
     <sec:authorize access="hasAuthority('admin')">

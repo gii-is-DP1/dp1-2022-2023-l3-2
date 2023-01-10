@@ -134,7 +134,8 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public List<User> findUserByString(String username) {
-        return this.findAll().stream().filter(user -> user.getUsername().contains(username)).toList();
+        return this.findAll().stream().filter(user -> user.getUsername().contains(username) && user.hasRole("jugador"))
+                .toList();
     }
 
     // Hay que hacerlo con QUERY
