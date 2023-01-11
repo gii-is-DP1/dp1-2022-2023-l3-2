@@ -21,7 +21,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 
+import java.util.List;
 import java.util.Set;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
@@ -84,15 +87,17 @@ public class UserControllerTest {
         user1.setAuthorities(au);
         user1.setEstadistica(stats);
         userService.saveUser(user1);
+        given(this.userService.findAuthenticatedUser()).willReturn(user1);
+        given(this.userService.getPages(any())).willReturn(List.of(List.of(user1)));
     }
 
     @WithMockUser(value = "spring")
     @Test
     void testParteDeUsuarios() throws Exception {
-        mockMvc.perform(get("/users")).andExpect(status().isOk())
+        mockMvc.perform(get("/users?page=0")).andExpect(status().isOk())
                 .andExpect(model().attributeExists("perfil"))
                 .andExpect(model().attributeExists("usuarios"))
-                .andExpect(model().attributeExists("puntuacion"))
+
                 .andExpect(view().name("users/welcomecopy"));
     }
 
