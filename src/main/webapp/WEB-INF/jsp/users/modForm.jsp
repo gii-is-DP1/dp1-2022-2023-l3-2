@@ -11,8 +11,7 @@
 
     <form:form modelAttribute="user" class="form-horizontal" id="add-owner-form">
         <div class="form-group has-feedback">
-            <h2>Nombre de Usuario</h2>
-            <input label="Password" name="username" required="true"/>
+           
             <h2>Contraseña</h2>
             <input label="Password" name="password" required="true"/>
             <h2>URL imagen</h2>

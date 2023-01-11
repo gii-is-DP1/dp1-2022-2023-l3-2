@@ -204,7 +204,9 @@ public class UserController {
         List<User> usuarios = invitacionAmistadService.findFriends(usuario).stream()
                 .map(invitacion -> invitacion.getUserrecibe()).toList();
 
-        Boolean condicionMod = userService.findAuthenticatedUser().equals(userService.findUser(id).get());
+        Boolean condicionMod = (userService.findAuthenticatedUser().equals(userService.findUser(id).get())
+                || userService.findAuthenticatedUser().getAuthorities().stream()
+                        .anyMatch(a -> a.getAuthority().equals("admin")));
         model.put("usuarios", usuarios);
         model.put("imagen", usuario.imgperfil);
         model.put("user", new User());
@@ -248,6 +250,12 @@ public class UserController {
             userService.saveUser(user);
             Estadistica estats = new Estadistica();
             estats.setUsuario(user);
+            estats.setAcero(0);
+            estats.setHierro(0);
+            estats.setOro(0);
+            estats.setMedallas(0);
+            estats.setObjetos(0);
+            estats.setPuntos(0);
             estats.setPartidasGanadas(0);
             estats.setPartidasPerdidas(0);
             estadisticaService.saveEstadistica(estats);
@@ -262,13 +270,16 @@ public class UserController {
     @GetMapping("users/mod")
     public String modifyUser(Map<String, Object> model, @RequestParam("user") String id) {
         User actual = userService.findAuthenticatedUser();
-
-        if (!(userService.findUser(id).get().equals(actual))) {
-            return view_user;
-        }
         User user = new User();
         model.put("user", user);
-        return "users/creatForm";
+        if (!userService.findAuthenticatedUser().getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("admin"))) {
+            if (!(userService.findUser(id).get().equals(actual))) {
+                return view_user;
+            }
+        }
+
+        return "users/modForm";
     }
 
     @PostMapping("users/mod")
@@ -277,16 +288,18 @@ public class UserController {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication.isAuthenticated()) {
-            org.springframework.security.core.userdetails.User currentUser = (org.springframework.security.core.userdetails.User) authentication
-                    .getPrincipal();
-            if (currentUser.getUsername().equals(user.getUsername())) {
-
-                if (user.getPassword().equals("")) {
-                    user.setPassword(currentUser.getPassword());
+            User currentUser = userService.findAuthenticatedUser();
+            if (currentUser.getUsername().equals(id)
+                    || userService.findAuthenticatedUser().getAuthorities().stream()
+                            .anyMatch(a -> a.getAuthority().equals("admin"))) {
+                if (user.getUsername().equals("") || user.getUsername().equals(null)) {
+                    user.setUsername(userService.findUser(id).get().getUsername());
                 }
-                if (user.getImgperfil().equals("")) {
-                    User actual = userService.findUser(currentUser.getUsername()).get();
-                    user.setImgperfil(actual.getImgperfil());
+                if (user.getPassword().equals("") || user.getPassword().equals(null)) {
+                    user.setUsername(userService.findUser(id).get().getPassword());
+                }
+                if (user.getImgperfil().equals("") || user.getImgperfil().equals(null)) {
+                    user.setUsername(userService.findUser(id).get().getImgperfil());
                 }
                 userService.saveUser(user);
                 Authorities authority = new Authorities();
