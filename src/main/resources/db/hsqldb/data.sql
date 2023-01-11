@@ -3,7 +3,7 @@ INSERT INTO users(username,password,enabled) VALUES ('admin1','4dm1n',TRUE);
 INSERT INTO authorities(id,username,authority) VALUES (1,'admin1','admin');
 -- One owner user, named owner1 with passwor 0wn3r
 INSERT INTO users(username,password,enabled) VALUES ('owner1','0wn3r',TRUE);
-INSERT INTO users(username,password,enabled) VALUES ('alegarsan11', '1234',TRUE);
+INSERT INTO users(username,password,enabled, imgperfil) VALUES ('alegarsan11', '1234',TRUE,'https://previews.123rf.com/images/yupiramos/yupiramos1708/yupiramos170831273/84892638-icono-del-avatar-hombre-sobre-ilustraci%C3%B3n-de-vectores-de-fondo-blanco.jpg');
 INSERT INTO users(username,password,enabled) VALUES ('jualeomad', '1234',TRUE);
 INSERT INTO users(username,password,enabled) VALUES ('marescram3', '1234',TRUE);
 INSERT INTO users(username,password,enabled) VALUES ('dandiasua', '1234',TRUE);
@@ -21,35 +21,18 @@ INSERT INTO authorities(id,username,authority) VALUES (9,'ernsaqrio','jugador');
 INSERT INTO users(username,password,enabled) VALUES ('vet1','v3t',TRUE);
 INSERT INTO authorities(id,username,authority) VALUES (3,'vet1','veterinarian');
 
-INSERT INTO vets(id, first_name,last_name) VALUES (1, 'James', 'Carter');
-INSERT INTO vets(id, first_name,last_name) VALUES (2, 'Helen', 'Leary');
-INSERT INTO vets(id, first_name,last_name) VALUES (3, 'Linda', 'Douglas');
-INSERT INTO vets(id, first_name,last_name) VALUES (4, 'Rafael', 'Ortega');
-INSERT INTO vets(id, first_name,last_name) VALUES (5, 'Henry', 'Stevens');
-INSERT INTO vets(id, first_name,last_name) VALUES (6, 'Sharon', 'Jenkins');
+INSERT INTO estadistica(id, partidas_ganadas, partidas_perdidas, puntos, hierro, acero, oro, objetos, medallas, user_id) VALUES
+(1, 0, 0, 0, 0, 0, 0, 0, 0, 'jualeomad'),
+(2, 0, 0, 0, 0, 0, 0, 0, 0, 'rafgargal'),
+(3, 0, 0, 0, 0, 0, 0, 0, 0, 'dandiasua'),
+(4, 0, 0, 0, 0, 0, 0, 0, 0, 'alegarsan11'),
+(5, 0, 0, 0, 0, 0, 0, 0, 0, 'marescram3'),
+(6, 0, 0, 0, 0, 0, 0, 0, 0, 'ernsaqrio');
 
-INSERT INTO specialties VALUES (1, 'radiology');
-INSERT INTO specialties VALUES (2, 'surgery');
-INSERT INTO specialties VALUES (3, 'dentistry');
-
-
-INSERT INTO vet_specialties VALUES (2, 1);
-INSERT INTO vet_specialties VALUES (3, 2);
-INSERT INTO vet_specialties VALUES (3, 3);
-INSERT INTO vet_specialties VALUES (4, 2);
-INSERT INTO vet_specialties VALUES (5, 1);
+INSERT INTO jugadores VALUES(1,0,2,FALSE,0,0,0,0,null,TRUE,TRUE,'alegarsan11');
 
 
-INSERT INTO jugadores(id,first_name, last_name, acero,esespectador,hierro,medalla,objeto,oro,primerjugador,username, posicion_final, turno) VALUES
-(1, 'Ernesto', 'Saquete Rios', 0, false,0,0,0,0,true,'ernsaqrio', null,true),
-(2, 'Daniel', 'Diañez',0 ,false,0,0,0,0,false,'dandiasua', null,false),
-(3, 'Rafael David', 'Garcia', 0,false,0,0,0,0,false,'rafgargal', null,false);
 
-INSERT INTO estadistica(id, partidas_ganadas, partidas_perdidas, user_id) VALUES
-(1, 0, 0, 'jualeomad'),
-(2, 0, 0, 'rafgargal'),
-(3, 0, 0, 'dandiasua'),
-(4, 0, 0, 'alegarsan11');
 
 
 INSERT INTO tipo_carta(id, name) VALUES
@@ -57,7 +40,8 @@ INSERT INTO tipo_carta(id, name) VALUES
 (1, 'extraccion'),
 (2, 'ayuda'),
 (3, 'forja'),
-(4, 'especial');
+(4, 'especial'),
+(5, 'base');
 
 INSERT INTO tipo_logro(id, name) VALUES
 (0, 'partidas_ganadas'),
@@ -85,7 +69,9 @@ INSERT INTO logro(id, name, descripcion, dificultad, requisito, tipo) VALUES
 (18, '200 medallas', 'Se consigue al coleccionar 200 medallas', 2, 200, 1),
 (19, '1000 medallas', 'Se consigue al coleccionar 1000 medallas', 3, 1000, 1);
 
+INSERT INTO invitacion_amistad(user_id_envia, user_id_recibe) VALUES
 
+('jualeomad', 'rafgargal');
 
 INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve, type) VALUES(1, '/resources/images/Dimensionadas/001.png', 1, 1, null, null, 'hierro',  3   , 'extraccion');
 INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve, type) VALUES(2, '/resources/images/Dimensionadas/002.png', 2, 1, null, null, 'hierro',  3   , 'extraccion');
@@ -141,12 +127,15 @@ INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve
 INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve, type) VALUES(52, '/resources/images/Dimensionadas/052.png', 7, 2, null, null, null, null    , 'base');
 INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve, type) VALUES(53, '/resources/images/Dimensionadas/053.png', 8, 0, null, null, 'medalla',1   , 'defensa');
 INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve, type) VALUES(54, '/resources/images/Dimensionadas/054.png', 9, 1, 'hierro', 3, 'acero', 2   , 'forja');
-INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve, type) VALUES(55, '/resources/images/Dimensionadas/055-A.png', 10, 4, null, null, null, null , 'base');
-INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve, type) VALUES(56, '/resources/images/Dimensionadas/056-A.png', 10, 4, null, null, null, null , 'base');
-INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve, type) VALUES(57, '/resources/images/Dimensionadas/057-A.png', 10, 4, null, null, null, null , 'base');
-INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve, type) VALUES(58, '/resources/images/Dimensionadas/058-A.png', 11, 4, null, null, null, null , 'base');
-INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve, type) VALUES(59, '/resources/images/Dimensionadas/059-A.png', 11, 4, null, null, null, null , 'base');
-INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve, type) VALUES(60, '/resources/images/Dimensionadas/060-A.png', 11, 4, null, null, null, null , 'base');
-INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve, type) VALUES(61, '/resources/images/Dimensionadas/061-A.png', 12, 4, null, null, null, null , 'base');
-INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve, type) VALUES(62, '/resources/images/Dimensionadas/062-A.png', 12, 4, null, null, null, null , 'base');
-INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve, type) VALUES(63, '/resources/images/Dimensionadas/063-A.png', 12, 4, null, null, null, null , 'base');
+INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve, type) VALUES(55, '/resources/images/Dimensionadas/055-A.png', 10, 4, null, null, null, null , 'especial');
+INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve, type) VALUES(56, '/resources/images/Dimensionadas/056-A.png', 10, 4, null, null, null, null , 'especial');
+INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve, type) VALUES(57, '/resources/images/Dimensionadas/057-A.png', 10, 4, null, null, null, null , 'especial');
+INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve, type) VALUES(58, '/resources/images/Dimensionadas/058-A.png', 11, 4, null, null, null, null , 'especial');
+INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve, type) VALUES(59, '/resources/images/Dimensionadas/059-A.png', 11, 4, null, null, null, null , 'especial');
+INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve, type) VALUES(60, '/resources/images/Dimensionadas/057-A.png', 11, 4, null, null, null, null , 'especial');
+INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve, type) VALUES(61, '/resources/images/Dimensionadas/058-A.png', 12, 4, null, null, null, null , 'especial');
+INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve, type) VALUES(62, '/resources/images/Dimensionadas/062-A.png', 12, 4, null, null, null, null , 'especial');
+INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve, type) VALUES(63, '/resources/images/Dimensionadas/063-A.png', 12, 4, null, null, null, null , 'especial');
+INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve, type) VALUES(64, '/resources/images/Dimensionadas/carta_vacia.png', 10, 5, null, null, null, null , 'base');
+INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve, type) VALUES(65, '/resources/images/Dimensionadas/carta_vacia.png', 11, 5, null, null, null, null , 'base');
+INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve, type) VALUES(66, '/resources/images/Dimensionadas/carta_vacia.png', 12, 5, null, null, null, null , 'base');

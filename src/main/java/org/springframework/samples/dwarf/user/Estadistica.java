@@ -1,5 +1,8 @@
 package org.springframework.samples.dwarf.user;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.MapsId;
@@ -23,4 +26,26 @@ public class Estadistica extends BaseEntity {
 
     Integer partidasGanadas;
     Integer partidasPerdidas;
+    Integer puntos;
+    Integer hierro;
+    Integer acero;
+    Integer oro;
+    Integer objetos;
+    Integer medallas;
+
+    public Map<String, Double> getPromedios() {
+        Map<String, Double> promedios = new HashMap<>();
+
+        Integer partidasJugadas = ((this.partidasGanadas + this.partidasPerdidas) > 0)
+                ? this.partidasGanadas + this.partidasPerdidas
+                : 1;
+
+        promedios.put("oro", (this.oro + .0) / partidasJugadas);
+        promedios.put("hierro", (this.hierro + .0) / partidasJugadas);
+        promedios.put("acero", (this.acero + .0) / partidasJugadas);
+        promedios.put("objetos", (this.objetos + .0) / partidasJugadas);
+        promedios.put("medallas", (this.medallas + .0) / partidasJugadas);
+
+        return promedios;
+    }
 }

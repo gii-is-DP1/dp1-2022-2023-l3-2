@@ -6,9 +6,10 @@
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="sec"
 	uri="http://www.springframework.org/security/tags"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!--  >%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%-->
 
-<petclinic:layout pageName="jugador">
+<petclinic:layout pageName="owners">
 
     <h2>Find Users</h2>
 
@@ -28,7 +29,7 @@
             <div class="col-sm-offset-2 col-sm-10">
                 <button type="submit" class="btn btn-default">Find User</button>
             </div>
-            <a href="/users?page=0">
+            <a href="/user?page=0">
                 <div class="col-sm-offset-2 col-sm-10">
                     <div class="btn btn-default">Find All Users</div>
                 </div>
@@ -36,6 +37,25 @@
         </div>
 
     </form:form>
+
+    <style>
+        .alert {
+            width: 400px;
+            height: 50px;
+            padding: 5px 20px;
+            border: 1px red;
+            background-color: rgb(255, 205, 205);
+            color: rgb(255, 105, 105);
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+        }
+    </style>
+    <c:if test="${mensaje != null}">
+        <div class="alert">
+            ${mensaje}
+        </div>
+    </c:if>
 
     <br/>
     <sec:authorize access="hasAuthority('admin')">

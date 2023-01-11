@@ -80,6 +80,7 @@
         .chat_container>div {
             width: 90%;
             overflow-y: scroll;
+            padding: 0 20px;
             height: 300px;
         }
 
@@ -217,7 +218,10 @@
         }
     </style>
     <a href="/partida/${id_partida}/comienza"><button>COMIENZA</button></a>
+    <h2>${partida.getFormattedDuration()}</h2>
     <c:if test="${jugadores.get(0).posicionFinal != null}">
+
+
         <div class="blur">
 
         </div>
@@ -251,9 +255,9 @@
     <div class="chat_container">
         <h2>CHAT</h2>
         <div id="chat_lines">
-            <c:forEach items="${chat}" var="chatLine">
+            <!-- <c:forEach items="${chat}" var="chatLine">
                 <p>(${chatLine.username}): ${chatLine.mensaje}</p>
-            </c:forEach>
+            </c:forEach> -->
         </div>
 
         <form:form modelAttribute="chatLine" action="/partida/${id_partida}/chatline" class="form-horizontal" id="add-owner-form" >
@@ -327,10 +331,16 @@
             <tr>
                 <c:forEach items="${tablero4}" var="pos">
 
-                        <td>
+                        <td style="position: relative;">
+                            <c:if test="${mazosConEnanoEncima.stream().filter(i -> pos.id.equals(i)).toList().size() != 0}">
+                                <img class="ficha" src="/resources/images/Dimensionadas/${asociacionesColores.get(asociacionesUsernameMazo.get(pos.id))}.png" >
+
+                            </c:if>
                             <spring:url value="${pos.getFirstCarta().imagen}" var="dwarf" />
-                            <img class="img-responsive" src="${dwarf}" height="160"
-                                width="160" style="transform: rotate(90deg); margin: auto;"/>
+                            <a href="/partida/${id_partida}/coloca?username=${username}&posicion=${pos.posicion}">
+                                <img class="img-responsive" src="${dwarf}" height="160"
+                                    width="160" style="margin: auto;"/>
+                            </a>
                         </td>
 
                 </c:forEach>
@@ -347,13 +357,13 @@
                         <c:if test="${jugador.primerjugador}">
                             <li style="list-style-type: none;">
                                 <img src="/resources/images/FichaDeInicio.png" height="18" width="20"/>
-                                <c:out value="${jugador.firstName}" />
+                                <c:out value="${jugador.user.username}" />
                             </li>
                         </c:if>
                         <c:if test="${!jugador.primerjugador}">
                             <li style="list-style-type: none;">
                                 <img src="/resources/images/FichaDeInicioVacia.png" height="18" width="20"/>
-                                <c:out value="${jugador.firstName}" />
+                                <c:out value="${jugador.user.username}" />
                             </li>
                         </c:if>
                         <li style="list-style-type: none;">
@@ -403,6 +413,38 @@
         // Scroll chat hacia abajo por defecto
         var objDiv = document.getElementById("chat_lines");
         objDiv.scrollTop = objDiv.scrollHeight;
+    </script>
+
+    <script>
+        function renderChat() {
+
+            const loggedUsername = document.querySelector("#main-navbar > ul.nav.navbar-nav.navbar-right > li > a > strong").textContent;
+
+            const idPartida = [[${id_partida}]]
+
+            fetch('http://localhost:8080/partida/' + idPartida + '/chatline')
+                .then(res => res.json())
+                .then(obj => {
+                    chatLines1 = obj.messages;
+
+                    const chat = document.getElementById("chat_lines");
+                    let htmlString = "";
+                    for(const chatLine1 of chatLines1) {
+                        if(chatLine1.username !== loggedUsername) {
+                            htmlString += "<p style=\"text-align: right\">(" + chatLine1.username + "): " + chatLine1.message + "</p>";
+                            continue
+                        }
+                        htmlString += "<p>(" + chatLine1.username + "): " + chatLine1.message + "</p>";
+                    }
+                    chat.innerHTML = htmlString;
+
+                    chat.scrollTop = chat.scrollHeight;
+                })
+
+
+        }
+        renderChat();
+        setInterval('renderChat()', 500);
     </script>
 
 </petclinic:layout>

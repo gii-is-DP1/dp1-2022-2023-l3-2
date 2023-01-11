@@ -24,6 +24,9 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
@@ -35,9 +38,13 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.envers.AuditTable;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 import org.springframework.beans.support.MutableSortDefinition;
 import org.springframework.beans.support.PropertyComparator;
 import org.springframework.core.style.ToStringCreator;
+import org.springframework.samples.dwarf.model.BaseEntity;
 import org.springframework.samples.dwarf.model.Person;
 import org.springframework.samples.dwarf.tablero.Enano;
 import org.springframework.samples.dwarf.user.User;
@@ -57,7 +64,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @Table(name = "jugadores")
-public class Jugador extends Person {
+@Audited
+public class Jugador extends BaseEntity {
 
     private boolean turno;
 
@@ -79,11 +87,13 @@ public class Jugador extends Person {
     //
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "username", referencedColumnName = "username")
+    @NotAudited
     private User user;
     //
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "enano_jugador", joinColumns = @JoinColumn(name = "enano"))
+    @NotAudited
     private List<Enano> enano;
 
     public User getUser() {
@@ -92,6 +102,22 @@ public class Jugador extends Person {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public static Jugador crearJugadorInicial(Boolean primerJugador) {
+
+        Jugador jugador = new Jugador();
+
+        jugador.setAcero(0);
+        jugador.setHierro(0);
+        jugador.setMedalla(0);
+        jugador.setObjeto(0);
+        jugador.setOro(0);
+        jugador.setPrimerjugador(primerJugador);
+        jugador.setTurno(false); // Se setea despues automaticamente
+        jugador.setEsespectador(false);
+
+        return jugador;
     }
 
 }

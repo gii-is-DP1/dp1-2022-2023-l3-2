@@ -21,6 +21,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.dwarf.user.AuthoritiesService;
+import org.springframework.samples.dwarf.user.User;
 import org.springframework.samples.dwarf.user.UserService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,47 +35,59 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class JugadorService {
 
-	private JugadorRepository ownerRepository;	
-	
-	@Autowired
-	private UserService userService;
-	
-	@Autowired
-	private AuthoritiesService authoritiesService;
+    private JugadorRepository ownerRepository;
 
-	@Autowired
-	public JugadorService(JugadorRepository ownerRepository) {
-		this.ownerRepository = ownerRepository;
-	}	
+    @Autowired
+    private UserService userService;
 
-	@Transactional(readOnly = true)
-	public Jugador findOwnerById(int id) throws DataAccessException {
-		return ownerRepository.findById(id);
-	}
+    @Autowired
+    private AuthoritiesService authoritiesService;
 
-	@Transactional(readOnly = true)
-	public Collection<Jugador> findOwnerByLastName(String lastName) throws DataAccessException {
-		return ownerRepository.findByLastName(lastName);
-	}
+    @Autowired
+    public JugadorService(JugadorRepository ownerRepository) {
+        this.ownerRepository = ownerRepository;
+    }
 
-	@Transactional
-	public List<Jugador> findAll() {
-		return (List<Jugador>) ownerRepository.findAll();
-	}
+    @Transactional(readOnly = true)
+    public Jugador findOwnerById(int id) throws DataAccessException {
+        return ownerRepository.findById(id);
+    }
 
-	@Transactional
-	public List<Jugador> findJugadorUser(String name){
-		return ownerRepository.findByUserUsername(name);
-	}
+    @Transactional
+    public List<Jugador> findAll() {
+        return (List<Jugador>) ownerRepository.findAll();
+    }
 
-	@Transactional
-	public void saveOwner(Jugador owner) throws DataAccessException {
-		//creating owner
-		ownerRepository.save(owner);		
-		//creating user
-		userService.saveUser(owner.getUser());
-		//creating authorities
-		authoritiesService.saveAuthorities(owner.getUser().getUsername(), "owner");
-	}		
+    @Transactional
+    public List<Jugador> findJugadorUser(String name) {
+        return ownerRepository.findByUserUsername(name);
+    }
+
+    @Transactional
+    public void saveJugador(Jugador owner) throws DataAccessException {
+        // creating jugador
+        ownerRepository.save(owner);
+        // creating user
+        // userService.saveUser(owner.getUser());
+        // creating authorities
+        // authoritiesService.saveAuthorities(owner.getUser().getUsername(), "owner");
+    }
+
+    @Transactional
+    public Jugador createJugadorByUsername(String username, Boolean primerJugador) throws DataAccessException {
+        User user = userService.findUserByString(username).get(0);
+
+        Jugador jugador = Jugador.crearJugadorInicial(primerJugador);
+        jugador.setUser(user);
+
+        ownerRepository.save(jugador);
+
+        return jugador;
+    }
+
+    @Transactional
+    public void deleteJugador(Jugador j) {
+        ownerRepository.delete(j);
+    }
 
 }

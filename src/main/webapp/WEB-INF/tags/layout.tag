@@ -6,7 +6,9 @@
 <%@ attribute name="customScript" required="false" fragment="true"%>
 
 <!doctype html>
+
 <html>
+
 <petclinic:htmlHeader/>
 
 <body>

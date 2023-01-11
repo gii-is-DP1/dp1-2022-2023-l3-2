@@ -7,5 +7,6 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface UserRepository extends CrudRepository<User, String> {
 
-
+    @Query("SELECT user FROM User user ORDER BY user.estadistica.puntos DESC")
+    List<User> findAllSortedByPuntuacion();
 }

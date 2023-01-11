@@ -23,8 +23,24 @@ public class CartaForja extends Carta {
     public void accion4(Tablero tablero, Jugador j, Enano e) {
         Carta primera = e.getMazo().getFirstCarta();
         List<Integer> cartasForjaEspeciales = Arrays.asList(16, 25, 26, 45, 51);
+        List<Integer> cartasQueNoModificanPrimerJugador = Arrays.asList(10, 15, 19, 21, 23, 29, 44, 54);
+
+        if (j.isPrimerjugador() && !cartasQueNoModificanPrimerJugador.contains(primera.getId())) {
+            j.setPrimerjugador(false);
+
+            Integer indexJugador = tablero.getJugadores().indexOf(j);
+
+            if (indexJugador == tablero.getNumJugadores() - 1) {
+                tablero.getJugadores().get(0).setPrimerjugador(true);
+            } else {
+                tablero.getJugadores().get(indexJugador +
+                        1).setPrimerjugador(true);
+            }
+        }
+
         // Condiciones especiales para las cartas de forja que piden materiales ditintos
         if (cartasForjaEspeciales.contains(primera.getId())) {
+
             if (primera.getId() == 16 && j.getAcero() >= 2 && j.getOro() >= 1) {
                 j.setAcero(j.getAcero() - 2);
                 j.setOro(j.getOro() - 1);

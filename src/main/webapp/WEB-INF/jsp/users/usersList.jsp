@@ -12,24 +12,23 @@
         <thead>
         <tr>
             <th style="width: 150px;">Username</th>
+
+
+            <th style="width: 150px;">Puntuacion</th>
         </tr>
         </thead>
         <tbody>
         <c:forEach items="${usuarios}" var="usuario">
             <tr>
                 <td>
-                    <a href="/users/${usuario.username}">${usuario.username}</a>
+                    <a href="/users/${usuario.username}">${usuario.username}</a> <a href="/users/${usuario.username}/delete"><span class="glyphicon glyphicon-trash"
+                        aria-hidden="true"></span></a>
                 </td>
 
 
-<!--
-                <td>
-                    <c:out value="${owner.user.username}"/>
+<td>
+                    <c:out value="${puntuacion.get(usuario)}"></c:out>
                 </td>
-                <td>
-                   <c:out value="${owner.user.password}"/>
-                </td>
--->
 
             </tr>
         </c:forEach>
@@ -68,7 +67,7 @@
 
     <div style="display: flex; flex-direction: row; margin: 0 auto; width: fit-content; gap:15px;">
         <c:if test="${paginaActual != 0}">
-            <a href="/users?page=${paginaActual-1}", style="width: 50px; height: 50px; text-decoration: none;" >
+            <a href="/user?page=${paginaActual-1}", style="width: 50px; height: 50px; text-decoration: none;" >
                 <div class="boton-pagina">
                     <
                 </div>
@@ -76,7 +75,7 @@
         </c:if>
         <c:forEach items="${paginas}" var="pageNumber">
 
-            <a href="/users?page=${pageNumber}", style="width: 50px; height: 50px; text-decoration: none;" >
+            <a href="/user?page=${pageNumber}", style="width: 50px; height: 50px; text-decoration: none;" >
                 <c:if test="${paginaActual == pageNumber}">
                     <div class="boton-pagina-actual">
                         ${pageNumber}
@@ -91,7 +90,7 @@
             </a>
         </c:forEach>
         <c:if test="${paginaActual != paginas.size() - 1}">
-            <a href="/users?page=${paginaActual+1}", style="width: 50px; height: 50px; text-decoration: none;" >
+            <a href="/user?page=${paginaActual+1}", style="width: 50px; height: 50px; text-decoration: none;" >
                 <div class="boton-pagina">
                     >
                 </div>

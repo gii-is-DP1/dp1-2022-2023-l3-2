@@ -37,9 +37,7 @@ public class Carta extends BaseEntity implements CartaInterfaz, Serializable {
 
     Integer posicion;
 
-    @ManyToOne
-    @JoinColumn(name = "mazo_id")
-    Mazo mazo;
+
 
     @ManyToOne
     @JoinColumn(name = "tipo")
@@ -74,6 +72,12 @@ public class Carta extends BaseEntity implements CartaInterfaz, Serializable {
     public void accion4(Tablero tablero, Jugador j, Enano e) {
         // TODO Auto-generated method stub
 
+    }
+
+    @Override
+    public String accion5(Tablero tablero, Jugador j) {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

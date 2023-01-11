@@ -26,12 +26,9 @@ import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
-
-@WebMvcTest(controllers = JugadorController.class, 
-excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class),
-excludeAutoConfiguration = SecurityConfiguration.class)
+@WebMvcTest(controllers = JugadorController.class, excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class), excludeAutoConfiguration = SecurityConfiguration.class)
 public class JugadorControllerTest {
-    
+
     private static final int TEST_JUGADOR_ID = 4;
 
     @Autowired
@@ -49,12 +46,10 @@ public class JugadorControllerTest {
     private Jugador pepe;
     private User pepebiyuela;
 
-	@BeforeEach
-	void setup() {
-		pepe = new Jugador();
-		pepe.setId(TEST_JUGADOR_ID);
-		pepe.setFirstName("Pepe");
-		pepe.setLastName("Biyuela");
+    @BeforeEach
+    void setup() {
+        pepe = new Jugador();
+        pepe.setId(TEST_JUGADOR_ID);
         pepe.setAcero(0);
         pepe.setEnanosDisponibles(null);
         pepe.setEsespectador(false);
@@ -66,8 +61,8 @@ public class JugadorControllerTest {
         pepe.setPrimerjugador(false);
         pepe.setTurno(false);
         pepe.setUser(pepebiyuela);
-		given(this.jugadorService.findOwnerById(4)).willReturn(pepe);
-	}
+        given(this.jugadorService.findOwnerById(4)).willReturn(pepe);
+    }
 
     @WithMockUser(value = "spring")
     @Test
@@ -76,116 +71,101 @@ public class JugadorControllerTest {
                 .andExpect(view().name("jugadores/createOrUpdateOwnerForm"));
     }
 
-    // @WithMockUser(value = "spring")
-	// @Test
-	// void testProcessCreationFormSuccess() throws Exception {
-	// 	mockMvc.perform(post("/jugador/new")
-    //             .param("firstName", "Daniel").with(csrf())
-	// 			.param("lastName", "Diañez")
-    //             .param("acero", "0")
-    //             .param("enanosDisponibles", "null")
-    //             .param("esespectador", "false")
-    //             .param("hierro", "0")
-    //             .param("medalla", "0")
-    //             .param("objeto", "0")
-    //             .param("oro", "0")
-    //             .param("posicionFinal", "null")
-    //             .param("primerjugador", "false")
-    //             .param("turno", "false")
-    //             .param("user", "dandiasua"))
-	// 			.andExpect(status().is3xxRedirection());
-	// }
+    /* @WithMockUser(value = "spring")
+    @Test
+    void testProcessCreationFormSuccess() throws Exception {
+        mockMvc.perform(post("/jugador/new")
+        .param("acero", "0")
+        .param("enanosDisponibles", "null")
+        .param("esespectador", "false")
+        .param("hierro", "0")
+        .param("medalla", "0")
+        .param("objeto", "0")
+        .param("oro", "0")
+        .param("posicionFinal", "null")
+        .param("primerjugador", "false")
+        .param("turno", "false")
+        .param("user", "dandiasua"))
+        .andExpect(status().is3xxRedirection());
+    } */
 
-    // @WithMockUser(value = "spring")
-	// @Test
-	// void testProcessCreationFormHasErrors() throws Exception {
-	// 	mockMvc.perform(post("/jugadores/new").with(csrf()).param("firstName", "Pepe").param("lastName", "Biyuela")
-	// 			.param("city", "London")).andExpect(status().isOk()).andExpect(model().attributeHasErrors("jugador"))
-	// 			.andExpect(model().attributeHasFieldErrors("jugador", "address"))
-	// 			.andExpect(model().attributeHasFieldErrors("jugador", "telephone"))
-	// 			.andExpect(view().name("jugadores/createOrUpdateOwnerForm"));
-	// }
+    /* @WithMockUser(value = "spring")
+    @Test
+    void testProcessCreationFormHasErrors() throws Exception {
+        mockMvc.perform(post("/jugadores/new").with(csrf()))
+        .andExpect(status().isOk()).andExpect(model().attributeHasErrors("jugador"))
+        .andExpect(view().name("jugadores/createOrUpdateOwnerForm"));
+    } */
 
     @WithMockUser(value = "spring")
-	@Test
-	void testInitFindForm() throws Exception {
-		mockMvc.perform(get("/jugador/find")).andExpect(status().isOk())
+    @Test
+    void testInitFindForm() throws Exception {
+        mockMvc.perform(get("/jugador/find")).andExpect(status().isOk())
                 .andExpect(model().attributeExists("jugador"))
-				.andExpect(view().name("jugadores/findOwners"));
-	}
-    
+                .andExpect(view().name("jugadores/findOwners"));
+    }
+
     // @WithMockUser(value = "spring")
-	// @Test
-	// void testProcessFindFormSuccess() throws Exception {
-	// 	given(this.jugadorService.findOwnerByLastName("")).willReturn(Lists.newArrayList(pepe, new Jugador()));
-	// 	mockMvc.perform(get("/jugadores")).andExpect(status().isOk()).andExpect(view().name("owners/ownersList"));
-	// }
+    // @Test
+    // void testProcessFindFormSuccess() throws Exception {
+    // given(this.jugadorService.findOwnerByLastName("")).willReturn(Lists.newArrayList(pepe,
+    // new Jugador()));
+    // mockMvc.perform(get("/jugadores")).andExpect(status().isOk()).andExpect(view().name("owners/ownersList"));
+    // }
+
+    /* @WithMockUser(value = "spring")
+    @Test
+    void testProcessFindFormNoOwnersFound() throws Exception {
+        mockMvc.perform(get("/jugador").param("lastName", "Unknown Surname")).andExpect(status().isOk())
+                .andExpect(model().attributeHasFieldErrors("jugador", "lastName"))
+                .andExpect(model().attributeHasFieldErrorCode("jugador", "lastName", "notFound"))
+                .andExpect(view().name("jugadores/findOwners"));
+    } */
 
     @WithMockUser(value = "spring")
-	@Test
-	void testProcessFindFormByLastName() throws Exception {
-		given(this.jugadorService.findOwnerByLastName(pepe.getLastName())).willReturn(Lists.newArrayList(pepe));
-
-		mockMvc.perform(get("/jugador").param("lastName", "Biyuela")).andExpect(status().is3xxRedirection())
-				.andExpect(view().name("redirect:/jugador/" + TEST_JUGADOR_ID));
-	}
-
-    @WithMockUser(value = "spring")
-	@Test
-	void testProcessFindFormNoOwnersFound() throws Exception {
-		mockMvc.perform(get("/jugador").param("lastName", "Unknown Surname")).andExpect(status().isOk())
-				.andExpect(model().attributeHasFieldErrors("jugador", "lastName"))
-				.andExpect(model().attributeHasFieldErrorCode("jugador", "lastName", "notFound"))
-				.andExpect(view().name("jugadores/findOwners"));
-	}
-
-    @WithMockUser(value = "spring")
-	@Test
-	void testInitUpdateOwnerForm() throws Exception {
-		mockMvc.perform(get("/jugador/{ownerId}/edit", TEST_JUGADOR_ID)).andExpect(status().isOk())
-				.andExpect(model().attributeExists("jugador"))
-				.andExpect(model().attribute("jugador", hasProperty("lastName", is("Biyuela"))))
-				.andExpect(model().attribute("jugador", hasProperty("firstName", is("Pepe"))))
-				.andExpect(model().attribute("jugador", hasProperty("acero",is(0))))
-                .andExpect(model().attribute("jugador", hasProperty("hierro",is(0))))
-                .andExpect(model().attribute("jugador", hasProperty("medalla",is(0))))
-                .andExpect(model().attribute("jugador", hasProperty("objeto",is(0))))
-                .andExpect(model().attribute("jugador", hasProperty("oro",is(0))))
+    @Test
+    void testInitUpdateOwnerForm() throws Exception {
+        mockMvc.perform(get("/jugador/{ownerId}/edit", TEST_JUGADOR_ID)).andExpect(status().isOk())
+                .andExpect(model().attributeExists("jugador"))
+                .andExpect(model().attribute("jugador", hasProperty("acero", is(0))))
+                .andExpect(model().attribute("jugador", hasProperty("hierro", is(0))))
+                .andExpect(model().attribute("jugador", hasProperty("medalla", is(0))))
+                .andExpect(model().attribute("jugador", hasProperty("objeto", is(0))))
+                .andExpect(model().attribute("jugador", hasProperty("oro", is(0))))
                 .andExpect(model().attribute("jugador", hasProperty("esespectador", is(false))))
                 .andExpect(model().attribute("jugador", hasProperty("primerjugador", is(false))))
                 .andExpect(model().attribute("jugador", hasProperty("turno", is(false))))
-				.andExpect(view().name("jugadores/createOrUpdateOwnerForm"));
-	}
+                .andExpect(view().name("jugadores/createOrUpdateOwnerForm"));
+    }
 
     @WithMockUser(value = "spring")
-	@Test
-	void testProcessUpdateOwnerFormSuccess() throws Exception {
-		mockMvc.perform(post("/jugador/{ownerId}/edit", TEST_JUGADOR_ID).with(csrf())
+    @Test
+    void testProcessUpdateOwnerFormSuccess() throws Exception {
+        mockMvc.perform(post("/jugador/{ownerId}/edit", TEST_JUGADOR_ID).with(csrf())
                 .param("firstName", "Jose")
-				.param("lastName", "Villa")
-				.param("acero", "50"))
+                .param("lastName", "Villa")
+                .param("acero", "50"))
                 .andExpect(status().is3xxRedirection())
-				.andExpect(view().name("redirect:/jugador/{ownerId}"));
-	}
+                .andExpect(view().name("redirect:/jugador/{ownerId}"));
+    }
 
-    // @WithMockUser(value = "spring")
-	// @Test
-	// void testProcessUpdateOwnerFormHasErrors() throws Exception {
-	// 	mockMvc.perform(post("/jugador/{ownerId}/edit", TEST_JUGADOR_ID).with(csrf()).param("firstName", "Jose")
-	// 			.param("lastName", "Villa")).andExpect(status().isOk())
-	// 			.andExpect(model().attributeHasErrors("jugador"))
-	// 			.andExpect(model().attributeHasFieldErrors("jugador", "address"))
-	// 			.andExpect(model().attributeHasFieldErrors("jugador", "telephone"))
-	// 			.andExpect(view().name("jugadores/createOrUpdateOwnerForm"));
-	// }
+    /* @WithMockUser(value = "spring")
+    @Test
+        void testProcessUpdateOwnerFormHasErrors() throws Exception {
+        mockMvc.perform(post("/jugador/{ownerId}/edit",
+        TEST_JUGADOR_ID).with(csrf()))
+        .andExpect(status().isOk())
+        .andExpect(model().attributeHasErrors("jugador"))
+        .andExpect(model().attributeHasFieldErrors("jugador", "address"))
+        .andExpect(model().attributeHasFieldErrors("jugador", "telephone"))
+        .andExpect(view().name("jugadores/createOrUpdateOwnerForm"));
+    } */
 
-	@WithMockUser(value = "spring")
-	@Test
-	void testShowOwner() throws Exception {
-		mockMvc.perform(get("/jugador/{ownerId}", TEST_JUGADOR_ID)).andExpect(status().isOk())
-				.andExpect(model().attribute("jugador", hasProperty("lastName", is("Biyuela"))))
-				.andExpect(model().attribute("jugador", hasProperty("firstName", is("Pepe"))))
-				.andExpect(view().name("jugadores/ownerDetails"));
-	}
+    @WithMockUser(value = "spring")
+    @Test
+    void testShowOwner() throws Exception {
+        mockMvc.perform(get("/jugador/{ownerId}", TEST_JUGADOR_ID)).andExpect(status().isOk())
+                .andExpect(view().name("jugadores/ownerDetails"));
+    }
 
 }
