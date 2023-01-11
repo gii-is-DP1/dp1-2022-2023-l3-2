@@ -34,6 +34,17 @@
         }
     </style>
 
+    <c:choose>
+    <c:when test="${isAdmin}">
+        <a href="/lobby/${lobbyId}/delete"><button type="button" class="btn btn-primary">Eliminar lobby</button></a>
+    </c:when>
+    <c:otherwise>
+        <a href="/lobby/${lobbyId}/delete-user?username=${currentUser.username}"><button type="button" class="btn btn-primary">Dejar lobby</button></a>
+    </c:otherwise>
+</c:choose>
+
+
+
     <h2>
         Lobby: ${lobbyName}
     </h2>

@@ -22,7 +22,7 @@ import lombok.ToString;
 @ToString
 public class Lobby extends NamedEntity {
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany
     @JoinTable(name = "usuarios_lobby", joinColumns = @JoinColumn(name = "user_id"))
     private List<User> usuarios;
 
