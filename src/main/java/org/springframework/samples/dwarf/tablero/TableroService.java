@@ -60,6 +60,10 @@ public class TableroService {
                 .toList();
     }
 
+    public List<Tablero> findEnCursoByUser(User user) {
+        return findByUser(user).stream().filter(tab -> !tab.isTerminada()).toList();
+    }
+
     // NO HECHO CON QUERY
     public List<Tablero> findLastNGamesByUser(User user, Integer n) {
         return repo.findAll().stream()

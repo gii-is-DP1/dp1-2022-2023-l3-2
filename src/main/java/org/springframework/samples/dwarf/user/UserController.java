@@ -30,6 +30,8 @@ import org.springframework.samples.dwarf.jugador.Jugador;
 import org.springframework.samples.dwarf.jugador.JugadorService;
 import org.springframework.samples.dwarf.lobby.InvitacionJuego;
 import org.springframework.samples.dwarf.lobby.InvitacionJuegoService;
+import org.springframework.samples.dwarf.lobby.Lobby;
+import org.springframework.samples.dwarf.lobby.LobbyService;
 import org.springframework.samples.dwarf.logro.Logro;
 import org.springframework.samples.dwarf.logro.LogroService;
 import org.springframework.samples.dwarf.tablero.Tablero;
@@ -71,12 +73,13 @@ public class UserController {
     private final EstadisticaService estadisticaService;
     private final TableroService taservice;
     private final JugadorService jService;
+    private final LobbyService lobbyService;
 
     @Autowired
     public UserController(JugadorService clinicService, UserService userService, LogroService logroService,
             InvitacionAmistadService invitacionAmistadService, AuthoritiesService authoritiesService,
             EstadisticaService estadisticaService, TableroService taservice, JugadorService jService,
-            InvitacionJuegoService invitacionJuegoService) {
+            InvitacionJuegoService invitacionJuegoService, LobbyService lobbyService) {
         this.ownerService = clinicService;
         this.userService = userService;
         this.invitacionJuegoService = invitacionJuegoService;
@@ -86,6 +89,7 @@ public class UserController {
         this.estadisticaService = estadisticaService;
         this.taservice = taservice;
         this.jService = jService;
+        this.lobbyService = lobbyService;
     }
 
     @InitBinder
@@ -236,13 +240,14 @@ public class UserController {
     }
 
     @GetMapping(value = "/users/{userid}")
-    public String showUser(@PathVariable("userid") String id, Map<String, Object> model) {
+    public String showUser(@PathVariable("userid") String id, Map<String, Object> model,
+            @RequestParam(required = false) String seccion) {
         User usuario = userService.findUser(id).get();
         List<Jugador> jugadores = ownerService.findJugadorUser(id);
 
         List<Logro> logrosCumplidos = logroService.findLogrosByUsername(id);
 
-        List<User> usuarios = invitacionAmistadService.findFriends(usuario).stream()
+        List<User> amigos = invitacionAmistadService.findFriends(usuario).stream()
                 .map(invitacion -> invitacion.getUserrecibe()).toList();
 
         Boolean condicionMod = (userService.findAuthenticatedUser().equals(userService.findUser(id).get())
@@ -251,13 +256,18 @@ public class UserController {
         List<Boolean> condicionEnline = invitacionAmistadService.findFriends(usuario).stream()
                 .map(u -> taservice.findByUser(u.getUserrecibe()).stream().allMatch(t -> t.isTerminada()))
                 .toList();
-        System.out.println(condicionEnline + " este ".repeat(200));
+
         Map<String, Boolean> condicionEnlinea = new HashMap<>();
 
-        for (int i = 0; i < usuarios.size(); i++) {
-            condicionEnlinea.put(usuarios.get(i).getUsername(), condicionEnline.get(i));
+        for (int i = 0; i < amigos.size(); i++) {
+            condicionEnlinea.put(amigos.get(i).getUsername(), condicionEnline.get(i));
         }
-        model.put("usuarios", usuarios);
+
+        List<Tablero> partidasEnCurso = taservice.findEnCursoByUser(usuario);
+        List<Lobby> lobbies = lobbyService.findByUser(usuario);
+
+        model.put("seccion", seccion);
+        model.put("amigos", amigos);
         model.put("imagen", usuario.imgperfil);
         model.put("user", new User());
         model.put("amigosEnLinea", condicionEnlinea);
@@ -270,6 +280,9 @@ public class UserController {
 
         final Integer PARTIDAS_MOSTRADAS = 7;
         model.put("partidas", taservice.findLastNGamesByUser(usuario, PARTIDAS_MOSTRADAS));
+
+        model.put("partidasEnCurso", partidasEnCurso);
+        model.put("lobbies", lobbies);
 
         return view_user;
     }
