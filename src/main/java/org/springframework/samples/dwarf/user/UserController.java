@@ -104,6 +104,9 @@ public class UserController {
             Date tiempo = new Date(System.currentTimeMillis());
             time = tiempo.getTime() - invi.getCreatedAt().getTime();
             diferencia.add(invi);
+            if (!invi.getUserenvia().equals(currentUser)) {
+                diferencia.add(invi);
+            }
             if (time >= 3600000L) {
                 diferencia.remove(invi);
             }
@@ -113,7 +116,9 @@ public class UserController {
             Long time = 0L;
             Date tiempo = new Date(System.currentTimeMillis());
             time = tiempo.getTime() - invi.getCreatedAt().getTime();
-            notificaciones.add(invi);
+            if (!invi.getUserenvia().equals(currentUser)) {
+                notificaciones.add(invi);
+            }
             if (time >= 3600000L) {
                 notificaciones.remove(invi);
             }
