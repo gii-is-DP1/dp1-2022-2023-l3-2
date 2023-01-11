@@ -20,7 +20,8 @@
             <div class="control-group" id="username">
                 <label class="col-sm-2 control-label">Username </label>
                 <div class="col-sm-10">
-                    <form:input class="form-control" path="username" size="30" maxlength="80"/>
+                    <!-- <form:input class="form-control" path="username" size="30" maxlength="80"/> -->
+                    <input class="form-control" label="Username" name="username" required="true" minlength="3" maxlength="50"/>
                     <span class="help-inline"><form:errors path="*"/></span>
                 </div>
             </div>
@@ -38,21 +39,8 @@
 
     </form:form>
 
-    <style>
-        .alert {
-            width: 400px;
-            height: 50px;
-            padding: 5px 20px;
-            border: 1px red;
-            background-color: rgb(255, 205, 205);
-            color: rgb(255, 105, 105);
-            border-radius: 5px;
-            display: flex;
-            align-items: center;
-        }
-    </style>
     <c:if test="${mensaje != null}">
-        <div class="alert">
+        <div class="alert alert-danger" role="alert">
             ${mensaje}
         </div>
     </c:if>

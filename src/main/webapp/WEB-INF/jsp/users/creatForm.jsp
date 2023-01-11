@@ -24,21 +24,8 @@
             <button class="btn btn-default" type="submit">Add User</button>
             </div>
         </div>
-        <style>
-            .alert {
-                width: 400px;
-                height: 50px;
-                padding: 5px 20px;
-                border: 1px red;
-                background-color: rgb(255, 205, 205);
-                color: rgb(255, 105, 105);
-                border-radius: 5px;
-                display: flex;
-                align-items: center;
-            }
-        </style>
         <c:if test="${mensaje != null}">
-            <div class="alert">
+            <div class="alert alert-danger" role="alert">
                 <c:out value="${mensaje}"></c:out>
             </div>
         </c:if>
