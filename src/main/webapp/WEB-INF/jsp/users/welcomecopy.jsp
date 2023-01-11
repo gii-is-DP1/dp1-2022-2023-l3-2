@@ -13,6 +13,20 @@
 					<span class="glyphicon glyphicon-user" aria-hidden="true"></span>
 					<a href="/users/${perfil}"><span>Perfil</span></a>
 
+
+                    <br/>
+                    <div class="alert alert-primary" role="alert">
+                        <c:forEach items="${juegos}" var="juego">
+                            <p>Se te ha invitado a un <a href="/lobby/${juego.lobbyId}">lobby</a></p>
+                        </c:forEach>
+                        
+                      </div><br/>
+                      <div class="alert alert-primary" role="alert">
+                          <c:forEach items="${amigos}" var="notify">
+                              <p>Te ha agregado <a href="/users/${notify.userenvia.username}">${notify.userenvia.username}</a> como amigo</p>
+                          </c:forEach>
+                          
+                        </div>
     <h2>Ranking de usuarios</h2>
 
 

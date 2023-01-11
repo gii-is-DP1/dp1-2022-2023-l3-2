@@ -69,9 +69,7 @@ INSERT INTO logro(id, name, descripcion, dificultad, requisito, tipo) VALUES
 (18, '200 medallas', 'Se consigue al coleccionar 200 medallas', 2, 200, 1),
 (19, '1000 medallas', 'Se consigue al coleccionar 1000 medallas', 3, 1000, 1);
 
-INSERT INTO invitacion_amistad(user_id_envia, user_id_recibe) VALUES
 
-('jualeomad', 'rafgargal');
 
 INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve, type) VALUES(1, '/resources/images/Dimensionadas/001.png', 1, 1, null, null, 'hierro',  3   , 'extraccion');
 INSERT INTO carta(id, imagen, posicion, tipo, entrada, cantidadEntrada, devuelve, cantidadDevuelve, type) VALUES(2, '/resources/images/Dimensionadas/002.png', 2, 1, null, null, 'hierro',  3   , 'extraccion');

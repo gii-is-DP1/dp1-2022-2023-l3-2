@@ -16,6 +16,7 @@
 package org.springframework.samples.dwarf.user;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +28,8 @@ import org.h2.expression.analysis.PartitionData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.dwarf.jugador.Jugador;
 import org.springframework.samples.dwarf.jugador.JugadorService;
+import org.springframework.samples.dwarf.lobby.InvitacionJuego;
+import org.springframework.samples.dwarf.lobby.InvitacionJuegoService;
 import org.springframework.samples.dwarf.logro.Logro;
 import org.springframework.samples.dwarf.logro.LogroService;
 import org.springframework.samples.dwarf.tablero.Tablero;
@@ -62,6 +65,7 @@ public class UserController {
     private final JugadorService ownerService;
     private final UserService userService;
     private final LogroService logroService;
+    private final InvitacionJuegoService invitacionJuegoService;
     private final InvitacionAmistadService invitacionAmistadService;
     private final AuthoritiesService authoritiesService;
     private final EstadisticaService estadisticaService;
@@ -71,9 +75,11 @@ public class UserController {
     @Autowired
     public UserController(JugadorService clinicService, UserService userService, LogroService logroService,
             InvitacionAmistadService invitacionAmistadService, AuthoritiesService authoritiesService,
-            EstadisticaService estadisticaService, TableroService taservice, JugadorService jService) {
+            EstadisticaService estadisticaService, TableroService taservice, JugadorService jService,
+            InvitacionJuegoService invitacionJuegoService) {
         this.ownerService = clinicService;
         this.userService = userService;
+        this.invitacionJuegoService = invitacionJuegoService;
         this.logroService = logroService;
         this.invitacionAmistadService = invitacionAmistadService;
         this.authoritiesService = authoritiesService;
@@ -90,11 +96,41 @@ public class UserController {
     @GetMapping("/users")
     public String parteDeUsuarios(Map<String, Object> model, @RequestParam Integer page) {
         User currentUser = userService.findAuthenticatedUser();
+        List<InvitacionJuego> juegos = invitacionJuegoService.findInvitacionesByUser(currentUser);
+        List<InvitacionAmistad> amigos = invitacionAmistadService.findInvitacionesByUser(currentUser);
+        List<InvitacionJuego> diferencia = new ArrayList<>();
+        for (InvitacionJuego invi : juegos) {
+            Long time = 0L;
+            Date tiempo = new Date(System.currentTimeMillis());
+            time = tiempo.getTime() - invi.getCreatedAt().getTime();
+            diferencia.add(invi);
+            if (time >= 3600000L) {
+                diferencia.remove(invi);
+            }
+        }
+        List<InvitacionAmistad> notificaciones = new ArrayList<>();
+        for (InvitacionAmistad invi : amigos) {
+            Long time = 0L;
+            Date tiempo = new Date(System.currentTimeMillis());
+            time = tiempo.getTime() - invi.getCreatedAt().getTime();
+            notificaciones.add(invi);
+            if (time >= 3600000L) {
+                notificaciones.remove(invi);
+            }
+        }
 
         List<List<User>> pages = userService.getPages(userService.findJugadoresSortedByPuntuacion());
+        List<User> pagina = pages.get(page);
+        if (!diferencia.isEmpty()) {
+            model.put("juegos", diferencia);
 
+        }
+        if (!notificaciones.isEmpty()) {
+            model.put("amigos", notificaciones);
+
+        }
         model.put("perfil", currentUser.getUsername());
-        model.put("usuarios", pages.get(page));
+        model.put("usuarios", pagina);
         model.put("paginaActual", page);
         model.put("paginas", IntStream.rangeClosed(0, pages.size() - 1)
                 .boxed().toList());
@@ -187,7 +223,7 @@ public class UserController {
             InvitacionAmistad invitacionAmistad = new InvitacionAmistad();
             invitacionAmistad.setUserenvia(userService.findUser(enviaUsername).get());
             invitacionAmistad.setUserrecibe(recibe);
-
+            invitacionAmistad.setCreatedAt(new Date());
             invitacionAmistadService.saveInvitacionAmistad(invitacionAmistad);
             model.put("usuarios", invitacionAmistadService.findFriendsUser(userService.findUser(enviaUsername).get()));
             return "redirect:/users/" + enviaUsername;
@@ -389,7 +425,7 @@ public class UserController {
         InvitacionAmistad invitacionAmistad = new InvitacionAmistad();
         invitacionAmistad.setUserenvia(userService.findUser(enviaUsername).get());
         invitacionAmistad.setUserrecibe(recibe);
-
+        invitacionAmistad.setCreatedAt(new Date());
         invitacionAmistadService.saveInvitacionAmistad(invitacionAmistad);
 
         return "redirect:/users/" + enviaUsername;

@@ -1,5 +1,7 @@
 package org.springframework.samples.dwarf.user;
 
+import java.util.Date;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -23,4 +25,6 @@ public class InvitacionAmistad extends BaseEntity {
     @OneToOne
     @JoinColumn(name = "user_id_recibe")
     private User userrecibe;
+
+    private Date createdAt;
 }
