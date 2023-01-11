@@ -103,13 +103,8 @@
 								</div>
 							</li>
 							<li class="divider"></li>
-							<br/>
-										<div>
-										<p class="text-left">
-												<a href="<c:url value="/users/mod" />"
-													class="btn btn-primary btn-block btn-sm">Modificar perfil</a>
-											</p>
-										</div>
+
+									
 <!--
                             <li>
 								<div class="navbar-login navbar-login-session">

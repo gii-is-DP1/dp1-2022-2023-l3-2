@@ -43,7 +43,9 @@
     <h2>
          Usuario:  ${usuario.username}
     </h2>
-
+    <c:if test="${condicion}">
+		<a class="btn btn-default" href='<spring:url value="/users/mod?user=${usuario.username}" htmlEscape="true"/>'>Modificar Mi perfil</a>
+	</c:if>
     <h3>Avatar</h3>
     <img id="avatar" src="${imagen}"></img>
 
