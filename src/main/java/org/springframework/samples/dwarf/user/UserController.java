@@ -204,9 +204,11 @@ public class UserController {
         List<User> usuarios = invitacionAmistadService.findFriends(usuario).stream()
                 .map(invitacion -> invitacion.getUserrecibe()).toList();
 
+        Boolean condicionMod = userService.findAuthenticatedUser().equals(userService.findUser(id).get());
         model.put("usuarios", usuarios);
         model.put("imagen", usuario.imgperfil);
         model.put("user", new User());
+        model.put("condicion", condicionMod);
         model.put("usuario", usuario);
         model.put("jugadores", jugadores);
         model.put("logros", logrosCumplidos);
@@ -258,14 +260,20 @@ public class UserController {
     }
 
     @GetMapping("users/mod")
-    public String modifyUser(Map<String, Object> model) {
+    public String modifyUser(Map<String, Object> model, @RequestParam("user") String id) {
+        User actual = userService.findAuthenticatedUser();
+
+        if (!(userService.findUser(id).get().equals(actual))) {
+            return view_user;
+        }
         User user = new User();
         model.put("user", user);
         return "users/creatForm";
     }
 
     @PostMapping("users/mod")
-    public String modifyUser(@Valid User user, BindingResult result, RedirectAttributes redatt) {
+    public String modifyUser(@Valid User user, BindingResult result, RedirectAttributes redatt,
+            @RequestParam("user") String id) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication.isAuthenticated()) {
