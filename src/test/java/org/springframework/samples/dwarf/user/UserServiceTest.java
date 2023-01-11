@@ -63,7 +63,7 @@ public class UserServiceTest {
     public void shouldFindByRol() {
         List<User> users = userService.findByRol("jugador");
 
-        User alegarsan11 = users.get(0);
+        User alegarsan11 = users.get(1);
         assertTrue(alegarsan11.hasRole("jugador"));
         assertThat(alegarsan11.getUsername()).isEqualTo("alegarsan11");
         assertThat(alegarsan11.getPassword()).isEqualTo("1234");
