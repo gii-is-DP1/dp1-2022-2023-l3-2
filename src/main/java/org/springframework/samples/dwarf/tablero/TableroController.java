@@ -259,9 +259,6 @@ public class TableroController {
                     return "redirect:/partida/" + id + "/fin";
                 }
             }
-            if (table.getMazos().get(12).getCartas().size() == 0) {
-                return "redirect:/partida/" + id + "/fin";
-            }
         }
         /*
          * Codigo para cronometro
@@ -454,6 +451,10 @@ public class TableroController {
     @GetMapping("{partidaId}/recursos")
     public String rondaRecursos(@PathVariable("partidaId") Integer id) {
         Tablero tabla = taservice.findById(id);
+
+        if (tabla.getMazos().get(12).getCartas().size() == 0) {
+            return "redirect:/partida/" + id + "/fin";
+        }
 
         tabla.getJugadores().stream().filter(j -> j.isTurno()).toList().get(0).setTurno(false);
         // tabla.getJugadores().get(0).setTurno(true);
