@@ -52,7 +52,7 @@ public class EstadisticaController {
     public String showEstadisticaByUser(@PathVariable("username") String username, Map<String, Object> model) {
 
         User user = userService.findUser(username).get();
-        List<Tablero> partidas = tableroService.findByUser(user);
+        List<Tablero> partidas = tableroService.findByUser(user).stream().filter(tab -> tab.isTerminada()).toList();
 
         User authenticatedUser = userService.findAuthenticatedUser();
 

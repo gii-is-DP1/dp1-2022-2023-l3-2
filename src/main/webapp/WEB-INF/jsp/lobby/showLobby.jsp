@@ -51,20 +51,19 @@
 
 
     <br>
-    Tabla de Usuarios
+    <h2>Usuarios</h2>
     <table id="usuariosTable" class="table table-striped"
         style="width: 400px; margin: auto;">
         <thead>
             <tr>
                 <th style="width: 200px; text-align: center;">Usuarios</th>
-                <th style="width: 200px; text-align: center;">Listo</th>
             </tr>
         </thead>
         <tbody>
             <c:forEach items="${usuarios}" var="usuario">
                 <tr>
 
-                    <td>
+                    <td style="text-align: center;">
                         <a href="/users/${usuario.username}">${usuario.username}</a>
                         <c:if test="${isAdmin && !lobbyAdmin.equals(usuario.username)}">
                             <a
@@ -74,15 +73,12 @@
                             </a>
                         </c:if>
                     </td>
-                    <td>
-                        Pendiente
-                    </td>
                 </tr>
             </c:forEach>
         </tbody>
     </table>
 
-    <h2>Añadir usuarios</h2>
+    <h2>Anyadir usuarios</h2>
     <form:form modelAttribute="user" action="/lobby/${lobbyId}/add-user" method="post"
         class="form-horizontal" id="search-jugador-form">
         <div class="form-group">
@@ -101,7 +97,7 @@
         </div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
-                <button type="submit" class="btn btn-default">Add User</button>
+                <button type="submit" class="btn btn-default">Anyadir usuario</button>
             </div>
         </div>
 

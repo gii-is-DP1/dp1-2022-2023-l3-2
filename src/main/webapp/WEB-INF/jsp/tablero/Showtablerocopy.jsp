@@ -217,7 +217,6 @@
             transition: transform .1s;
         }
     </style>
-    <a href="/partida/${id_partida}/comienza"><button>COMIENZA</button></a>
     <h2>${partida.getFormattedDuration()}</h2>
     <c:if test="${jugadores.get(0).posicionFinal != null}">
 
@@ -229,7 +228,7 @@
             <c:forEach items="${jugadoresOrdenados}" var="jugador">
                 <h2>${jugador.posicionFinal}. ${jugador.getUser().username}</h2>
             </c:forEach>
-            <a class="button-fin" href="/partida/${id_partida}/borrar_partida">
+            <a class="button-fin" href="/">
                 Finalizar partida
             </a>
         </div>

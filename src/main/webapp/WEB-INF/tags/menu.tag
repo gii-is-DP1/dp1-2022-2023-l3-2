@@ -35,11 +35,14 @@
 					<span>Parte de usuario</span>
 				</petclinic:menuItem>
 				</sec:authorize>
+
+                <sec:authorize access="hasAuthority('admin')">
 				<petclinic:menuItem active="${name eq 'owners'}" url="/user/find"
 					title="Solo para administradores">
 					<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
 					<span>Usuarios</span>
 				</petclinic:menuItem>
+                </sec:authorize>
 
 				<petclinic:menuItem active="${name eq 'tablero'}" url="/partida/en-curso"
 					title="Partidas">
@@ -104,7 +107,7 @@
 							</li>
 							<li class="divider"></li>
 
-									
+
 <!--
                             <li>
 								<div class="navbar-login navbar-login-session">

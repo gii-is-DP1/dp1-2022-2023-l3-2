@@ -20,39 +20,50 @@
         </c:otherwise>
     </c:choose>
 
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th style="width: 150px;">Nombre</th>
-            <th style="width: 150px;">Creador</th>
-            <th style="width: 150px;">Jugadores</th>
-            <th style="width: 150px;">Tiempo transcurrido</th>
-        </tr>
-        </thead>
-        <tbody>
-        <c:forEach items="${partidas}" var="partida">
-            <tr>
-                <td>
-                    <a href="/partida/${partida.id}">${partida.id} - ${partida.name}</a>
-                </td>
-                <td>
-                    <a href="/users/${partida.jugadores.get(0).user.username}">
-                        ${partida.jugadores.get(0).user.username}
-                    </a>
-                </td>
-                <td>
-                    <c:forEach items="${partida.jugadores}" var="jugador">
-                        <a href="/users/${jugador.user.username}">${jugador.user.username}</a>
-                    </c:forEach>
-                </td>
-                <td>
-                    ${partida.getFormattedDuration()}
+    <c:choose>
+        <c:when test="${partidas.isEmpty()}">
+            <div class="alert alert-warning" role="alert">
+                No hay ninguna partida
+            </div>
+        </c:when>
+        <c:otherwise>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th style="width: 150px;">Nombre</th>
+                    <th style="width: 150px;">Creador</th>
+                    <th style="width: 150px;">Jugadores</th>
+                    <th style="width: 150px;">Tiempo transcurrido</th>
+                </tr>
+                </thead>
+                <tbody>
+                <c:forEach items="${partidas}" var="partida">
+                    <tr>
+                        <td>
+                            <a href="/partida/${partida.id}">${partida.id} - ${partida.name}</a>
+                        </td>
+                        <td>
+                            <a href="/users/${partida.jugadores.get(0).user.username}">
+                                ${partida.jugadores.get(0).user.username}
+                            </a>
+                        </td>
+                        <td>
+                            <c:forEach items="${partida.jugadores}" var="jugador">
+                                <a href="/users/${jugador.user.username}">${jugador.user.username}</a>
+                            </c:forEach>
+                        </td>
+                        <td>
+                            ${partida.getFormattedDuration()}
 
-                </td>
-            </tr>
-        </c:forEach>
-        </tbody>
-    </table>
+                        </td>
+                    </tr>
+                </c:forEach>
+                </tbody>
+            </table>
+        </c:otherwise>
+    </c:choose>
+
+
 
 
 

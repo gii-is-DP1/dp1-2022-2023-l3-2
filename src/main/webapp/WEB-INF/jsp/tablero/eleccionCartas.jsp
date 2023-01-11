@@ -10,7 +10,7 @@
 <petclinic:layout pageName="Eleccion materiales">
 
 <c:forEach items="${cartas}" var="carta">
-        <a href="/partida/${id_partida}/eleccion-carta?carta=${carta.id}&username=${username}" ><img src="${carta.imagen}" height="160"
-            width="80"/></a>
+        <a href="/partida/${id_partida}/eleccion-carta?carta=${carta.id}&username=${username}" ><img src="${carta.imagen}" height="224"
+            width="160"/></a>
 </c:forEach>
 </petclinic:layout>

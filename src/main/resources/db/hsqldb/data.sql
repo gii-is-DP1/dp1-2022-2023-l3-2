@@ -16,6 +16,7 @@ INSERT INTO authorities(id,username,authority) VALUES (6,'marescram3','jugador')
 INSERT INTO authorities(id,username,authority) VALUES (7,'dandiasua','jugador');
 INSERT INTO authorities(id,username,authority) VALUES (8,'rafgargal','jugador');
 INSERT INTO authorities(id,username,authority) VALUES (9,'ernsaqrio','jugador');
+INSERT INTO authorities(id,username,authority) VALUES (10,'admin1','jugador');
 
 -- One vet user, named vet1 with passwor v3t
 INSERT INTO users(username,password,enabled) VALUES ('vet1','v3t',TRUE);
@@ -27,7 +28,8 @@ INSERT INTO estadistica(id, partidas_ganadas, partidas_perdidas, puntos, hierro,
 (3, 0, 0, 0, 0, 0, 0, 0, 0, 'dandiasua'),
 (4, 0, 0, 0, 0, 0, 0, 0, 0, 'alegarsan11'),
 (5, 0, 0, 0, 0, 0, 0, 0, 0, 'marescram3'),
-(6, 0, 0, 0, 0, 0, 0, 0, 0, 'ernsaqrio');
+(6, 0, 0, 0, 0, 0, 0, 0, 0, 'ernsaqrio'),
+(7, 0, 0, 0, 0, 0, 0, 0, 0, 'admin1');
 
 INSERT INTO jugadores VALUES(1,0,2,FALSE,0,0,0,0,null,TRUE,TRUE,'alegarsan11');
 
