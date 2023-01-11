@@ -288,18 +288,29 @@ public class TableroController {
          * int DESDE = 7;
          * int aleatorio = (int)(Math.random()*(HASTA-DESDE+1)+DESDE);
          */
-
+        Carta cartaTemporal = null;
         for (int i = 0; i < 2; i++) {
             int DESDE = 0;
             int HASTA = baraja.size() - 1;
 
             int indexCarta = (int) (Math.random() * (HASTA - DESDE + 1) + DESDE);
+
             Carta carta = tabla.getMazos().get(12).getCartas().get(indexCarta);
+            if (i == 0) {
+                cartaTemporal = carta;
+            }
             tabla.getMazos().stream().filter(mazo -> mazo.getPosicion() == carta.getPosicion()).toList().get(0)
                     .getCartas()
                     .add(0, carta);
             baraja.remove(carta);
-
+            if (i == 1 && cartaTemporal.getPosicion().equals(carta.getPosicion())) {
+                int indexCarta3 = (int) (Math.random() * (HASTA - DESDE + 1) + DESDE);
+                Carta carta3 = tabla.getMazos().get(12).getCartas().get(indexCarta3);
+                tabla.getMazos().stream().filter(mazo -> mazo.getPosicion() == carta3.getPosicion()).toList().get(0)
+                        .getCartas()
+                        .add(0, carta3);
+                baraja.remove(carta3);
+            }
             if (baraja.size() == 0)
                 break;
         }
