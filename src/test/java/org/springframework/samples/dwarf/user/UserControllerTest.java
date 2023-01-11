@@ -9,6 +9,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.samples.dwarf.configuration.SecurityConfiguration;
 import org.springframework.samples.dwarf.jugador.JugadorService;
+import org.springframework.samples.dwarf.lobby.InvitacionJuegoService;
+import org.springframework.samples.dwarf.lobby.LobbyService;
 import org.springframework.samples.dwarf.logro.LogroService;
 import org.springframework.samples.dwarf.tablero.TableroService;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
@@ -43,7 +45,13 @@ public class UserControllerTest {
     private UserService userService;
 
     @MockBean
+    private InvitacionJuegoService invitacionJuegoService;
+
+    @MockBean
     private LogroService logroService;
+
+    @MockBean
+    private LobbyService lobbyService;
 
     @MockBean
     private InvitacionAmistadService invitacionAmistadService;

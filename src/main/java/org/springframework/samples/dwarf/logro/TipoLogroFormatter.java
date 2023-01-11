@@ -14,7 +14,7 @@ public class TipoLogroFormatter implements Formatter<TipoLogro> {
 
     @Override
     public String print(TipoLogro tipo, Locale arg1) {
-        return tipo.getName().replace("_", " ");
+        return tipo.getName();
     }
 
     @Override
