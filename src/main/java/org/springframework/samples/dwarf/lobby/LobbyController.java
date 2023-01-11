@@ -174,7 +174,12 @@ public class LobbyController {
         }
 
         lobby.getUsuarios().add(userSearched);
-
+        InvitacionJuego invitacion = new InvitacionJuego();
+        invitacion.setUserrecibe(userSearched);
+        invitacion.setUserenvia(userService.findUser(lobby.getAdmin()).get());
+        invitacion.setLobbyId(lobby.getId());
+        invitacion.setCreatedAt(new Date());
+        invitacionJuegoService.saveInvitacionAmistad(invitacion);
         lobby.setNumUsuarios(lobby.getNumUsuarios() + 1);
 
         return "redirect:/lobby/" + lobby.getId();
