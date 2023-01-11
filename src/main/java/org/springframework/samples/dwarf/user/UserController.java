@@ -356,15 +356,15 @@ public class UserController {
             if (currentUser.getUsername().equals(id)
                     || userService.findAuthenticatedUser().getAuthorities().stream()
                             .anyMatch(a -> a.getAuthority().equals("admin"))) {
-                if (user.getUsername().equals("") || user.getUsername().equals(null)) {
-                    user.setUsername(userService.findUser(id).get().getUsername());
-                }
-                if (user.getPassword().equals("") || user.getPassword().equals(null)) {
-                    user.setUsername(userService.findUser(id).get().getPassword());
-                }
-                if (user.getImgperfil().equals("") || user.getImgperfil().equals(null)) {
-                    user.setUsername(userService.findUser(id).get().getImgperfil());
-                }
+                // if (user.getUsername().equals("")) {
+                // user.setUsername(userService.findUser(id).get().getUsername());
+                // }
+                // if (user.getPassword().equals("")) {
+                // user.setUsername(userService.findUser(id).get().getPassword());
+                // }
+                // if (user.getImgperfil().equals("")) {
+                // user.setUsername(userService.findUser(id).get().getImgperfil());
+                // }
                 userService.saveUser(user);
                 Authorities authority = new Authorities();
                 authority.setAuthority("jugador");

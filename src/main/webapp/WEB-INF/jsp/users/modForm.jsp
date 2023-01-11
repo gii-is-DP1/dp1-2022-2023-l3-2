@@ -13,14 +13,14 @@
         <div class="form-group has-feedback">
 
             <h2>Contraseña</h2>
-            <input label="Password" name="password" required="true"/>
+            <input label="Password" name="password"/>
             <h2>URL imagen</h2>
             <input label="URL imagen" name="imgperfil"/>
 
         </div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
-            <button class="btn btn-default" type="submit">Add User</button>
+            <button class="btn btn-default" type="submit">Modificar usuario</button>
             </div>
         </div>
         <c:if test="${mensaje != null}">

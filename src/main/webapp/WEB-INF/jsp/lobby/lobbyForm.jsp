@@ -10,7 +10,7 @@
     <h2>Lobby</h2>
     <form:form modelAttribute="lobby" class="form-horizontal" id="add-owner-form">
         <div class="form-group has-feedback">
-            <petclinic:inputField label="Name" name="name" />
+            <petclinic:inputField label="Nombre" name="name" />
 
 
 

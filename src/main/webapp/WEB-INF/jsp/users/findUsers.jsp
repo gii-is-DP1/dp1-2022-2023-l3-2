@@ -11,7 +11,7 @@
 
 <petclinic:layout pageName="owners">
 
-    <h2>Find Users</h2>
+    <h2>Busqueda de usuarios</h2>
 
 
     <form:form modelAttribute="user" action="/users/find" method="post" class="form-horizontal"
@@ -20,7 +20,6 @@
             <div class="control-group" id="username">
                 <label class="col-sm-2 control-label">Username </label>
                 <div class="col-sm-10">
-                    <!-- <form:input class="form-control" path="username" size="30" maxlength="80"/> -->
                     <input class="form-control" label="Username" name="username" required="true" minlength="3" maxlength="50"/>
                     <span class="help-inline"><form:errors path="*"/></span>
                 </div>
@@ -28,11 +27,11 @@
         </div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
-                <button type="submit" class="btn btn-default">Find User</button>
+                <button type="submit" class="btn btn-default">Buscar usuario</button>
             </div>
             <a href="/user?page=0">
                 <div class="col-sm-offset-2 col-sm-10">
-                    <div class="btn btn-default">Find All Users</div>
+                    <div class="btn btn-default">Buscar todos los usuarios</div>
                 </div>
             </a>
         </div>
@@ -44,10 +43,5 @@
             ${mensaje}
         </div>
     </c:if>
-
-    <br/>
-    <sec:authorize access="hasAuthority('admin')">
-		<a class="btn btn-default" href='<spring:url value="/jugador/new" htmlEscape="true"/>'>Add Owner</a>
-	</sec:authorize>
 
 </petclinic:layout>

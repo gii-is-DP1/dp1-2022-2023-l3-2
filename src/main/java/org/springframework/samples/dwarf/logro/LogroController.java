@@ -64,6 +64,7 @@ public class LogroController {
     public String createLogro(@Valid Logro logro, BindingResult result, RedirectAttributes redatt) {
         if (result.hasErrors()) {
             redatt.addFlashAttribute("error", result.getAllErrors());
+            System.out.println("ERRORES = " + result.getAllErrors().toString());
             return "redirect:/logros/create";
         } else {
 
@@ -90,7 +91,6 @@ public class LogroController {
         }
 
     }
-
 
     @Transactional
     @GetMapping("/logros/del")

@@ -426,7 +426,6 @@ public class TableroController {
                 }
                 while (true) {
 
-
                     if (i == tabla.getJugadores().size()) {
                         i = 0;
                         continue;
@@ -442,8 +441,6 @@ public class TableroController {
 
                 // Nueva condicion de llamada a recursos
                 // si enanosDisponibles de todos igual a 0
-
-
 
                 return "redirect:/partida/" + id;
 
@@ -555,14 +552,6 @@ public class TableroController {
         estadisticaService.actualizarEstadistica(tabla);
 
         return "redirect:/partida/" + id;
-    }
-
-    @Transactional
-    @GetMapping("{partidaId}/borrar_partida")
-    public String borrarPartida(@PathVariable("partidaId") Integer id) {
-        // Acaba cuando un jugador tiene 4 objetos o la baraja no tiene mas cartas
-
-        return "redirect:/";
     }
 
     @GetMapping("{partidaId}/chatline")

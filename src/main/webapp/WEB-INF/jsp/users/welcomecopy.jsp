@@ -10,22 +10,24 @@
     <h2>Perfil personal</h2>
 
 
-					<span class="glyphicon glyphicon-user" aria-hidden="true"></span>
-					<a href="/users/${perfil}"><span>Perfil</span></a>
+                    <a href="/users/${perfil}" class="btn btn-success"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Perfil</a>
 
-
-                    <br/>
                     <div class="alert alert-primary" role="alert">
                         <c:forEach items="${juegos}" var="juego">
-                            <p>Se te ha invitado a un <a href="/lobby/${juego.lobbyId}">lobby</a></p>
+
+                            <div class="alert alert-success" role="alert">
+                                Se te ha invitado a un <a href="/lobby/${juego.lobbyId}">lobby</a>
+                            </div>
                         </c:forEach>
-                        
-                      </div><br/>
+
+                      </div>
                       <div class="alert alert-primary" role="alert">
                           <c:forEach items="${amigos}" var="notify">
-                              <p>Te ha agregado <a href="/users/${notify.userenvia.username}">${notify.userenvia.username}</a> como amigo</p>
+                              <div class="alert alert-info" role="alert">
+                                Te ha agregado <a href="/users/${notify.userenvia.username}">${notify.userenvia.username}</a> como amigo
+                              </div>
                           </c:forEach>
-                          
+
                         </div>
     <h2>Ranking de usuarios</h2>
 
