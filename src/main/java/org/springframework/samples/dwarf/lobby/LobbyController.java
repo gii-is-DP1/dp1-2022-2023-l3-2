@@ -92,15 +92,12 @@ public class LobbyController {
         model.addAttribute("usuarios", lobby.getUsuarios());
         model.addAttribute("user", new User());
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        org.springframework.security.core.userdetails.User currentUser = (org.springframework.security.core.userdetails.User) authentication
-                .getPrincipal();
+        User currentUser = userService.findAuthenticatedUser();
 
         model.addAttribute("isAdmin", currentUser.getUsername().equals(lobby.getAdmin()));
+        model.addAttribute("currentUser", currentUser);
         model.addAttribute("lobbyAdmin", lobby.getAdmin());
-
         model.addAttribute("usernames", lobby.getUsuarios().stream().map(user -> user.getUsername()).toList());
-
         model.addAttribute("tablero", new Tablero());
 
         return showLobby;
@@ -234,5 +231,12 @@ public class LobbyController {
             }
         }
         return "redirect:/lobby/" + lobby.getId();
+    }
+
+    @Transactional
+    @GetMapping("/{lobbyId}/delete")
+    public String deleteLobby(@PathVariable("lobbyId") Integer id) {
+        lobbyService.deleteById(id);
+        return "redirect:/";
     }
 }
