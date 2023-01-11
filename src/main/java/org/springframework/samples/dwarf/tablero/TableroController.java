@@ -279,6 +279,14 @@ public class TableroController {
     public String rondaPrincipio(@PathVariable("partidaId") Integer id) {
         Tablero tabla = taservice.findById(id);
 
+        //coloca 4 enanos por jugador
+        for(Jugador jugador: tabla.getJugadores()){
+           List<Enano> lis = new ArrayList<>();
+           for(int i = 0 ;i<4;i++){
+            Enano enano = new Enano();
+            lis.add(enano);
+           }  jugador.setEnano(lis);
+        }
         // Coger dos cartas aleatorias de la baraja y colocarlas
         List<Carta> baraja = tabla.getMazos().get(tabla.getMazos().size() - 1).getCartas();
 
