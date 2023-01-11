@@ -241,6 +241,13 @@ public class LobbyController {
     @Transactional
     @GetMapping("/{lobbyId}/delete")
     public String deleteLobby(@PathVariable("lobbyId") Integer id) {
+
+        for (InvitacionJuego i : invitacionJuegoService.findAll()) {
+            if (i.getLobbyId().equals(id)) {
+                invitacionJuegoService.delInvi(i);
+            }
+        }
+
         lobbyService.deleteById(id);
         return "redirect:/";
     }

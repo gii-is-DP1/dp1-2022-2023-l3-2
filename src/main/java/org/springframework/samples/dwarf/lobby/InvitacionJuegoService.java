@@ -17,6 +17,11 @@ public class InvitacionJuegoService {
     }
 
     @Transactional
+    public List<InvitacionJuego> findAll() {
+        return invitacionrepo.findAll();
+    }
+
+    @Transactional
     public void saveInvitacionAmistad(InvitacionJuego invitacion) {
         invitacionrepo.save(invitacion);
     }
