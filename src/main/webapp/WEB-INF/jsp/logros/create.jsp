@@ -13,9 +13,9 @@
             <h2>Nombre </h2>
             <input label="Nombre" name="name" placeholder="Es necesario poner un valor" value="" required="true" size="80px"/>
             <h2>Requisito</h2>
-            <input label="requisito" name="requisito" placeholder="Es necesario poner un valor numerico positivo" value="0" required="true"size="80px"/>
+            <input label="requisito" name="requisito" placeholder="Es necesario poner un valor numerico positivo" value="" required="true"size="80px"/>
             <h2>Dificultad</h2>
-            <input label="requisito" name="dificultad" placeholder="Es necesario poner un valor numerico positivo" value="1" required="true"size="80px"/>
+            <input label="requisito" name="dificultad" placeholder="Es necesario poner un valor numerico entre 1 y 3" value="" required="true"size="80px"/>
             <h2>Descripcion</h2>
             <input label="requisito" name="descripcion" placeholder="Es necesario poner un valor" value="" required="true"size="80px"/>
 
