@@ -231,6 +231,7 @@
         <thead>
         <tr>
             <th style="width: 150px;">Username</th>
+            <th style="width: 150px;">Disponibilidad</th>
         </tr>
         </thead>
         <tbody>
@@ -238,6 +239,15 @@
             <tr>
                 <td>
                     <a href="/users/${usuario.username}">${usuario.username}</a>
+                    
+                </td>
+                <td>
+                    <c:choose>
+                    <c:when test="${amigosEnLinea.get(usuario.username)}"><p>Disponible</p></c:when>
+                    <c:otherwise><p> 
+                        En Partida
+                    </p></c:otherwise>
+                </c:choose>
                 </td>
             </tr>
         </c:forEach>
