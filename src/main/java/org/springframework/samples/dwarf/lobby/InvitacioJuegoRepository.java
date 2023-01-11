@@ -11,6 +11,8 @@ import org.springframework.stereotype.Repository;
 public interface InvitacioJuegoRepository extends CrudRepository<InvitacionJuego, Integer> {
     InvitacionJuego save(InvitacionJuego invitacion);
 
+    List<InvitacionJuego> findAll();
+
     List<InvitacionJuego> findByUserenvia(User user);
 
     @Query("SELECT invi FROM InvitacionJuego invi WHERE invi.userenvia =:userenvia AND invi.userrecibe =:userrecibe")

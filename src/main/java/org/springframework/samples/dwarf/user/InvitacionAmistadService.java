@@ -15,6 +15,7 @@ public class InvitacionAmistadService {
         this.invitacionrepo = invitacionrepo;
     }
 
+
     @Transactional
     public void saveInvitacionAmistad(InvitacionAmistad invitacion) {
         invitacionrepo.save(invitacion);
