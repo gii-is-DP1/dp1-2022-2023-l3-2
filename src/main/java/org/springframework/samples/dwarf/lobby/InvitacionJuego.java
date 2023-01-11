@@ -1,5 +1,7 @@
 package org.springframework.samples.dwarf.lobby;
 
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
@@ -25,4 +27,6 @@ public class InvitacionJuego extends BaseEntity {
     private User userrecibe;
 
     Integer lobbyId;
+
+    Date createdAt;
 }

@@ -15,7 +15,6 @@
     <h2>Project ${title}</h2>
     <h2><a href="/logro/">Logros del Juego</a></h2>
     <p><h2>Group ${group}</h2></p>
-    <a href="/logro/">Logros del Juego</a>
     <p><ul>
     <c:forEach items="${persons}" var="person">
         <li>${person.firstName}&nbsp${person.lastName}</li>
