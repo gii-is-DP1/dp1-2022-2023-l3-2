@@ -103,7 +103,7 @@ public class UserController {
             Long time = 0L;
             Date tiempo = new Date(System.currentTimeMillis());
             time = tiempo.getTime() - invi.getCreatedAt().getTime();
-            diferencia.add(invi);
+
             if (!invi.getUserenvia().equals(currentUser)) {
                 diferencia.add(invi);
             }
