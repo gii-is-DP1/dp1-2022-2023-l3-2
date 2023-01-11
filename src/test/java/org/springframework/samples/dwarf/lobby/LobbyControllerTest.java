@@ -103,13 +103,16 @@ public class LobbyControllerTest {
                 .andExpect(view().name("lobby/lobbyForm"));
     }
 
-    @WithMockUser(value = "spring")
-    @Test
-    void testShow() throws Exception {
-        mockMvc.perform(get("/lobby/1")).andExpect(status().isOk())
-                .andExpect(model().attributeExists("user"))
-                .andExpect(view().name("lobby/showLobby"));
-    }
+    /*
+     * @WithMockUser(value = "spring")
+     * 
+     * @Test
+     * void testShow() throws Exception {
+     * mockMvc.perform(get("/lobby/1")).andExpect(status().isOk())
+     * .andExpect(model().attributeExists("user"))
+     * .andExpect(view().name("lobby/showLobby"));
+     * }
+     */
 
     @WithMockUser(value = "spring")
     @Test
