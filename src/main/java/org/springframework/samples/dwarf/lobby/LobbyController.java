@@ -1,6 +1,7 @@
 package org.springframework.samples.dwarf.lobby;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -142,6 +143,7 @@ public class LobbyController {
         invitacion.setUserrecibe(userSearched);
         invitacion.setUserenvia(userService.findUser(lobby.getAdmin()).get());
         invitacion.setLobbyId(lobby.getId());
+        invitacion.setCreatedAt(new Date());
         invitacionJuegoService.saveInvitacionAmistad(invitacion);
         lobby.setNumUsuarios(lobby.getNumUsuarios() + 1);
 

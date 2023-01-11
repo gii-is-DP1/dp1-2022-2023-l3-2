@@ -207,9 +207,19 @@ public class UserController {
         Boolean condicionMod = (userService.findAuthenticatedUser().equals(userService.findUser(id).get())
                 || userService.findAuthenticatedUser().getAuthorities().stream()
                         .anyMatch(a -> a.getAuthority().equals("admin")));
+        List<Boolean> condicionEnline = invitacionAmistadService.findFriends(usuario).stream()
+                .map(u -> taservice.findByUser(u.getUserrecibe()).stream().allMatch(t -> t.isTerminada()))
+                .toList();
+        System.out.println(condicionEnline + " este ".repeat(200));
+        Map<String, Boolean> condicionEnlinea = new HashMap<>();
+
+        for (int i = 0; i < usuarios.size(); i++) {
+            condicionEnlinea.put(usuarios.get(i).getUsername(), condicionEnline.get(i));
+        }
         model.put("usuarios", usuarios);
         model.put("imagen", usuario.imgperfil);
         model.put("user", new User());
+        model.put("amigosEnLinea", condicionEnlinea);
         model.put("condicion", condicionMod);
         model.put("usuario", usuario);
         model.put("jugadores", jugadores);
