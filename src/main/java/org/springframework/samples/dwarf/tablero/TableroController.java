@@ -24,6 +24,7 @@ import org.springframework.samples.dwarf.carta.TipoCarta;
 import org.springframework.samples.dwarf.jugador.Jugador;
 import org.springframework.samples.dwarf.jugador.JugadorService;
 import org.springframework.samples.dwarf.user.EstadisticaService;
+import org.springframework.samples.dwarf.user.InvitacionAmistadService;
 import org.springframework.samples.dwarf.user.UserService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -53,13 +54,18 @@ public class TableroController {
     private TableroService taservice;
     private JugadorService jugadorService;
     private EstadisticaService estadisticaService;
+    private UserService userService;
+    private InvitacionAmistadService invitacionAmistadService;
 
     @Autowired
     public TableroController(TableroService service, JugadorService jugadorService,
-            EstadisticaService estadisticaService) {
+            EstadisticaService estadisticaService, UserService userService,
+            InvitacionAmistadService invitacionAmistadService) {
         this.taservice = service;
         this.jugadorService = jugadorService;
         this.estadisticaService = estadisticaService;
+        this.userService = userService;
+        this.invitacionAmistadService = invitacionAmistadService;
     }
 
     @Transactional
@@ -186,7 +192,18 @@ public class TableroController {
     @GetMapping("/{partidaId}")
     public String showTablero(@PathVariable("partidaId") Integer id, Model model, HttpServletResponse response) {
         /* response.addHeader("Refresh", "3"); */
+
         Tablero table = taservice.findById(id);
+
+        if (!table.getJugadores().stream().map(j -> j.getUser()).toList()
+                .contains(userService.findAuthenticatedUser())) {
+            if (!table.getJugadores().stream().map(j -> j.getUser()).toList()
+                    .containsAll(invitacionAmistadService.findFriends(userService.findAuthenticatedUser()).stream()
+                            .map(j -> j.getUserrecibe()).toList())
+                    || invitacionAmistadService.findFriends(userService.findAuthenticatedUser()).isEmpty()) {
+                return "redirect:/";
+            }
+        }
         List<Mazo> mazo = table.getMazos();
         List<Mazo> mazo1 = mazo.subList(0, 3);
         List<Mazo> mazo2 = mazo.subList(3, 6);
