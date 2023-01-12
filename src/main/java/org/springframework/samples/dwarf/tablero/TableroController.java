@@ -112,9 +112,11 @@ public class TableroController {
 
     @GetMapping("/{partidaId}")
     public String showTablero(@PathVariable("partidaId") Integer id, Model model, HttpServletResponse response) {
-        response.addHeader("Refresh", "3");
 
         Tablero table = taservice.findById(id);
+
+        if (!taservice.isMyTurno(table))
+            response.addHeader("Refresh", "3");
 
         if (!taservice.puedoSerEspectador(table))
             return "redirect:/";
@@ -254,9 +256,7 @@ public class TableroController {
 
         User currentUser = userService.findAuthenticatedUser();
 
-        chatLine.setUsername(currentUser.getUsername());
-
-        tabla.getChat().add(chatLine);
+        taservice.addMessage(tabla, currentUser, chatLine.getMensaje());
         return "redirect:/partida/" + id;
 
     }

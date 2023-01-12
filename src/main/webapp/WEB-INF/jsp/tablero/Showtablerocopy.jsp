@@ -446,4 +446,15 @@
         setInterval('renderChat()', 500);
     </script>
 
+    <script>
+        // Si hacemos focus en el input del chat bloqueamos el refresh
+        const chatInput = document.getElementsByName("mensaje")[0]
+        chatInput.addEventListener('focus', (event) => {
+            window.stop()
+        });
+        chatInput.addEventListener('blur', (event) => {
+            location.reload()
+        });
+    </script>
+
 </petclinic:layout>

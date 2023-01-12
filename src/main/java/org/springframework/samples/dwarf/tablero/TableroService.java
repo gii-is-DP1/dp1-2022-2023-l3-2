@@ -463,4 +463,20 @@ public class TableroService {
         mazoElegido.getCartas().remove(cartaElegida);
         mazoElegido.getCartas().add(0, cartaElegida);
     }
+
+    @Transactional(readOnly = true)
+    public boolean isMyTurno(Tablero tablero) {
+        return userService.findAuthenticatedUser().getUsername().equals(tablero.getUsernameByTurno());
+    }
+
+    @Transactional
+    public void addMessage(Tablero tablero, User currentUser, String message) {
+
+        ChatLine chatLine = new ChatLine();
+
+        chatLine.setUsername(currentUser.getUsername());
+        chatLine.setMensaje(message);
+
+        tablero.getChat().add(chatLine);
+    }
 }
