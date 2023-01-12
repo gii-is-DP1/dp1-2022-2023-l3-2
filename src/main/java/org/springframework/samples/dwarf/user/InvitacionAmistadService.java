@@ -3,12 +3,18 @@ package org.springframework.samples.dwarf.user;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.samples.dwarf.lobby.Lobby;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class InvitacionAmistadService {
     private InvitacioAmistadRepository invitacionrepo;
+
+    public Boolean condicionNoAmigo(Lobby lobby, User userSearched, User admin) {
+        return !findFriendsUser(admin)
+                .contains(userSearched.getUsername());
+    }
 
     @Autowired
     public InvitacionAmistadService(InvitacioAmistadRepository invitacionrepo) {
