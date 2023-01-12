@@ -9,7 +9,6 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -38,7 +37,6 @@ public class LogroController {
         return VIEW_LOGROS;
     }
 
-    @Transactional
     @GetMapping("/logros/mod")
     public String updateLogro(Map<String, Object> model) {
 
@@ -59,12 +57,10 @@ public class LogroController {
         return "logros/create";
     }
 
-    @Transactional()
     @PostMapping("/logros/create")
     public String createLogro(@Valid Logro logro, BindingResult result, RedirectAttributes redatt) {
         if (result.hasErrors()) {
             redatt.addFlashAttribute("error", result.getAllErrors());
-            System.out.println("ERRORES = " + result.getAllErrors().toString());
             return "redirect:/logros/create";
         } else {
 
@@ -76,7 +72,6 @@ public class LogroController {
 
     }
 
-    @Transactional()
     @PostMapping("/logros/mod")
     public String updateLogro(@Valid Logro logro, BindingResult result, RedirectAttributes redatt) {
         if (result.hasErrors()) {
@@ -92,7 +87,6 @@ public class LogroController {
 
     }
 
-    @Transactional
     @GetMapping("/logros/del")
     public String delLogro(Map<String, Object> model, @RequestParam("logro") Integer id) {
         logroService.delLogro(id);
