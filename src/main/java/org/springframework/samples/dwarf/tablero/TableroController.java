@@ -112,7 +112,7 @@ public class TableroController {
 
     @GetMapping("/{partidaId}")
     public String showTablero(@PathVariable("partidaId") Integer id, Model model, HttpServletResponse response) {
-        /* response.addHeader("Refresh", "3"); */
+        response.addHeader("Refresh", "3");
 
         Tablero table = taservice.findById(id);
 

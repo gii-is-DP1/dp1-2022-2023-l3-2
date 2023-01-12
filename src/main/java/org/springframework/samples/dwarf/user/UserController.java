@@ -60,7 +60,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 public class UserController {
 
-
     private static final String view_user = "users/showUser";
     private static final String VIEW_USERS_LIST = "users/usersList";
 
@@ -178,7 +177,7 @@ public class UserController {
         if (result.hasErrors()) {
             return "redirect:/user";
         } else {
-            // creating owner, user, and authority
+
             List<User> usersSearched = userService.findUserByString(user.username);
             if (usersSearched.size() == 0) {
                 redatt.addFlashAttribute("mensaje", "No hay resultados para la busqueda");
@@ -188,34 +187,25 @@ public class UserController {
             if (usersSearched.size() == 1) {
                 return "redirect:/users/" + usersSearched.get(0).getUsername();
             }
-            // model.put("usuarios", userService.findUserByString(user.username));
+
             return "redirect:/user?page=0&search=" + user.username;
         }
     }
 
     @PostMapping(value = "/users/friend")
     public String processAddFriendForm(Map<String, Object> model, @Valid User user, BindingResult result) {
+
+        User currentUser = userService.findAuthenticatedUser();
+
         if (result.hasErrors()) {
-            org.springframework.security.core.userdetails.User currentUser = (org.springframework.security.core.userdetails.User) SecurityContextHolder
-                    .getContext().getAuthentication()
-                    .getPrincipal();
             return "redirect:/users/" + currentUser.getUsername();
         } else {
-            // creating owner, user, and authority
 
             String enviaUsername = "";
             User recibe = userService.findUser(user.username).get();
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-            if (authentication != null) {
-                if (authentication.isAuthenticated()) {
-                    org.springframework.security.core.userdetails.User currentUser = (org.springframework.security.core.userdetails.User) authentication
-                            .getPrincipal();
+            enviaUsername = currentUser.getUsername();
 
-                    enviaUsername = currentUser.getUsername();
-
-                }
-            }
             // si no encuentra al usuario
             if (!userService.findAll().contains(userService.findUser(user.username).get())) {
                 return "redirect:/users/" + enviaUsername;
@@ -227,11 +217,9 @@ public class UserController {
 
                 return "redirect:/users/" + enviaUsername;
             }
-            InvitacionAmistad invitacionAmistad = new InvitacionAmistad();
-            invitacionAmistad.setUserenvia(userService.findUser(enviaUsername).get());
-            invitacionAmistad.setUserrecibe(recibe);
-            invitacionAmistad.setCreatedAt(new Date());
-            invitacionAmistadService.saveInvitacionAmistad(invitacionAmistad);
+
+            invitacionAmistadService.saveInvitacionAmistadFromForm(enviaUsername, recibe);
+
             model.put("usuarios", invitacionAmistadService.findFriendsUser(userService.findUser(enviaUsername).get()));
             return "redirect:/users/" + enviaUsername;
         }

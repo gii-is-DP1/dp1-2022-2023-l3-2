@@ -101,7 +101,7 @@
         </div>
     </c:if>
 
-    <c:if test="${usernames.size() > 1}">
+    <c:if test="${usernames.size() > 1 && isAdmin}">
         <h2>Tablero</h2>
         <c:if test="${usernames.size() == 2}">
             <form:form modelAttribute="tablero" class="form-horizontal" id="add-owner-form"
@@ -118,7 +118,7 @@
                 </div>
             </form:form>
         </c:if>
-        <c:if test="${usernames.size() == 3}">
+        <c:if test="${usernames.size() == 3 && isAdmin}">
             <form:form modelAttribute="tablero" class="form-horizontal" id="add-owner-form"
                 action="/partida/?username1=${usernames.get(0)}&username2=${usernames.get(1)}&username3=${usernames.get(2)}"
                 method="POST">
