@@ -16,7 +16,7 @@
                         <c:forEach items="${juegos}" var="juego">
 
                             <div class="alert alert-success" role="alert">
-                                Se te ha invitado a un <a href="/lobby/${juego.lobbyId}">lobby</a>
+                                Se te ha invitado a un <a href="/lobby/${juego.lobbyId}">lobby</a> 
                             </div>
                         </c:forEach>
 
@@ -24,7 +24,7 @@
                       <div class="alert alert-primary" role="alert">
                           <c:forEach items="${amigos}" var="notify">
                               <div class="alert alert-info" role="alert">
-                                Te ha agregado <a href="/users/${notify.userenvia.username}">${notify.userenvia.username}</a> como amigo
+                                Te ha agregado <a href="/users/${notify.userenvia.username}">${notify.userenvia.username}</a> como amigo 
                               </div>
                           </c:forEach>
 

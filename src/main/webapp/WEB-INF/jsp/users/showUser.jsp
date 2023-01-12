@@ -74,7 +74,7 @@
                         <tr>
                             <th style="width: 200px; text-align: center;">Nombre de Jugador</th>
                             <th style="width: 200px; text-align: center;">Materiales</th>
-                            <th style="width: 200px; text-align: center;">Cosa</th>
+              
                         </tr>
                     </thead>
                     <tbody>
