@@ -55,7 +55,7 @@ public class LobbyController {
     }
 
     @PostMapping("/")
-    public String processTablero(@Valid Lobby lobby, BindingResult result) {
+    public String processLobby(@Valid Lobby lobby, BindingResult result) {
         if (result.hasErrors()) {
             return lobbyForm;
         }
@@ -109,8 +109,7 @@ public class LobbyController {
             return "redirect:/lobby/" + lobby.getId();
         }
 
-        invitacionJuegoService.saveInvitacionAmistad(
-                lobbyService.añadirAmigo(lobby, userSearched, userService.findUser(lobby.getAdmin()).get()));
+        lobbyService.añadirAmigo(lobby, userSearched, userService.findUser(lobby.getAdmin()).get());
 
         return "redirect:/lobby/" + lobby.getId();
     }

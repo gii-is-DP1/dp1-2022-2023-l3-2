@@ -77,7 +77,7 @@ public class LobbyService {
     }
 
     @Transactional
-    public InvitacionJuego añadirAmigo(Lobby lobby, User userSearched, User admin) {
+    public void añadirAmigo(Lobby lobby, User userSearched, User admin) {
         lobby.getUsuarios().add(userSearched);
         InvitacionJuego invitacion = new InvitacionJuego();
         invitacion.setUserrecibe(userSearched);
@@ -85,7 +85,7 @@ public class LobbyService {
         invitacion.setLobbyId(lobby.getId());
         invitacion.setCreatedAt(new Date());
         lobby.setNumUsuarios(lobby.getNumUsuarios() + 1);
-        return invitacion;
+        invitacioJuegoRepository.save(invitacion);
 
     }
 
