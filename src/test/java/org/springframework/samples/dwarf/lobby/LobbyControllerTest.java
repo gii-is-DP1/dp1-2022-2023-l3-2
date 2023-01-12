@@ -18,12 +18,16 @@ import org.springframework.samples.dwarf.user.UserService;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+
+import com.jayway.jsonpath.Option;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import java.util.List;
@@ -91,7 +95,8 @@ public class LobbyControllerTest {
         amigos.setUserrecibe(rafa);
         invitacionAmistadService.saveInvitacionAmistad(amigos);
         Optional<User> aOptional = Optional.of(rafa);
-        given(this.userService.findUser("rafgargal")).willReturn(aOptional);
+        given(this.userService.findUser(any())).willReturn(aOptional);
+        given(this.userService.findAuthenticatedUser()).willReturn(rafa);
 
     }
 
@@ -103,32 +108,42 @@ public class LobbyControllerTest {
                 .andExpect(view().name("lobby/lobbyForm"));
     }
 
-    /*
-     * @WithMockUser(value = "spring")
-     * 
-     * @Test
-     * void testShow() throws Exception {
-     * mockMvc.perform(get("/lobby/1")).andExpect(status().isOk())
-     * .andExpect(model().attributeExists("user"))
-     * .andExpect(view().name("lobby/showLobby"));
-     * }
-     */
+    @WithMockUser(value = "spring")
+    @Test
+    void testProcessLobby() throws Exception {
+        mockMvc.perform(post("/lobby/").with(csrf()).param("id", "1")).andExpect(status().is(302))
+                .andExpect(view().name("redirect:/lobby/1"));
+    }
 
 
     @WithMockUser(value = "spring")
     @Test
     void testAddUser2() throws Exception {
-        mockMvc.perform(get("/lobby/1/add-user?exactUsername=user2")).andExpect(status().is(302))
+
+        mockMvc.perform(get("/lobby/1/add-user?exactUsername=rafgargal")).andExpect(status().is(302))
                 .andExpect(view().name("redirect:/lobby/1"));
     }
+
 
     @WithMockUser(value = "spring")
     @Test
     void testDelUser() throws Exception {
-        mockMvc.perform(get("/lobby/1/add-user?exactUsername=user2")).andExpect(status().is(302))
-                .andExpect(view().name("redirect:/lobby/1"));
-        mockMvc.perform(get("/lobby/1/delete-user?username=user2")).andExpect(status().is(302))
+
+        mockMvc.perform(get("/lobby/1/delete-user?username=rafgargal")).andExpect(status().is(302))
                 .andExpect(view().name("redirect:/lobby/1"));
 
     }
+
+    @WithMockUser(value = "spring")
+    @Test
+    void testDelLobby() throws Exception {
+        mockMvc.perform(get("/lobby/1/delete")).andExpect(status().is(302)).andExpect(view().name("redirect:/"));
+    }
+
+    @WithMockUser(value = "spring")
+    @Test
+    void testShowLobby() throws Exception {
+        mockMvc.perform(get("/lobby/1")).andExpect(status().is(200)).andExpect(view().name("lobby/showLobby"));
+    }
+
 }
