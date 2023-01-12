@@ -50,18 +50,23 @@ public class UserService {
     private InvitacionJuegoService invitacionJuegoService;
     private LobbyService lobbyService;
     private TableroService taservice;
+    private EstadisticaService estadisticaService;
+    private AuthoritiesService authoritiesService;
 
     @Autowired
     public UserService(UserRepository userRepository, JugadorService jService,
             InvitacionAmistadService invitacionAmistadService, LobbyService lobbyService,
             TableroService taservice,
-            InvitacionJuegoService invitacionJuegoService) {
+            InvitacionJuegoService invitacionJuegoService, EstadisticaService estadisticaService,
+            @Lazy AuthoritiesService authoritiesService) {
         this.userRepository = userRepository;
         this.jService = jService;
         this.invitacionAmistadService = invitacionAmistadService;
         this.lobbyService = lobbyService;
         this.taservice = taservice;
         this.invitacionJuegoService = invitacionJuegoService;
+        this.estadisticaService = estadisticaService;
+        this.authoritiesService = authoritiesService;
     }
 
     @Transactional
@@ -210,5 +215,34 @@ public class UserService {
             }
         }
         return acum;
+    }
+
+    @Transactional
+    public void createUser(User user) {
+        saveUser(user);
+        Estadistica estats = new Estadistica();
+        estats.setUsuario(user);
+        estats.setAcero(0);
+        estats.setHierro(0);
+        estats.setOro(0);
+        estats.setMedallas(0);
+        estats.setObjetos(0);
+        estats.setPuntos(0);
+        estats.setPartidasGanadas(0);
+        estats.setPartidasPerdidas(0);
+        estadisticaService.saveEstadistica(estats);
+        Authorities authority = new Authorities();
+        authority.setAuthority("jugador");
+        authority.setUser(user);
+        authoritiesService.saveAuthorities(authority);
+    }
+
+    @Transactional
+    public void modifyUser(User user) {
+        saveUser(user);
+        Authorities authority = new Authorities();
+        authority.setAuthority("jugador");
+        authority.setUser(user);
+        authoritiesService.saveAuthorities(authority);
     }
 }

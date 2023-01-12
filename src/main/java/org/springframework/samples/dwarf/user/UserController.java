@@ -192,39 +192,6 @@ public class UserController {
         }
     }
 
-    @PostMapping(value = "/users/friend")
-    public String processAddFriendForm(Map<String, Object> model, @Valid User user, BindingResult result) {
-
-        User currentUser = userService.findAuthenticatedUser();
-
-        if (result.hasErrors()) {
-            return "redirect:/users/" + currentUser.getUsername();
-        } else {
-
-            String enviaUsername = "";
-            User recibe = userService.findUser(user.username).get();
-
-            enviaUsername = currentUser.getUsername();
-
-            // si no encuentra al usuario
-            if (!userService.findAll().contains(userService.findUser(user.username).get())) {
-                return "redirect:/users/" + enviaUsername;
-            }
-
-            // amiga que ya esta
-            if (invitacionAmistadService.findFriendsUser(userService.findUser(enviaUsername).get())
-                    .contains(user.username)) {
-
-                return "redirect:/users/" + enviaUsername;
-            }
-
-            invitacionAmistadService.saveInvitacionAmistadFromForm(enviaUsername, recibe);
-
-            model.put("usuarios", invitacionAmistadService.findFriendsUser(userService.findUser(enviaUsername).get()));
-            return "redirect:/users/" + enviaUsername;
-        }
-    }
-
     @GetMapping(value = "/users/{userid}")
     public String showUser(@PathVariable("userid") String id, Map<String, Object> model,
             @RequestParam(required = false) String seccion) {
@@ -297,22 +264,7 @@ public class UserController {
                 return "redirect:/usersnew";
             }
 
-            userService.saveUser(user);
-            Estadistica estats = new Estadistica();
-            estats.setUsuario(user);
-            estats.setAcero(0);
-            estats.setHierro(0);
-            estats.setOro(0);
-            estats.setMedallas(0);
-            estats.setObjetos(0);
-            estats.setPuntos(0);
-            estats.setPartidasGanadas(0);
-            estats.setPartidasPerdidas(0);
-            estadisticaService.saveEstadistica(estats);
-            Authorities authority = new Authorities();
-            authority.setAuthority("jugador");
-            authority.setUser(user);
-            authoritiesService.saveAuthorities(authority);
+            userService.createUser(user);
             return "redirect:/";
         }
     }
@@ -336,34 +288,16 @@ public class UserController {
     public String modifyUser(@Valid User user, BindingResult result, RedirectAttributes redatt,
             @RequestParam("user") String id) {
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication.isAuthenticated()) {
-            User currentUser = userService.findAuthenticatedUser();
-            if (currentUser.getUsername().equals(id)
-                    || userService.findAuthenticatedUser().getAuthorities().stream()
-                            .anyMatch(a -> a.getAuthority().equals("admin"))) {
-                // if (user.getUsername().equals("")) {
-                // user.setUsername(userService.findUser(id).get().getUsername());
-                // }
-                // if (user.getPassword().equals("")) {
-                // user.setUsername(userService.findUser(id).get().getPassword());
-                // }
-                // if (user.getImgperfil().equals("")) {
-                // user.setUsername(userService.findUser(id).get().getImgperfil());
-                // }
-                userService.saveUser(user);
-                Authorities authority = new Authorities();
-                authority.setAuthority("jugador");
-                authority.setUser(user);
-                authoritiesService.saveAuthorities(authority);
-                return "redirect:/";
-            }
-
-            redatt.addFlashAttribute("mensaje", "No eres propietario de este usuario");
-            return "redirect:/users/mod";
-
+        User currentUser = userService.findAuthenticatedUser();
+        if (currentUser.getUsername().equals(id)
+                || userService.findAuthenticatedUser().getAuthorities().stream()
+                        .anyMatch(a -> a.getAuthority().equals("admin"))) {
+            userService.modifyUser(user);
+            return "redirect:/";
         }
-        return "redirect:/";
+
+        redatt.addFlashAttribute("mensaje", "No eres propietario de este usuario");
+        return "redirect:/users/mod";
     }
 
     @GetMapping("/users/{userid}/search-friends")
@@ -404,35 +338,47 @@ public class UserController {
 
         String enviaUsername = "";
         User recibe = userService.findUser(destUsername).get();
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User currentUser = userService.findAuthenticatedUser();
 
-        if (authentication != null) {
-            if (authentication.isAuthenticated()) {
-                org.springframework.security.core.userdetails.User currentUser = (org.springframework.security.core.userdetails.User) authentication
-                        .getPrincipal();
+        enviaUsername = currentUser.getUsername();
 
-                enviaUsername = currentUser.getUsername();
-
-            }
-        }
-        // si no encuentra al usuario
-        if (!userService.findAll().contains(userService.findUser(destUsername).get())) {
-            return "redirect:/users/" + enviaUsername;
-        }
-
-        // amiga que ya esta
-        if (invitacionAmistadService.findFriendsUser(userService.findUser(enviaUsername).get())
-                .contains(destUsername)) {
-
-            return "redirect:/users/" + enviaUsername;
-        }
-        InvitacionAmistad invitacionAmistad = new InvitacionAmistad();
-        invitacionAmistad.setUserenvia(userService.findUser(enviaUsername).get());
-        invitacionAmistad.setUserrecibe(recibe);
-        invitacionAmistad.setCreatedAt(new Date());
-        invitacionAmistadService.saveInvitacionAmistad(invitacionAmistad);
+        invitacionAmistadService.saveInvitacionAmistadFromForm(enviaUsername, recibe);
 
         return "redirect:/users/" + enviaUsername;
 
+    }
+
+    // No usado??
+    @PostMapping(value = "/users/friend")
+    public String processAddFriendForm(Map<String, Object> model, @Valid User user, BindingResult result) {
+
+        User currentUser = userService.findAuthenticatedUser();
+
+        if (result.hasErrors()) {
+            return "redirect:/users/" + currentUser.getUsername();
+        } else {
+
+            String enviaUsername = "";
+            User recibe = userService.findUser(user.username).get();
+
+            enviaUsername = currentUser.getUsername();
+
+            // si no encuentra al usuario
+            if (!userService.findAll().contains(userService.findUser(user.username).get())) {
+                return "redirect:/users/" + enviaUsername;
+            }
+
+            // amiga que ya esta
+            if (invitacionAmistadService.findFriendsUser(userService.findUser(enviaUsername).get())
+                    .contains(user.username)) {
+
+                return "redirect:/users/" + enviaUsername;
+            }
+
+            invitacionAmistadService.saveInvitacionAmistadFromForm(enviaUsername, recibe);
+
+            model.put("usuarios", invitacionAmistadService.findFriendsUser(userService.findUser(enviaUsername).get()));
+            return "redirect:/users/" + enviaUsername;
+        }
     }
 }
