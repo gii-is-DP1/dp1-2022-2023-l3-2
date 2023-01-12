@@ -1,8 +1,10 @@
 package org.springframework.samples.dwarf.user;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.samples.dwarf.lobby.Lobby;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class InvitacionAmistadService {
     private InvitacioAmistadRepository invitacionrepo;
+    private UserService userService;
 
     public Boolean condicionNoAmigo(Lobby lobby, User userSearched, User admin) {
         return !findFriendsUser(admin)
@@ -17,10 +20,10 @@ public class InvitacionAmistadService {
     }
 
     @Autowired
-    public InvitacionAmistadService(InvitacioAmistadRepository invitacionrepo) {
+    public InvitacionAmistadService(InvitacioAmistadRepository invitacionrepo, @Lazy UserService userService) {
         this.invitacionrepo = invitacionrepo;
+        this.userService = userService;
     }
-
 
     @Transactional
     public void saveInvitacionAmistad(InvitacionAmistad invitacion) {
@@ -45,5 +48,14 @@ public class InvitacionAmistadService {
     @Transactional
     public void deleteInvitacionAmistad(InvitacionAmistad invitacion) {
         invitacionrepo.delete(invitacion);
+    }
+
+    @Transactional
+    public void saveInvitacionAmistadFromForm(String enviaUsername, User recibe) {
+        InvitacionAmistad invitacionAmistad = new InvitacionAmistad();
+        invitacionAmistad.setUserenvia(userService.findUser(enviaUsername).get());
+        invitacionAmistad.setUserrecibe(recibe);
+        invitacionAmistad.setCreatedAt(new Date());
+        saveInvitacionAmistad(invitacionAmistad);
     }
 }

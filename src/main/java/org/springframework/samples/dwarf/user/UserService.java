@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.dwarf.jugador.Jugador;
 import org.springframework.samples.dwarf.jugador.JugadorService;
@@ -52,7 +53,8 @@ public class UserService {
 
     @Autowired
     public UserService(UserRepository userRepository, JugadorService jService,
-            InvitacionAmistadService invitacionAmistadService, LobbyService lobbyService, TableroService taservice,
+            InvitacionAmistadService invitacionAmistadService, LobbyService lobbyService,
+            TableroService taservice,
             InvitacionJuegoService invitacionJuegoService) {
         this.userRepository = userRepository;
         this.jService = jService;
