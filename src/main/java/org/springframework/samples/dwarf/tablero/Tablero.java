@@ -84,6 +84,81 @@ public class Tablero extends NamedEntity {
 
     }
 
+    public boolean mazoNormalTieneEnanoEncima(Integer posicion) {
+        final int PRIMER_MAZO_NORMAL = 1;
+        final int ULTIMO_MAZO_NORMAL = 9;
+        if (this.tieneEnanoEncima(this.getMazos().get(posicion - 1).getFirstCarta().getId())
+                && posicion >= PRIMER_MAZO_NORMAL
+                && posicion <= ULTIMO_MAZO_NORMAL)
+            return true;
+        return false;
+    }
+
+    public List<Integer> mazosConEnanoEncima() {
+        List<Enano> todosLosEnanos = new ArrayList<>();
+        for (Jugador j : this.getJugadores()) {
+            for (Enano e : j.getEnano()) {
+                todosLosEnanos.add(e);
+            }
+        }
+
+        return todosLosEnanos.stream().filter(e -> e.getMazo() != null)
+                .map(e -> e.getMazo().getId()).toList();
+    }
+
+    public List<Mazo> getSubMazos(Integer index) {
+        List<Mazo> mazo = this.getMazos();
+        List<Mazo> mazo1 = mazo.subList(0, 3);
+        List<Mazo> mazo2 = mazo.subList(3, 6);
+        List<Mazo> mazo3 = mazo.subList(6, 9);
+        List<Mazo> mazo4 = mazo.subList(9, 12);
+
+        return List.of(mazo1, mazo2, mazo3, mazo4).get(index);
+    }
+
+    public Map<Integer, String> getAsociacionesUsernameMazo() {
+        Map<Integer, String> asociacionesUsernameMazo = new HashMap<>(); // <idMazo, String>
+        for (Jugador j : this.getJugadores()) {
+            String username1 = j.getUser().getUsername();
+            for (Enano e : j.getEnano()) {
+                if (e.getMazo() != null) {
+                    asociacionesUsernameMazo.put(e.getMazo().getId(), username1);
+                }
+            }
+        }
+        return asociacionesUsernameMazo;
+    }
+
+    public Map<String, String> getAsociacionesColores() {
+        List<String> colores = Arrays.asList("Rojo", "Azul", "Amarillo");
+        Map<String, String> asociacionesColores = new HashMap<>(); // <username, color>
+        for (int i = 0; i < this.getJugadores().size(); i++) {
+            String username1 = this.getJugadores().get(i).getUser().getUsername();
+            asociacionesColores.put(username1, colores.get(i));
+        }
+        return asociacionesColores;
+    }
+
+    public String getUsernameByTurno() {
+        return this.getJugadores().stream().filter(j -> j.isTurno()).toList().get(0).getUser()
+                .getUsername();
+    }
+
+    public boolean alguienTiene4Objetos() {
+        if (this.getJugadores().get(0).getPosicionFinal() == null) {
+            for (Jugador j : this.getJugadores()) {
+                if (j.getObjeto() >= 4) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public Integer getCartasRestantesBaraja() {
+        return this.getMazos().get(this.getMazos().size() - 1).getCartas().size();
+    }
+
     public Jugador getJugadorByUsername(String username) {
         return jugadores.stream().filter(jugador -> jugador.getUser().getUsername().equals(username)).toList().get(0);
     }
@@ -215,5 +290,21 @@ public class Tablero extends NamedEntity {
         if (this.terminada)
             return secondsToHoursMinutesSeconds(secondsDiffBetweenTwoDates(this.createdAt, this.finishedAt));
         return secondsToHoursMinutesSeconds(secondsDiffBetweenTwoDates(this.createdAt, new Date()));
+    }
+
+    public Jugador getJugadorActual(String username) {
+        return this.getJugadores().stream()
+                .filter(jugador -> jugador.getUser().getUsername().equals(username))
+                .toList().get(0);
+    }
+
+    public List<Enano> getEnanosByUsername(String username) {
+        return this.getJugadores().stream()
+                .filter(jugador -> jugador.getUser().getUsername().equals(username))
+                .toList().get(0).getEnano();
+    }
+
+    public boolean alguienTieneEnanos() {
+        return this.getJugadores().stream().anyMatch(jugador -> jugador.getEnanosDisponibles() > 0);
     }
 }

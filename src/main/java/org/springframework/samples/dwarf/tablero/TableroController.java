@@ -68,7 +68,6 @@ public class TableroController {
         this.invitacionAmistadService = invitacionAmistadService;
     }
 
-    @Transactional
     @GetMapping("/")
     public String showTablero(Map<String, Object> model) {
         Tablero tabla = new Tablero();
@@ -76,81 +75,13 @@ public class TableroController {
         return tablero;
     }
 
-    @Transactional
     @PostMapping("/")
     public String processTablero(
             @RequestParam String name, @RequestParam(required = false) String username1,
             @RequestParam(required = false) String username2,
             @RequestParam(required = false) String username3) {
 
-        Tablero tabla = new Tablero();
-        tabla.setName(name);
-
-        List<Mazo> mazos = new ArrayList<>();
-        for (int i = 1; i < 14; i++) {
-            if (i <= 9) {
-                Carta carta = taservice.findCartaById(i);
-                List<Carta> cartas = new ArrayList<>();
-                Mazo mazo = new Mazo();
-                cartas.add(carta);
-                mazo.setPosicion(i);
-                mazo.setCartas(cartas);
-                mazos.add(mazo);
-            } else if (i < 13) {
-                List<Carta> cartasEspeciales = taservice.findByPosicion(i);
-                Mazo mazo = new Mazo();
-                mazo.setCartas(cartasEspeciales);
-                mazo.setPosicion(i);
-                mazos.add(mazo);
-            } else {
-                Mazo mazo = new Mazo();
-                List<Carta> cartas = new ArrayList<>();
-
-                for (int j = 10; j < 55; j++) {
-                    Carta carta = new Carta();
-                    carta = taservice.findCartaById(j);
-                    cartas.add(carta);
-                }
-                mazo.setPosicion(i);
-                mazo.setCartas(cartas);
-                mazos.add(mazo);
-            }
-        }
-
-        tabla.setRonda(1);
-        tabla.setMazos(mazos);
-        tabla.setTerminada(false);
-        List<Jugador> jugadores = new ArrayList<>();
-        if (username1 != null) {
-            Jugador j = jugadorService.createJugadorByUsername(username1, true);
-            jugadores.add(j);
-        }
-        if (username2 != null) {
-            Jugador j = jugadorService.createJugadorByUsername(username2, false);
-            jugadores.add(j);
-        }
-        if (username3 != null) {
-            Jugador j = jugadorService.createJugadorByUsername(username3, false);
-            jugadores.add(j);
-        }
-
-        // tabla.setJugadores(jugadorService.findAll());
-
-        tabla.setJugadores(jugadores);
-
-        // Seteamos los turnos iniciales
-        for (int i = 0; i < tabla.getJugadores().size(); i++) {
-            if (i == 0) {
-                tabla.getJugadores().get(i).setTurno(true);
-            } else {
-                tabla.getJugadores().get(i).setTurno(false);
-            }
-        }
-
-        tabla.setDefensaTotal(false);
-        tabla.setCreatedAt(new Date());
-
-        taservice.saveTablero(tabla);
+        Tablero tabla = taservice.saveTableroFromProcess(name, username1, username2, username3);
 
         return "redirect:/partida/" + tabla.getId() + "/comienza";
 
@@ -158,15 +89,10 @@ public class TableroController {
 
     @GetMapping("/all")
     public String showPartidasList(Model model) {
-        List<Tablero> partidas = taservice.findAll();
-        List<Tablero> result = new ArrayList<>();
-        for (Tablero tabla : partidas) {
-            if (tabla.isTerminada()) {
-                result.add(tabla);
-            }
-        }
 
-        model.addAttribute("partidas", result);
+        List<Tablero> partidas = taservice.findAllFinished();
+
+        model.addAttribute("partidas", partidas);
         model.addAttribute("terminadas", true);
 
         return showListaPartidas;
@@ -175,50 +101,25 @@ public class TableroController {
     @GetMapping("/en-curso")
     public String showPartidasEnCurso(Model model, HttpServletResponse response) {
         response.addHeader("Refresh", "2");
-        List<Tablero> partidas = taservice.findAll();
-        List<Tablero> result = new ArrayList<>();
-        for (Tablero tabla : partidas) {
-            if (!tabla.isTerminada()) {
-                result.add(tabla);
-            }
-        }
-        model.addAttribute("partidas", result);
+
+        List<Tablero> partidas = taservice.findAllNotFinished();
+
+        model.addAttribute("partidas", partidas);
         model.addAttribute("terminadas", false);
 
         return showListaPartidas;
     }
 
-    @Transactional
     @GetMapping("/{partidaId}")
     public String showTablero(@PathVariable("partidaId") Integer id, Model model, HttpServletResponse response) {
         /* response.addHeader("Refresh", "3"); */
 
         Tablero table = taservice.findById(id);
 
-        if (!table.getJugadores().stream().map(j -> j.getUser()).toList()
-                .contains(userService.findAuthenticatedUser())) {
-            if (!table.getJugadores().stream().map(j -> j.getUser()).toList()
-                    .containsAll(invitacionAmistadService.findFriends(userService.findAuthenticatedUser()).stream()
-                            .map(j -> j.getUserrecibe()).toList())
-                    || invitacionAmistadService.findFriends(userService.findAuthenticatedUser()).isEmpty()) {
-                return "redirect:/";
-            }
-        }
-        List<Mazo> mazo = table.getMazos();
-        List<Mazo> mazo1 = mazo.subList(0, 3);
-        List<Mazo> mazo2 = mazo.subList(3, 6);
-        List<Mazo> mazo3 = mazo.subList(6, 9);
-        List<Mazo> mazo4 = mazo.subList(9, 12);
+        if (!taservice.puedoSerEspectador(table))
+            return "redirect:/";
 
-        // PROVISIONAL: ENANO EN MAZO
-        List<Enano> todosLosEnanos = new ArrayList<>();
-        for (Jugador j : table.getJugadores()) {
-            for (Enano e : j.getEnano()) {
-                todosLosEnanos.add(e);
-            }
-        }
-        List<Integer> mazosConEnanoEncima = todosLosEnanos.stream().filter(e -> e.getMazo() != null)
-                .map(e -> e.getMazo().getId()).toList();
+        List<Integer> mazosConEnanoEncima = table.mazosConEnanoEncima();
 
         model.addAttribute("mazosConEnanoEncima", mazosConEnanoEncima);
         model.addAttribute("id_partida", table.getId());
@@ -226,40 +127,21 @@ public class TableroController {
         model.addAttribute("chat", table.getChat());
         model.addAttribute("partida", table);
         model.addAttribute("chatLine", new ChatLine());
-        // ==============================
 
-        String username = table.getJugadores().stream().filter(j -> j.isTurno()).toList().get(0).getUser()
-                .getUsername();
+        String username = table.getUsernameByTurno();
+
         model.addAttribute("username", username);
-        model.addAttribute("tablero1", mazo1);
-        model.addAttribute("tablero2", mazo2);
-        model.addAttribute("tablero3", mazo3);
-        model.addAttribute("tablero4", mazo4);
+        model.addAttribute("tablero1", table.getSubMazos(0));
+        model.addAttribute("tablero2", table.getSubMazos(1));
+        model.addAttribute("tablero3", table.getSubMazos(2));
+        model.addAttribute("tablero4", table.getSubMazos(3));
         model.addAttribute("jugadores", table.getJugadores());
-        model.addAttribute("cartasRestantesBaraja",
-                table.getMazos().get(table.getMazos().size() - 1).getCartas().size());
+        model.addAttribute("cartasRestantesBaraja", table.getCartasRestantesBaraja());
 
-        Map<Integer, String> asociacionesUsernameMazo = new HashMap<>(); // <idMazo, String>
-        for (Jugador j : table.getJugadores()) {
-            String username1 = j.getUser().getUsername();
-            for (Enano e : j.getEnano()) {
-                if (e.getMazo() != null) {
-                    asociacionesUsernameMazo.put(e.getMazo().getId(), username1);
-                }
-            }
-        }
-        model.addAttribute("asociacionesUsernameMazo", asociacionesUsernameMazo);
-
-        System.out.println(asociacionesUsernameMazo.toString());
+        model.addAttribute("asociacionesUsernameMazo", table.getAsociacionesUsernameMazo());
 
         // Colores enanos
-        List<String> colores = Arrays.asList("Rojo", "Azul", "Amarillo");
-        Map<String, String> asociacionesColores = new HashMap<>(); // <username, color>
-        for (int i = 0; i < table.getJugadores().size(); i++) {
-            String username1 = table.getJugadores().get(i).getUser().getUsername();
-            asociacionesColores.put(username1, colores.get(i));
-        }
-        model.addAttribute("asociacionesColores", asociacionesColores);
+        model.addAttribute("asociacionesColores", table.getAsociacionesColores());
 
         // Rondas
         model.addAttribute("ronda", table.getRonda());
@@ -270,198 +152,59 @@ public class TableroController {
                     table.getJugadores().stream().sorted(Comparator.comparing(j -> j.getPosicionFinal())).toList());
         }
 
-        if (table.getJugadores().get(0).getPosicionFinal() == null) {
-            for (Jugador j : table.getJugadores()) {
-                if (j.getObjeto() >= 4) {
-                    return "redirect:/partida/" + id + "/fin";
-                }
-            }
-        }
-        /*
-         * Codigo para cronometro
-         * while (table.getJugadores().stream().map(j ->
-         * j.getPosicionFinal()).anyMatch(p -> p == null)) {
-         * table.actualizaCrono();
-         * }
-         */
-        return tablero1;
+        if (table.alguienTiene4Objetos())
+            return "redirect:/partida/" + id + "/fin";
 
+        return tablero1;
     }
 
-    @Transactional
     @GetMapping("/{partidaId}/comienza")
     public String rondaPrincipio(@PathVariable("partidaId") Integer id) {
         Tablero tabla = taservice.findById(id);
 
-        // Coger dos cartas aleatorias de la baraja y colocarlas
-        List<Carta> baraja = tabla.getMazos().get(tabla.getMazos().size() - 1).getCartas();
+        taservice.sacarYColocarCartasDeBaraja(tabla);
 
-        /*
-         * Generar valor aleatorio ejemplo:
-         * int HASTA = 20;
-         * int DESDE = 7;
-         * int aleatorio = (int)(Math.random()*(HASTA-DESDE+1)+DESDE);
-         */
-        Carta cartaTemporal = null;
-        for (int i = 0; i < 2; i++) {
-            int DESDE = 0;
-            int HASTA = baraja.size() - 1;
-
-            int indexCarta = (int) (Math.random() * (HASTA - DESDE + 1) + DESDE);
-
-            Carta carta = tabla.getMazos().get(12).getCartas().get(indexCarta);
-            if (i == 0) {
-                cartaTemporal = carta;
-            }
-            tabla.getMazos().stream().filter(mazo -> mazo.getPosicion() == carta.getPosicion()).toList().get(0)
-                    .getCartas()
-                    .add(0, carta);
-            baraja.remove(carta);
-            if (i == 1 && cartaTemporal.getPosicion().equals(carta.getPosicion())) {
-                int indexCarta3 = (int) (Math.random() * (HASTA - DESDE + 1) + DESDE);
-                Carta carta3 = tabla.getMazos().get(12).getCartas().get(indexCarta3);
-                tabla.getMazos().stream().filter(mazo -> mazo.getPosicion() == carta3.getPosicion()).toList().get(0)
-                        .getCartas()
-                        .add(0, carta3);
-                baraja.remove(carta3);
-            }
-            if (baraja.size() == 0)
-                break;
-        }
-
-        List<Jugador> jugadores = tabla.getJugadores();
-        for (Jugador j : jugadores) {
-            List<Enano> enanos = new ArrayList<>();
-            for (int r = 0; r < 4; r++) {
-                Enano enano = new Enano();
-                enano.setPosicion(12);
-                enanos.add(enano);
-            }
-            j.setEnano(enanos);
-
-        }
-
-        // Se establecen los enanos disponibles por defecto a 2
-        tabla.getJugadores().stream().forEach(jugador -> jugador.setEnanosDisponibles(2));
-
-        // Forzamos una carta de ayuda al inicio para testing
-        // tabla.getMazos().get(1).getCartas().add(0,
-        // tabla.getMazos().get(12).getCartas().stream()
-        // .filter(cartas -> cartas.getId() == 24 || cartas.getId() ==
-        // 32).toList().get(0));
+        taservice.descolocarEnanos(tabla);
 
         return "redirect:/partida/" + id;
     }
 
-    @Transactional
     @GetMapping("/{partidaId}/coloca")
     public String rondaColoca(@PathVariable("partidaId") Integer id, Model model, @RequestParam String username,
             @RequestParam Integer posicion) {
 
         Tablero tabla = taservice.findById(id);
+        Mazo mazoSeleccionado = tabla.getMazos().get(posicion - 1);
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null) {
-            if (authentication.isAuthenticated()) {
-                User currentUser = (User) authentication.getPrincipal();
-                if (!username.equals(currentUser.getUsername())) { // Cambiar para usar autenticacion
-                    System.out.println("#".repeat(200));
-                    return "redirect:/partida/" + id;
-                }
+        if (!userService.findAuthenticatedUser().getUsername().equals(username))
+            return "redirect:/partida/" + id;
 
-                // Si el mazo ya tiene un enano encima no se coloca
-                if (tabla.tieneEnanoEncima(tabla.getMazos().get(posicion - 1).getFirstCarta().getId()) && posicion >= 1
-                        && posicion <= 9)
-                    return "redirect:/partida/" + id;
+        if (tabla.mazoNormalTieneEnanoEncima(posicion))
+            return "redirect:/partida/" + id;
 
-                if (tabla.getMazos().get(posicion - 1).getFirstCarta().getTipo().getName().equals("base"))
-                    return "redirect:/partida/" + id;
+        if (mazoSeleccionado.getFirstCarta().getTipo().getName().equals("base"))
+            return "redirect:/partida/" + id;
 
-                Jugador jugadorActual = tabla.getJugadores().stream()
-                        .filter(jugador -> jugador.getUser().getUsername().equals(username))
-                        .toList().get(0);
+        Jugador jugadorActual = tabla.getJugadorActual(username);
 
-                if (tabla.getMazos().get(posicion - 1).getFirstCarta().getTipo().getName().equals("ayuda")) {
-                    // jugador con username igual al query
-
-                    jugadorActual.setEnanosDisponibles(jugadorActual.getEnanosDisponibles() + 2);
-                }
-                List<Enano> enanosJugador = tabla.getJugadores().stream()
-                        .filter(jugador -> jugador.getUser().getUsername().equals(username))
-                        .toList().get(0).getEnano();
-                // Colocar enanos sobre todo el tablero (para las cartas especiales y no
-                // especiales)
-
-                for (Enano e : enanosJugador) {
-                    if (e.getPosicion() == 12) {
-                        e.setPosicion(posicion);
-                        for (Mazo mazo : tabla.getMazos()) {
-                            if (10 <= mazo.getPosicion() && 13 > mazo.getPosicion() && enanosJugador.size() >= 1
-                                    && tabla.getJugadores().stream()
-                                            .filter(jugador -> jugador.getUser().getUsername().equals(username))
-                                            .map(j -> j.getMedalla()).toList().get(0) >= 4
-                                    && mazo.getPosicion() == posicion) {
-                                tabla.getJugadorByUsername(username)
-                                        .setMedalla(tabla.getJugadorByUsername(username).getMedalla() - 4);
-                                e.setMazo(mazo);
-                                jugadorActual.setEnanosDisponibles(jugadorActual.getEnanosDisponibles() - 1);
-
-                                break;
-                            } else if (10 <= mazo.getPosicion() && 13 > mazo.getPosicion() && enanosJugador.size() >= 2
-                                    && mazo.getPosicion() == posicion) {
-                                e.setMazo(mazo);
-                                jugadorActual.setEnanosDisponibles(jugadorActual.getEnanosDisponibles() - 2);
-                                break;
-
-                            } else if (!(10 <= mazo.getPosicion() && 13 > mazo.getPosicion())
-                                    && posicion == mazo.getPosicion()) {
-                                e.setMazo(mazo);
-                                jugadorActual.setEnanosDisponibles(jugadorActual.getEnanosDisponibles() - 1);
-
-                                break;
-
-                            }
-                        }
-                        break;
-                    }
-                }
-
-                String accion5 = tabla.getMazos().get(posicion - 1).getFirstCarta().accion5(tabla, jugadorActual);
-
-                if (!tabla.getJugadores().stream().anyMatch(jugador -> jugador.getEnanosDisponibles() > 0))
-                    return "redirect:/partida/" + id + "/recursos";
-
-                // Seteamos turno en el siguiente jugador con enanos disponibles
-                int indexOfJugadorActual = tabla.getJugadores().indexOf(jugadorActual);
-
-                int i = indexOfJugadorActual + 1;
-                if (accion5 != null) {
-                    return accion5;
-                }
-                while (true) {
-
-                    if (i == tabla.getJugadores().size()) {
-                        i = 0;
-                        continue;
-                    }
-
-                    if (tabla.getJugadores().get(i).getEnanosDisponibles() > 0) {
-                        tabla.setTurnoByUsername(tabla.getJugadores().get(i).getUser().getUsername());
-                        break;
-                    }
-
-                    i++;
-                }
-
-                // Nueva condicion de llamada a recursos
-                // si enanosDisponibles de todos igual a 0
-
-                return "redirect:/partida/" + id;
-
-            }
+        if (mazoSeleccionado.isFirstCartaTipo("ayuda")) {
+            jugadorActual.setEnanosDisponibles(jugadorActual.getEnanosDisponibles() + 2);
         }
-        return "redirect:/login/";
 
+        taservice.colocarEnanos(tabla, username, posicion);
+
+        String accion5 = tabla.getMazos().get(posicion - 1).getFirstCarta().accion5(tabla, jugadorActual);
+
+        if (!tabla.alguienTieneEnanos())
+            return "redirect:/partida/" + id + "/recursos";
+
+        if (accion5 != null) {
+            return accion5;
+        }
+
+        taservice.setSiguienteTurno(tabla, username);
+
+        return "redirect:/partida/" + id;
     }
 
     @Transactional
