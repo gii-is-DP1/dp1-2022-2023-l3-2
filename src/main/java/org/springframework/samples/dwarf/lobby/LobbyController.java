@@ -103,49 +103,52 @@ public class LobbyController {
         return showLobby;
     }
 
-    @Transactional
-    @PostMapping("/{lobbyId}/add-user")
-    public String addUser(@PathVariable("lobbyId") Integer id, @Valid User user, BindingResult result) {
+    // @Transactional
+    // @PostMapping("/{lobbyId}/add-user")
+    // public String addUser(@PathVariable("lobbyId") Integer id, @Valid User user,
+    // BindingResult result) {
 
-        Lobby lobby = lobbyService.findById(id);
+    // Lobby lobby = lobbyService.findById(id);
 
-        if (result.hasErrors()) {
-            return "redirect:/lobby" + lobby.getId();
-        }
+    // if (result.hasErrors()) {
+    // return "redirect:/lobby" + lobby.getId();
+    // }
 
-        // Lobby no puede tener mas de 3 users
-        if (lobby.getUsuarios().size() > 2) {
-            return "redirect:/lobby/" + lobby.getId();
-        }
+    // // Lobby no puede tener mas de 3 users
+    // if (lobby.getUsuarios().size() > 2) {
+    // return "redirect:/lobby/" + lobby.getId();
+    // }
 
-        Optional<User> user1 = userService.findUser(user.getUsername());
+    // Optional<User> user1 = userService.findUser(user.getUsername());
 
-        if (!user1.isPresent()) {
-            return "redirect:/lobby/" + lobby.getId();
-        }
-        User userSearched = user1.get();
+    // if (!user1.isPresent()) {
+    // return "redirect:/lobby/" + lobby.getId();
+    // }
+    // User userSearched = user1.get();
 
-        // No puedes añadir un usuario que ya está
-        if (lobby.getUsuarios().stream().anyMatch(usr -> usr.getUsername().equals(userSearched.getUsername()))) {
-            return "redirect:/lobby/" + lobby.getId();
-        }
-        // No es su amigo
-        if (!invitacionAmistadService.findFriendsUser(userService.findUser(lobby.getAdmin()).get())
-                .contains(userSearched.getUsername())) {
-            return "redirect:/lobby/" + lobby.getId();
-        }
+    // // No puedes añadir un usuario que ya está
+    // if (lobby.getUsuarios().stream().anyMatch(usr ->
+    // usr.getUsername().equals(userSearched.getUsername()))) {
+    // return "redirect:/lobby/" + lobby.getId();
+    // }
+    // // No es su amigo
+    // if
+    // (!invitacionAmistadService.findFriendsUser(userService.findUser(lobby.getAdmin()).get())
+    // .contains(userSearched.getUsername())) {
+    // return "redirect:/lobby/" + lobby.getId();
+    // }
 
-        lobby.getUsuarios().add(userSearched);
-        InvitacionJuego invitacion = new InvitacionJuego();
-        invitacion.setUserrecibe(userSearched);
-        invitacion.setUserenvia(userService.findUser(lobby.getAdmin()).get());
-        invitacion.setLobbyId(lobby.getId());
-        invitacion.setCreatedAt(new Date());
-        invitacionJuegoService.saveInvitacionAmistad(invitacion);
-        lobby.setNumUsuarios(lobby.getNumUsuarios() + 1);
+    // lobby.getUsuarios().add(userSearched);
+    // InvitacionJuego invitacion = new InvitacionJuego();
+    // invitacion.setUserrecibe(userSearched);
+    // invitacion.setUserenvia(userService.findUser(lobby.getAdmin()).get());
+    // invitacion.setLobbyId(lobby.getId());
+    // invitacion.setCreatedAt(new Date());
+    // invitacionJuegoService.saveInvitacionAmistad(invitacion);
+    // lobby.setNumUsuarios(lobby.getNumUsuarios() + 1);
 
-        return "redirect:/lobby/" + lobby.getId();
-    }
+    // return "redirect:/lobby/" + lobby.getId();
+    // }
 
     @Transactional
     @GetMapping("/{lobbyId}/add-user")
