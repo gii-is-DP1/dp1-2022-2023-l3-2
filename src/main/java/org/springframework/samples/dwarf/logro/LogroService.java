@@ -9,6 +9,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.dwarf.jugador.Jugador;
 import org.springframework.samples.dwarf.jugador.JugadorService;
+import org.springframework.samples.dwarf.user.Estadistica;
 import org.springframework.samples.dwarf.user.User;
 import org.springframework.samples.dwarf.user.UserService;
 import org.springframework.stereotype.Service;
@@ -58,6 +59,7 @@ public class LogroService {
     public List<Logro> findLogrosByUsername(String username) {
 
         User usuario = userService.findUser(username).get();
+        Estadistica estadistica = usuario.getEstadistica();
 
         List<Jugador> jugadores = jugadorService.findJugadorUser(username);
 
@@ -70,29 +72,15 @@ public class LogroService {
                     logrosCumplidos.add(logro);
             }
             if (logro.getTipo().getName().equals("recursos_conseguidos")) {
-
-                Integer hierro = 0;
-                Integer acero = 0;
-                Integer objetos = 0;
-                Integer medallas = 0;
-                Integer oro = 0;
-                for (Jugador j : jugadores) {
-                    hierro += j.getHierro();
-                    acero += j.getAcero();
-                    objetos += j.getObjeto();
-                    medallas += j.getMedalla();
-                    oro += j.getOro();
-                }
-
-                if (logro.getName().contains("hierro") && hierro >= logro.getRequisito())
+                if (logro.getName().contains("hierro") && estadistica.getHierro() >= logro.getRequisito())
                     logrosCumplidos.add(logro);
-                if (logro.getName().contains("acero") && acero >= logro.getRequisito())
+                if (logro.getName().contains("acero") && estadistica.getAcero() >= logro.getRequisito())
                     logrosCumplidos.add(logro);
-                if (logro.getName().contains("objetos") && objetos >= logro.getRequisito())
+                if (logro.getName().contains("objetos") && estadistica.getObjetos() >= logro.getRequisito())
                     logrosCumplidos.add(logro);
-                if (logro.getName().contains("medallas") && medallas >= logro.getRequisito())
+                if (logro.getName().contains("medallas") && estadistica.getMedallas() >= logro.getRequisito())
                     logrosCumplidos.add(logro);
-                if (logro.getName().contains("oro") && oro >= logro.getRequisito())
+                if (logro.getName().contains("oro") && estadistica.getOro() >= logro.getRequisito())
                     logrosCumplidos.add(logro);
             }
 
