@@ -2,6 +2,7 @@ package org.springframework.samples.dwarf.tablero;
 
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.BDDMockito.given;
 
@@ -23,6 +24,8 @@ import org.springframework.samples.dwarf.jugador.JugadorService;
 import org.springframework.samples.dwarf.user.Authorities;
 import org.springframework.samples.dwarf.user.AuthoritiesService;
 import org.springframework.samples.dwarf.user.EstadisticaService;
+import org.springframework.samples.dwarf.user.InvitacionAmistad;
+import org.springframework.samples.dwarf.user.InvitacionAmistadService;
 import org.springframework.samples.dwarf.user.User;
 import org.springframework.samples.dwarf.user.UserService;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
@@ -49,6 +52,9 @@ public class TableroControllerTest {
 
     @Autowired
     MockMvc mockMvc;
+
+    @MockBean
+    private InvitacionAmistadService invitacionAmistadService;
 
     @MockBean
     private TableroService taService;
@@ -114,6 +120,10 @@ public class TableroControllerTest {
         authoritiesService.saveAuthorities(authority);
 
         alegarsan.setUser(ale);
+        InvitacionAmistad invi = new InvitacionAmistad();
+        invi.setId(1);
+        invi.setCreatedAt(new Date());
+        invi.setUserenvia(ale);
 
         Jugador rafgargal = new Jugador();
         rafgargal.setId(2);
@@ -149,6 +159,8 @@ public class TableroControllerTest {
         jugadorService.saveJugador(rafgargal);
         given(jugadorService.findOwnerById(1)).willReturn(alegarsan);
         given(jugadorService.findOwnerById(2)).willReturn(rafgargal);
+        invi.setUserrecibe(rafa);
+        invitacionAmistadService.saveInvitacionAmistad(invi);
 
         jugadores.add(jugadorService.findOwnerById(1));
         jugadores.add(jugadorService.findOwnerById(2));
@@ -220,7 +232,7 @@ public class TableroControllerTest {
         ChatLine chat = new ChatLine();
         chat.setId(1);
         chat.setMensaje("Hol hola");
-        chat.setUsername("alegarsan");
+        chat.setUsername("alegarsan11");
         chatLineService.saveChatLine(chat);
         tableroPrueba.setChat(List.of(chat));
 
@@ -231,6 +243,8 @@ public class TableroControllerTest {
         System.out.println(tableroPrueba.getMazos().stream().map(j -> j.getCartas()).toList());
         taService.saveTablero(tableroPrueba);
         given(this.taService.findById(1)).willReturn(tableroPrueba);
+        invi.setUserrecibe(ale);
+        given(this.invitacionAmistadService.findFriends(any())).willReturn(List.of(invi));
 
     }
 
@@ -257,11 +271,11 @@ public class TableroControllerTest {
      * }
      */
 
-    @WithMockUser(value = "spring")
+    @WithMockUser(value = "alegarsan11")
     @Test
     void testShowTablero1() throws Exception {
         given(this.taService.findById(TEST_TABLERO_ID)).willReturn(tableroPrueba);
-        mockMvc.perform(get("/partida/{partidaId}", TEST_TABLERO_ID)).andExpect(status().isOk())
+        mockMvc.perform(get("/partida/{partidaId}", TEST_TABLERO_ID)).andExpect(status().is(200))
                 .andExpect(view().name("tablero/Showtablerocopy"));
                 
     }

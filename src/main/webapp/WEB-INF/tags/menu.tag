@@ -43,12 +43,13 @@
 					<span>Usuarios</span>
 				</petclinic:menuItem>
                 </sec:authorize>
-
+                <sec:authorize access="hasAuthority('admin')">
 				<petclinic:menuItem active="${name eq 'tablero'}" url="/partida/en-curso"
 					title="Partidas">
 					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
 					<span>Partidas</span>
 				</petclinic:menuItem>
+				</sec:authorize>
                 <petclinic:menuItem active="${name eq 'lobby'}" url="/lobby/"
 					title="Lobby">
 					<span class="glyphicon glyphicon-globe" aria-hidden="true"></span>
