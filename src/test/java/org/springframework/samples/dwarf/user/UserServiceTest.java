@@ -87,5 +87,12 @@ public class UserServiceTest {
         Integer punt = puntuaciones.get(jualeomad);
         assertThat(punt).isEqualTo(0);
     }
-    
+
+    @Test
+    public void shouldGetPages() {
+        List<User> usuarios = List.of(userService.findUser("alegarsan11").get());
+        userService.getPages(usuarios);
+        assertEquals(userService.getPages(usuarios).size(), 1);
+    }
+
 }
