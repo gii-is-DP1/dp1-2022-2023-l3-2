@@ -29,4 +29,8 @@ public class Mazo extends NamedEntity {
     public Carta getFirstCarta() {
         return cartas.get(0);
     }
+
+    public boolean isFirstCartaTipo(String tipo) {
+        return this.getFirstCarta().getTipo().getName().equals(tipo);
+    }
 }

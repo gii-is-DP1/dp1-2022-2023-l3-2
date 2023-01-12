@@ -21,6 +21,9 @@ public interface TableroRepository extends Repository<Tablero, String> {
     @Query("SELECT tablero FROM Tablero tablero WHERE tablero.finishedAt IS NOT NULL")
     List<Tablero> findAllFinished();
 
+    @Query("SELECT tablero FROM Tablero tablero WHERE tablero.finishedAt IS NULL")
+    List<Tablero> findAllNotFinished();
+
     @Query("SELECT DISTINCT carta FROM Carta carta")
     List<Carta> findAllCartas();
 
