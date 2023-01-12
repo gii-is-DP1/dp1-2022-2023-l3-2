@@ -1,8 +1,6 @@
 package org.springframework.samples.dwarf.lobby;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -13,7 +11,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.samples.dwarf.user.Authorities;
 import org.springframework.samples.dwarf.user.AuthoritiesService;
-import org.springframework.samples.dwarf.user.Estadistica;
 import org.springframework.samples.dwarf.user.User;
 import org.springframework.samples.dwarf.user.UserService;
 import org.springframework.stereotype.Service;
@@ -82,8 +79,16 @@ public class InvitacionJuegoServiceTest {
     }
 
     @Test
-    public void shouldFindFriendsUser() {
+    public void shouldFindAll() {
+        List<InvitacionJuego> invs = invitacionJuegoService.findAll();
+        assertThat(invs.size()).isEqualTo(1);
 
+        InvitacionJuego inv = invs.get(0);
+        assertThat(inv.getLobbyId()).isEqualTo(1);
+    }
+
+    @Test
+    public void shouldFindFriendsUser() {
         List<String> friends = invitacionJuegoService.findFriendsUser(user1);
         assertThat(friends.size()).isEqualTo(1);
     }
@@ -93,4 +98,18 @@ public class InvitacionJuegoServiceTest {
         List<InvitacionJuego> invs = invitacionJuegoService.findBoth(user1, user2);
         assertThat(invs.size()).isEqualTo(1);
     }
+
+    @Test
+    public void shouldDelInvi() {
+        InvitacionJuego inv = invitacionJuegoService.findAll().get(0);
+        invitacionJuegoService.delInvi(inv);
+        assertThat(invitacionJuegoService.findAll().size()).isEqualTo(0);
+    }
+
+    @Test
+    public void shouldFindInvitacionesByUser() {
+        List<InvitacionJuego> invs = invitacionJuegoService.findInvitacionesByUser(user1);
+        assertThat(invs.size()).isEqualTo(1);
+    }
+
 }
