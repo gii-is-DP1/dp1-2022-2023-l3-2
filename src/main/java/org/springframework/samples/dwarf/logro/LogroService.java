@@ -61,8 +61,6 @@ public class LogroService {
         User usuario = userService.findUser(username).get();
         Estadistica estadistica = usuario.getEstadistica();
 
-        List<Jugador> jugadores = jugadorService.findJugadorUser(username);
-
         List<Logro> logrosAll = findAll();
         List<Logro> logrosCumplidos = new ArrayList<>();
 
