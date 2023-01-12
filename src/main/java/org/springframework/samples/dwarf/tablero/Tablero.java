@@ -307,4 +307,9 @@ public class Tablero extends NamedEntity {
     public boolean alguienTieneEnanos() {
         return this.getJugadores().stream().anyMatch(jugador -> jugador.getEnanosDisponibles() > 0);
     }
+
+    public boolean barajaTieneCartas() {
+        final int BARAJA = 12;
+        return this.getMazos().get(BARAJA).getCartas().size() != 0;
+    }
 }

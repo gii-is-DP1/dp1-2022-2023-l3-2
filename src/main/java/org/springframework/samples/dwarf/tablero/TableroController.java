@@ -16,7 +16,6 @@ import javax.transaction.Transactional;
 import javax.validation.Valid;
 import javax.websocket.server.PathParam;
 
-import org.springframework.security.core.userdetails.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.samples.dwarf.carta.Carta;
@@ -25,6 +24,7 @@ import org.springframework.samples.dwarf.jugador.Jugador;
 import org.springframework.samples.dwarf.jugador.JugadorService;
 import org.springframework.samples.dwarf.user.EstadisticaService;
 import org.springframework.samples.dwarf.user.InvitacionAmistadService;
+import org.springframework.samples.dwarf.user.User;
 import org.springframework.samples.dwarf.user.UserService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -185,15 +185,13 @@ public class TableroController {
         if (mazoSeleccionado.getFirstCarta().getTipo().getName().equals("base"))
             return "redirect:/partida/" + id;
 
-        Jugador jugadorActual = tabla.getJugadorActual(username);
-
         if (mazoSeleccionado.isFirstCartaTipo("ayuda")) {
-            jugadorActual.setEnanosDisponibles(jugadorActual.getEnanosDisponibles() + 2);
+            taservice.incrementarEnanosPorAyuda(tabla, username);
         }
 
         taservice.colocarEnanos(tabla, username, posicion);
 
-        String accion5 = tabla.getMazos().get(posicion - 1).getFirstCarta().accion5(tabla, jugadorActual);
+        String accion5 = taservice.ejecutarAccionEnColoca(tabla, posicion, username);
 
         if (!tabla.alguienTieneEnanos())
             return "redirect:/partida/" + id + "/recursos";
@@ -207,109 +205,31 @@ public class TableroController {
         return "redirect:/partida/" + id;
     }
 
-    @Transactional
     @GetMapping("{partidaId}/recursos")
     public String rondaRecursos(@PathVariable("partidaId") Integer id) {
         Tablero tabla = taservice.findById(id);
 
-        if (tabla.getMazos().get(12).getCartas().size() == 0) {
+        if (!tabla.barajaTieneCartas()) {
             return "redirect:/partida/" + id + "/fin";
         }
 
-        tabla.getJugadores().stream().filter(j -> j.isTurno()).toList().get(0).setTurno(false);
-        // tabla.getJugadores().get(0).setTurno(true);
+        taservice.quitarTurnoActual(tabla);
 
-        boolean farmeo2 = true;
-        int accion = 1;
-        farmeo2 = tabla.analizarDefensas();
-        while (accion <= 5) {
-            for (Jugador j : tabla.getJugadores()) {
-                for (Enano e : j.getEnano()) {
-                    if (e.getPosicion() != 12) {
-                        Carta primera = e.getMazo().getFirstCarta();
-                        if (accion == 2)
-                            primera.accion2(tabla, j, e);
-                        if (accion == 3 && farmeo2)
-                            primera.accion3(tabla, j, e);
-                        if (accion == 4)
-                            primera.accion4(tabla, j, e);
-                    }
-                }
-            }
-            accion++;
-        }
+        taservice.ejecutarAccionesCartasEnRecursos(tabla);
 
-        tabla.getJugadores().stream().filter(j -> j.isPrimerjugador()).toList().get(0).setTurno(true);
+        taservice.setTurnoToPrimerJugador(tabla);
 
-        // Sumamos 1 ronda
-        tabla.setRonda(tabla.getRonda() + 1);
+        taservice.incrementarRonda(tabla);
 
         return "redirect:/partida/" + id + "/comienza";
     }
 
-    @Transactional
     @GetMapping("{partidaId}/fin")
     public String finPartida(@PathVariable("partidaId") Integer id) {
         Tablero tabla = taservice.findById(id);
 
-        // Comprobamos si tenemos ganador sin desempate
-        Map<String, Integer> mayorias = new HashMap<>();
-        // Inicializamos mayorias a 0
-        for (Jugador j : tabla.getJugadores()) {
-            mayorias.put(j.getUser().getUsername(), 0);
-        }
+        taservice.calcularPosicionesFinales(tabla);
 
-        List<Integer> oro = tabla.getJugadores().stream().map(j -> j.getOro()).toList();
-        List<Integer> acero = tabla.getJugadores().stream().map(j -> j.getAcero()).toList();
-        List<Integer> objetos = tabla.getJugadores().stream().map(j -> j.getObjeto()).toList();
-
-        List<Integer> oroOrdenado = oro.stream().sorted(Comparator.reverseOrder()).toList();
-        // Si hay mayoria
-        if (oroOrdenado.get(0) != oroOrdenado.get(1)) {
-            String user = tabla.getJugadores().get(oro.indexOf(oroOrdenado.get(0))).getUser().getUsername();
-            mayorias.put(
-                    user,
-                    mayorias.get(user) + 1);
-        }
-
-        List<Integer> aceroOrdenado = acero.stream().sorted(Comparator.reverseOrder()).toList();
-        // Si hay mayoria
-        if (aceroOrdenado.get(0) != aceroOrdenado.get(1)) {
-            String user = tabla.getJugadores().get(acero.indexOf(aceroOrdenado.get(0))).getUser().getUsername();
-            mayorias.put(
-                    user,
-                    mayorias.get(user) + 1);
-        }
-
-        List<Integer> objetosOrdenado = objetos.stream().sorted(Comparator.reverseOrder()).toList();
-        // Si hay mayoria
-        if (objetosOrdenado.get(0) != objetosOrdenado.get(1)) {
-            String user = tabla.getJugadores().get(objetos.indexOf(objetosOrdenado.get(0))).getUser().getUsername();
-            mayorias.put(
-                    user,
-                    mayorias.get(user) + 1);
-        }
-
-        List<Jugador> results; // Orden de victoria
-        Comparator<Jugador> comparator = Comparator.comparing(j -> mayorias.get(j.getUser().getUsername()),
-                Comparator.reverseOrder());
-        comparator = comparator.thenComparing(Comparator.comparing(jugador -> jugador.getMedalla(),
-                Comparator.reverseOrder()));
-        comparator = comparator.thenComparing(Comparator.comparing(jugador -> jugador.getHierro(),
-                Comparator.reverseOrder()));
-
-        results = tabla.getJugadores().stream().sorted(comparator).toList();
-
-        // Guardamos las posiciones finales
-        for (int i = 0; i < results.size(); i++) {
-            results.get(i).setPosicionFinal(i + 1);
-        }
-
-        // Seteamos "terminada" y "finishedAt"
-        tabla.setTerminada(true);
-        tabla.setFinishedAt(new Date());
-
-        // Actualizamos estadistica de los usuarios
         estadisticaService.actualizarEstadistica(tabla);
 
         return "redirect:/partida/" + id;
@@ -324,33 +244,23 @@ public class TableroController {
         return tabla.getChatLinesInJSON();
     }
 
-    @Transactional
     @PostMapping("{partidaId}/chatline")
     public String processChatLine(@PathVariable("partidaId") Integer id, ChatLine chatLine,
             BindingResult result) {
         if (result.hasErrors()) {
-            System.out.println("#".repeat(200));
-            return "redirect:/partida/" + id;
-
-        } else {
-            Tablero tabla = taservice.findById(id);
-
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            if (authentication != null) {
-                if (authentication.isAuthenticated()) {
-                    User currentUser = (User) authentication.getPrincipal();
-                    chatLine.setUsername(currentUser.getUsername());
-                } else {
-                    chatLine.setUsername("anonymous");
-                }
-            }
-
-            tabla.getChat().add(chatLine);
             return "redirect:/partida/" + id;
         }
+        Tablero tabla = taservice.findById(id);
+
+        User currentUser = userService.findAuthenticatedUser();
+
+        chatLine.setUsername(currentUser.getUsername());
+
+        tabla.getChat().add(chatLine);
+        return "redirect:/partida/" + id;
+
     }
 
-    @Transactional
     @GetMapping("{partidaId}/eleccion-materiales")
     public String eleccionMateriales(@PathVariable("partidaId") Integer id, Model model,
             @RequestParam("username") String username) {
@@ -360,104 +270,61 @@ public class TableroController {
         return eleccionMateriales;
     }
 
-    @Transactional
     @GetMapping("{partidaId}/eleccion-material")
     public String eleccionMaterial(@PathVariable("partidaId") Integer id, @RequestParam("material") String material,
             @RequestParam("username") String username) {
 
         Tablero tablero = taservice.findById(id);
-        Jugador j = tablero.getJugadorByUsername(username);
 
-        if (material.equals("oro"))
-            j.setOro(j.getOro() + 5);
-        if (material.equals("hierro"))
-            j.setHierro(j.getHierro() + 5);
-        if (material.equals("acero"))
-            j.setAcero(j.getAcero() + 5);
+        taservice.setMaterialesDeEleccion(tablero, username, material);
 
-        Jugador jugadorActual = tablero.getJugadores().stream()
-                .filter(jugador -> jugador.getUser().getUsername().equals(username))
-                .toList().get(0);
-        int indexOfJugadorActual = tablero.getJugadores().indexOf(jugadorActual);
+        // Jugador jugadorActual = tablero.getJugadores().stream()
+        // .filter(jugador -> jugador.getUser().getUsername().equals(username))
+        // .toList().get(0);
+        // int indexOfJugadorActual = tablero.getJugadores().indexOf(jugadorActual);
 
-        int i = indexOfJugadorActual + 1;
-        while (true) {
+        // int i = indexOfJugadorActual + 1;
+        // while (true) {
 
-            if (i == tablero.getJugadores().size()) {
-                i = 0;
-                continue;
-            }
+        // if (i == tablero.getJugadores().size()) {
+        // i = 0;
+        // continue;
+        // }
 
-            if (tablero.getJugadores().get(i).getEnanosDisponibles() > 0) {
-                tablero.setTurnoByUsername(tablero.getJugadores().get(i).getUser().getUsername());
-                break;
-            }
+        // if (tablero.getJugadores().get(i).getEnanosDisponibles() > 0) {
+        // tablero.setTurnoByUsername(tablero.getJugadores().get(i).getUser().getUsername());
+        // break;
+        // }
 
-            i++;
-        }
+        // i++;
+        // }
+
+        taservice.setSiguienteTurno(tablero, username);
 
         return "redirect:/partida/" + id;
     }
 
-    @Transactional
     @GetMapping("{partidaId}/eleccion-cartas")
     public String eleccionCartas(@PathVariable("partidaId") Integer id, Model model,
             @RequestParam("username") String username) {
         Tablero tablero = taservice.findById(id);
-        List<Carta> cartasTotal = taservice.findAllCartas();
+
         model.addAttribute("username", username);
         model.addAttribute("id_partida", id);
-        for (Mazo mazo : tablero.getMazos()) {
-            if (mazo.getPosicion() > 9) {
-                if (mazo.getCartas().contains(taservice.findCartaById(58))) {
-                    mazo.getCartas().remove(taservice.findCartaById(58));
-                }
-                cartasTotal.removeAll(mazo.getCartas());
-            } else {
 
-                cartasTotal.remove(mazo.getFirstCarta());
-            }
-        }
-
-        model.addAttribute("cartas", cartasTotal);
+        model.addAttribute("cartas", taservice.setCartasParaEleccion(tablero));
         return eleccionCartas;
     }
 
-    @Transactional
     @GetMapping("{partidaId}/eleccion-carta")
     public String eleccionCarta(@PathVariable("partidaId") Integer id, @RequestParam("carta") Integer carta,
             @RequestParam("username") String username) {
 
         Tablero tablero = taservice.findById(id);
 
-        Carta cartaElegida = taservice.findCartaById(carta);
+        taservice.moverCartaAlPrincipioDelMazo(tablero, carta);
 
-        Mazo mazoElegido = tablero.getMazos().stream().filter(m -> m.getPosicion().equals(cartaElegida.getPosicion()))
-                .toList()
-                .get(0);
-        mazoElegido.getCartas().remove(cartaElegida);
-        mazoElegido.getCartas().add(0, cartaElegida);
-
-        Jugador jugadorActual = tablero.getJugadores().stream()
-                .filter(jugador -> jugador.getUser().getUsername().equals(username))
-                .toList().get(0);
-        int indexOfJugadorActual = tablero.getJugadores().indexOf(jugadorActual);
-
-        int i = indexOfJugadorActual + 1;
-        while (true) {
-
-            if (i == tablero.getJugadores().size()) {
-                i = 0;
-                continue;
-            }
-
-            if (tablero.getJugadores().get(i).getEnanosDisponibles() > 0) {
-                tablero.setTurnoByUsername(tablero.getJugadores().get(i).getUser().getUsername());
-                break;
-            }
-
-            i++;
-        }
+        taservice.setSiguienteTurno(tablero, username);
 
         return "redirect:/partida/" + id;
     }
