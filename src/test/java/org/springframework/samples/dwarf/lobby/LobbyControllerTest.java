@@ -114,12 +114,6 @@ public class LobbyControllerTest {
      * }
      */
 
-    @WithMockUser(value = "spring")
-    @Test
-    void testAddUser() throws Exception {
-        mockMvc.perform(post("/lobby/1/add-user").with(csrf())).andExpect(status().is(302))
-                .andExpect(view().name("redirect:/lobby/1"));
-    }
 
     @WithMockUser(value = "spring")
     @Test

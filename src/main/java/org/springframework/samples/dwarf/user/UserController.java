@@ -60,11 +60,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 public class UserController {
 
-    private static final String VIEWS_OWNER_CREATE_FORM = "users/createOwnerForm";
+
     private static final String view_user = "users/showUser";
     private static final String VIEW_USERS_LIST = "users/usersList";
 
-    private final JugadorService ownerService;
+    private final JugadorService jugadorService;
     private final UserService userService;
     private final LogroService logroService;
     private final InvitacionJuegoService invitacionJuegoService;
@@ -72,15 +72,14 @@ public class UserController {
     private final AuthoritiesService authoritiesService;
     private final EstadisticaService estadisticaService;
     private final TableroService taservice;
-    private final JugadorService jService;
     private final LobbyService lobbyService;
 
     @Autowired
-    public UserController(JugadorService clinicService, UserService userService, LogroService logroService,
+    public UserController(JugadorService jugadorService, UserService userService, LogroService logroService,
             InvitacionAmistadService invitacionAmistadService, AuthoritiesService authoritiesService,
-            EstadisticaService estadisticaService, TableroService taservice, JugadorService jService,
+            EstadisticaService estadisticaService, TableroService taservice,
             InvitacionJuegoService invitacionJuegoService, LobbyService lobbyService) {
-        this.ownerService = clinicService;
+        this.jugadorService = jugadorService;
         this.userService = userService;
         this.invitacionJuegoService = invitacionJuegoService;
         this.logroService = logroService;
@@ -88,7 +87,6 @@ public class UserController {
         this.authoritiesService = authoritiesService;
         this.estadisticaService = estadisticaService;
         this.taservice = taservice;
-        this.jService = jService;
         this.lobbyService = lobbyService;
     }
 
@@ -243,7 +241,7 @@ public class UserController {
     public String showUser(@PathVariable("userid") String id, Map<String, Object> model,
             @RequestParam(required = false) String seccion) {
         User usuario = userService.findUser(id).get();
-        List<Jugador> jugadores = ownerService.findJugadorUser(id);
+        List<Jugador> jugadores = jugadorService.findJugadorUser(id);
 
         List<Logro> logrosCumplidos = logroService.findLogrosByUsername(id);
 
