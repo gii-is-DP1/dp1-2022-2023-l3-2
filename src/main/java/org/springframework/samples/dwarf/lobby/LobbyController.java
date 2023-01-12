@@ -82,8 +82,6 @@ public class LobbyController {
         return showLobby;
     }
 
-
-
     @GetMapping("/{lobbyId}/add-user")
     public String addUserAlternative(@PathVariable("lobbyId") Integer id, @RequestParam String exactUsername) {
         Lobby lobby = lobbyService.findById(id);
@@ -125,10 +123,11 @@ public class LobbyController {
 
         List<User> usersSearched1 = userService.findUserByString(q);
 
-        // Solo amigos
+        // Solo amigos y que no esten ya en la lobby
         usersSearched1 = usersSearched1.stream()
                 .filter(usr -> invitacionAmistadService.findFriendsUser(userService.findUser(lobby.getAdmin()).get())
                         .contains(usr.getUsername()))
+                .filter(usr -> !lobby.getUsuarios().contains(usr))
                 .toList();
 
         List<String> usersSearched = usersSearched1.stream()
