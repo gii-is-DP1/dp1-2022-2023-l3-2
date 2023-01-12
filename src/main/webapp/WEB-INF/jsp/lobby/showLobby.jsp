@@ -79,24 +79,21 @@
     </table>
 
     <h2>Anyadir usuarios</h2>
-    <form:form modelAttribute="user" action="/lobby/${lobbyId}/add-user" method="post"
+    <form onsubmit="" action="/lobby/${lobbyId}/add-user" method="post"
         class="form-horizontal" id="search-jugador-form">
         <div class="form-group">
             <div class="control-group" id="username">
                 <label class="col-sm-2 control-label">Username </label>
                 <div class="col-sm-10">
-                    <form:input  class="form-control" path="username" size="30"
+                    <input  class="form-control" size="30"
                         maxlength="80" id="user-input"/>
                     <ul id="input-dropdown">
                     </ul>
-                    <span class="help-inline">
-                        <form:errors path="*" />
-                    </span>
                 </div>
             </div>
         </div>
 
-    </form:form>
+    </form>
 
     <c:if test="${usernames.size() == 1}">
         <div class="alert alert-warning" role="alert">
@@ -154,6 +151,13 @@
                         dropdown.innerHTML = html
                     })
         })
+
+        // No ENTER post al añadir amigos
+        const form = document.getElementById("search-jugador-form")
+        form.addEventListener('submit', event => {
+            event.preventDefault();
+            console.log('Form submission cancelled.');
+        });
     </script>
 
 
