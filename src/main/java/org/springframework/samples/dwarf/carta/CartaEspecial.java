@@ -127,6 +127,7 @@ public class CartaEspecial extends Carta {
         return null;
     }
 
+    // Funcion solo se usa para los test
     public String accion5(Tablero tablero, Jugador j, Enano e) {
         List<Integer> idCartasAyuda = List.of(55, 56, 57, 58, 59, 60, 61, 62, 63);
         Carta primera = e.getMazo().getFirstCarta();

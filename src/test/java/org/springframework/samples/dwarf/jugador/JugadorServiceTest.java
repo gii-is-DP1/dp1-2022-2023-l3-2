@@ -23,7 +23,7 @@ public class JugadorServiceTest {
 
     @Test
     public void shouldFindOwnerById() {
-        Jugador alegarsan11 = jugadorService.findOwnerById(1);
+        Jugador alegarsan11 = jugadorService.findJugadorById(1);
         User alegarsan11User = userService.findUser("alegarsan11").get();
 
         assertThat(alegarsan11.getAcero()).isEqualTo(0);
@@ -95,7 +95,7 @@ public class JugadorServiceTest {
 
     @Test
     public void shouldDeleteJugador() {
-        Jugador alegarsan11 = jugadorService.findOwnerById(1);
+        Jugador alegarsan11 = jugadorService.findJugadorById(1);
         jugadorService.deleteJugador(alegarsan11);
         assertThat(jugadorService.findAll().size()).isEqualTo(0);
     }

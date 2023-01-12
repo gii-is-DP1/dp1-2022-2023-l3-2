@@ -18,7 +18,6 @@ INSERT INTO authorities(id,username,authority) VALUES (8,'rafgargal','jugador');
 INSERT INTO authorities(id,username,authority) VALUES (9,'ernsaqrio','jugador');
 INSERT INTO authorities(id,username,authority) VALUES (10,'admin1','jugador');
 
--- One vet user, named vet1 with passwor v3t
 INSERT INTO users(username,password,enabled) VALUES ('vet1','v3t',TRUE);
 INSERT INTO authorities(id,username,authority) VALUES (3,'vet1','veterinarian');
 

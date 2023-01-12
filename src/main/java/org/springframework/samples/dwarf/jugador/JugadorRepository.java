@@ -41,7 +41,7 @@ public interface JugadorRepository extends Repository<Jugador, Integer> {
      * @param owner the <code>Owner</code> to save
      * @see BaseEntity#isNew
      */
-    void save(Jugador owner) throws DataAccessException;
+    void save(Jugador jugador) throws DataAccessException;
 
     void delete(Jugador jugador);
 

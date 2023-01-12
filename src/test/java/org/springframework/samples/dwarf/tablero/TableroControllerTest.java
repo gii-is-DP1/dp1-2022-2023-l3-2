@@ -157,13 +157,13 @@ public class TableroControllerTest {
 
         rafgargal.setUser(rafa);
         jugadorService.saveJugador(rafgargal);
-        given(jugadorService.findOwnerById(1)).willReturn(alegarsan);
-        given(jugadorService.findOwnerById(2)).willReturn(rafgargal);
+        given(jugadorService.findJugadorById(1)).willReturn(alegarsan);
+        given(jugadorService.findJugadorById(2)).willReturn(rafgargal);
         invi.setUserrecibe(rafa);
         invitacionAmistadService.saveInvitacionAmistad(invi);
 
-        jugadores.add(jugadorService.findOwnerById(1));
-        jugadores.add(jugadorService.findOwnerById(2));
+        jugadores.add(jugadorService.findJugadorById(1));
+        jugadores.add(jugadorService.findJugadorById(2));
         tableroPrueba.setJugadores(jugadores);
 
 
