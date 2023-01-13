@@ -4,13 +4,13 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="dwarf" tagdir="/WEB-INF/tags" %>
 
-<petclinic:layout pageName="lobby">
+<dwarf:layout pageName="lobby">
     <h2>Lobby</h2>
     <form:form modelAttribute="lobby" class="form-horizontal" id="add-owner-form">
         <div class="form-group has-feedback">
-            <petclinic:inputField label="Nombre" name="name" />
+            <dwarf:inputField label="Nombre" name="name" />
 
 
 
@@ -22,4 +22,4 @@
 
         </div>
     </form:form>
-</petclinic:layout>
+</dwarf:layout>

@@ -4,9 +4,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="dwarf" tagdir="/WEB-INF/tags" %>
 
-<petclinic:layout pageName="tablero">
+<dwarf:layout pageName="tablero">
     <h2>Tablero</h2>
     <c:forEach items="${tablero1}" var="pos">
         <tr>
@@ -55,4 +55,4 @@
         </tr>
 
     </c:forEach>
-</petclinic:layout>
+</dwarf:layout>

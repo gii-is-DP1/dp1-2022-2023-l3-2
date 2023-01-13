@@ -4,9 +4,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="dwarf" tagdir="/WEB-INF/tags" %>
 
-<petclinic:layout pageName="Lobby">
+<dwarf:layout pageName="Lobby">
 
     <style>
         #input-dropdown {
@@ -164,5 +164,5 @@
 
 
 
-</petclinic:layout>
+</dwarf:layout>
 
