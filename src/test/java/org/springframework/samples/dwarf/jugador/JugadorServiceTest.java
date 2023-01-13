@@ -87,7 +87,7 @@ public class JugadorServiceTest {
     public void shouldCreateJugadorByUsername() {
         Jugador alegarsan12 = jugadorService.createJugadorByUsername("alegarsan11", false);
 
-        assertThat(alegarsan12.getId()).isEqualTo(22);
+        assertThat(alegarsan12.getId()).isEqualTo(2);
         assertThat(alegarsan12.isPrimerjugador()).isEqualTo(false);
         User alegarsan11User = userService.findUser("alegarsan11").get();
         assertThat(alegarsan12.getUser()).isEqualTo(alegarsan11User);
