@@ -60,6 +60,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 public class UserController {
 
+
     private static final String view_user = "users/showUser";
     private static final String VIEW_USERS_LIST = "users/usersList";
 
@@ -177,7 +178,7 @@ public class UserController {
         if (result.hasErrors()) {
             return "redirect:/user";
         } else {
-
+            // creating owner, user, and authority
             List<User> usersSearched = userService.findUserByString(user.username);
             if (usersSearched.size() == 0) {
                 redatt.addFlashAttribute("mensaje", "No hay resultados para la busqueda");
@@ -187,8 +188,52 @@ public class UserController {
             if (usersSearched.size() == 1) {
                 return "redirect:/users/" + usersSearched.get(0).getUsername();
             }
-
+            // model.put("usuarios", userService.findUserByString(user.username));
             return "redirect:/user?page=0&search=" + user.username;
+        }
+    }
+
+    @PostMapping(value = "/users/friend")
+    public String processAddFriendForm(Map<String, Object> model, @Valid User user, BindingResult result) {
+        if (result.hasErrors()) {
+            org.springframework.security.core.userdetails.User currentUser = (org.springframework.security.core.userdetails.User) SecurityContextHolder
+                    .getContext().getAuthentication()
+                    .getPrincipal();
+            return "redirect:/users/" + currentUser.getUsername();
+        } else {
+            // creating owner, user, and authority
+
+            String enviaUsername = "";
+            User recibe = userService.findUser(user.username).get();
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+            if (authentication != null) {
+                if (authentication.isAuthenticated()) {
+                    org.springframework.security.core.userdetails.User currentUser = (org.springframework.security.core.userdetails.User) authentication
+                            .getPrincipal();
+
+                    enviaUsername = currentUser.getUsername();
+
+                }
+            }
+            // si no encuentra al usuario
+            if (!userService.findAll().contains(userService.findUser(user.username).get())) {
+                return "redirect:/users/" + enviaUsername;
+            }
+
+            // amiga que ya esta
+            if (invitacionAmistadService.findFriendsUser(userService.findUser(enviaUsername).get())
+                    .contains(user.username)) {
+
+                return "redirect:/users/" + enviaUsername;
+            }
+            InvitacionAmistad invitacionAmistad = new InvitacionAmistad();
+            invitacionAmistad.setUserenvia(userService.findUser(enviaUsername).get());
+            invitacionAmistad.setUserrecibe(recibe);
+            invitacionAmistad.setCreatedAt(new Date());
+            invitacionAmistadService.saveInvitacionAmistad(invitacionAmistad);
+            model.put("usuarios", invitacionAmistadService.findFriendsUser(userService.findUser(enviaUsername).get()));
+            return "redirect:/users/" + enviaUsername;
         }
     }
 
@@ -242,7 +287,8 @@ public class UserController {
 
     @GetMapping(value = "/users/{userid}/delete")
     public String deleteUser(@PathVariable("userid") String id) {
-        userService.deleteUserById(id);
+
+        userService.deleteUserById(id, taservice.findByUser(userService.findUser(id).get()));
         return "redirect:/user/find";
     }
 
@@ -264,7 +310,22 @@ public class UserController {
                 return "redirect:/usersnew";
             }
 
-            userService.createUser(user);
+            userService.saveUser(user);
+            Estadistica estats = new Estadistica();
+            estats.setUsuario(user);
+            estats.setAcero(0);
+            estats.setHierro(0);
+            estats.setOro(0);
+            estats.setMedallas(0);
+            estats.setObjetos(0);
+            estats.setPuntos(0);
+            estats.setPartidasGanadas(0);
+            estats.setPartidasPerdidas(0);
+            estadisticaService.saveEstadistica(estats);
+            Authorities authority = new Authorities();
+            authority.setAuthority("jugador");
+            authority.setUser(user);
+            authoritiesService.saveAuthorities(authority);
             return "redirect:/";
         }
     }
@@ -288,16 +349,34 @@ public class UserController {
     public String modifyUser(@Valid User user, BindingResult result, RedirectAttributes redatt,
             @RequestParam("user") String id) {
 
-        User currentUser = userService.findAuthenticatedUser();
-        if (currentUser.getUsername().equals(id)
-                || userService.findAuthenticatedUser().getAuthorities().stream()
-                        .anyMatch(a -> a.getAuthority().equals("admin"))) {
-            userService.modifyUser(user);
-            return "redirect:/";
-        }
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication.isAuthenticated()) {
+            User currentUser = userService.findAuthenticatedUser();
+            if (currentUser.getUsername().equals(id)
+                    || userService.findAuthenticatedUser().getAuthorities().stream()
+                            .anyMatch(a -> a.getAuthority().equals("admin"))) {
+                // if (user.getUsername().equals("")) {
+                // user.setUsername(userService.findUser(id).get().getUsername());
+                // }
+                // if (user.getPassword().equals("")) {
+                // user.setUsername(userService.findUser(id).get().getPassword());
+                // }
+                // if (user.getImgperfil().equals("")) {
+                // user.setUsername(userService.findUser(id).get().getImgperfil());
+                // }
+                userService.saveUser(user);
+                Authorities authority = new Authorities();
+                authority.setAuthority("jugador");
+                authority.setUser(user);
+                authoritiesService.saveAuthorities(authority);
+                return "redirect:/";
+            }
 
-        redatt.addFlashAttribute("mensaje", "No eres propietario de este usuario");
-        return "redirect:/users/mod";
+            redatt.addFlashAttribute("mensaje", "No eres propietario de este usuario");
+            return "redirect:/users/mod";
+
+        }
+        return "redirect:/";
     }
 
     @GetMapping("/users/{userid}/search-friends")
@@ -338,47 +417,35 @@ public class UserController {
 
         String enviaUsername = "";
         User recibe = userService.findUser(destUsername).get();
-        User currentUser = userService.findAuthenticatedUser();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        enviaUsername = currentUser.getUsername();
+        if (authentication != null) {
+            if (authentication.isAuthenticated()) {
+                org.springframework.security.core.userdetails.User currentUser = (org.springframework.security.core.userdetails.User) authentication
+                        .getPrincipal();
 
-        invitacionAmistadService.saveInvitacionAmistadFromForm(enviaUsername, recibe);
+                enviaUsername = currentUser.getUsername();
+
+            }
+        }
+        // si no encuentra al usuario
+        if (!userService.findAll().contains(userService.findUser(destUsername).get())) {
+            return "redirect:/users/" + enviaUsername;
+        }
+
+        // amiga que ya esta
+        if (invitacionAmistadService.findFriendsUser(userService.findUser(enviaUsername).get())
+                .contains(destUsername)) {
+
+            return "redirect:/users/" + enviaUsername;
+        }
+        InvitacionAmistad invitacionAmistad = new InvitacionAmistad();
+        invitacionAmistad.setUserenvia(userService.findUser(enviaUsername).get());
+        invitacionAmistad.setUserrecibe(recibe);
+        invitacionAmistad.setCreatedAt(new Date());
+        invitacionAmistadService.saveInvitacionAmistad(invitacionAmistad);
 
         return "redirect:/users/" + enviaUsername;
 
-    }
-
-    // No usado??
-    @PostMapping(value = "/users/friend")
-    public String processAddFriendForm(Map<String, Object> model, @Valid User user, BindingResult result) {
-
-        User currentUser = userService.findAuthenticatedUser();
-
-        if (result.hasErrors()) {
-            return "redirect:/users/" + currentUser.getUsername();
-        } else {
-
-            String enviaUsername = "";
-            User recibe = userService.findUser(user.username).get();
-
-            enviaUsername = currentUser.getUsername();
-
-            // si no encuentra al usuario
-            if (!userService.findAll().contains(userService.findUser(user.username).get())) {
-                return "redirect:/users/" + enviaUsername;
-            }
-
-            // amiga que ya esta
-            if (invitacionAmistadService.findFriendsUser(userService.findUser(enviaUsername).get())
-                    .contains(user.username)) {
-
-                return "redirect:/users/" + enviaUsername;
-            }
-
-            invitacionAmistadService.saveInvitacionAmistadFromForm(enviaUsername, recibe);
-
-            model.put("usuarios", invitacionAmistadService.findFriendsUser(userService.findUser(enviaUsername).get()));
-            return "redirect:/users/" + enviaUsername;
-        }
     }
 }
