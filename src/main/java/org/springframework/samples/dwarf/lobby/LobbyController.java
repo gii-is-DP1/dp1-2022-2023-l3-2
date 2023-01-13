@@ -69,6 +69,13 @@ public class LobbyController {
 
         Lobby lobby = lobbyService.findById(id);
         User currentUser = userService.findAuthenticatedUser();
+
+        if (!currentUser.getUsername().equals(lobby.getAdmin()))
+            response.addHeader("Refresh", "2");
+
+        if (lobby.getTableroId() != null)
+            return "redirect:/partida/" + lobby.getTableroId();
+
         model.addAttribute("lobbyName", lobby.getName());
         model.addAttribute("lobbyId", lobby.getId());
         model.addAttribute("usuarios", lobby.getUsuarios());

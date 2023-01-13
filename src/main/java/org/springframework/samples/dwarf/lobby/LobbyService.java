@@ -25,14 +25,17 @@ public class LobbyService {
         this.invitacioJuegoRepository = invitacioJuegoRepository;
     }
 
+    @Transactional(readOnly = true)
     public Boolean condicionCantidadUsuarios(Lobby lobby) {
         return lobby.getUsuarios().size() > 2;
     }
 
+    @Transactional(readOnly = true)
     public Boolean condicionEstaPresente(Optional<User> user) {
         return !user.isPresent();
     }
 
+    @Transactional(readOnly = true)
     public Boolean condicionAmigoEnLobby(Lobby lobby, User userSearched) {
         return lobby.getUsuarios().stream().anyMatch(usr -> usr.getUsername().equals(userSearched.getUsername()));
     }
@@ -107,5 +110,15 @@ public class LobbyService {
             }
         }
         deleteById(lobby.getId());
+    }
+
+    @Transactional
+    public void setTableroId(Lobby lobby, Integer id) {
+        lobby.setTableroId(id);
+    }
+
+    @Transactional(readOnly = true)
+    public Lobby findByTableroId(Integer id) {
+        return lobbyRepo.findByTableroId(id);
     }
 }

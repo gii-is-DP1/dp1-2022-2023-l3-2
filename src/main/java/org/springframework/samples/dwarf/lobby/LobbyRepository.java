@@ -20,4 +20,6 @@ public interface LobbyRepository extends Repository<Lobby, String> {
 
     @Query("SELECT lobbies FROM Lobby lobbies WHERE :user MEMBER OF lobbies.usuarios")
     public List<Lobby> findByUser(User user);
+
+    Lobby findByTableroId(Integer id);
 }

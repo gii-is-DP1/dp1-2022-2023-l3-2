@@ -29,4 +29,6 @@ public class Lobby extends NamedEntity {
     private Integer numUsuarios;
 
     private String admin;
+
+    private Integer tableroId;
 }
