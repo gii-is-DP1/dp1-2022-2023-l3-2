@@ -5,9 +5,9 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.samples.dwarf.carta.Carta;
 import org.springframework.samples.dwarf.jugador.Jugador;
 import org.springframework.samples.dwarf.jugador.JugadorService;
+import org.springframework.samples.dwarf.user.InvitacioAmistadRepository;
 import org.springframework.samples.dwarf.user.InvitacionAmistadService;
 import org.springframework.samples.dwarf.user.User;
-import org.springframework.samples.dwarf.user.UserService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,17 +17,12 @@ import java.util.*;
 public class TableroService {
 
     private TableroRepository repo;
-    private JugadorService jugadorService;
-    private UserService userService;
-    private InvitacionAmistadService invitacionAmistadService;
+    private InvitacioAmistadRepository invitacioAmistadRepository;
 
     @Autowired
-    public TableroService(TableroRepository repo, JugadorService jugadorService, @Lazy UserService userService,
-            InvitacionAmistadService invitacionAmistadService) {
+    public TableroService(TableroRepository repo, InvitacioAmistadRepository invitacioAmistadRepository) {
         this.repo = repo;
-        this.jugadorService = jugadorService;
-        this.userService = userService;
-        this.invitacionAmistadService = invitacionAmistadService;
+        this.invitacioAmistadRepository = invitacioAmistadRepository;
     }
 
     @Transactional(readOnly = true)
@@ -105,7 +100,8 @@ public class TableroService {
     }
 
     @Transactional
-    public Tablero saveTableroFromProcess(String name, String username1, String username2, String username3) {
+    public Tablero saveTableroFromProcess(String name, String username1, String username2, String username3,
+            List<Jugador> jugadores) {
         Tablero tabla = new Tablero();
         tabla.setName(name);
 
@@ -143,19 +139,7 @@ public class TableroService {
         tabla.setRonda(1);
         tabla.setMazos(mazos);
         tabla.setTerminada(false);
-        List<Jugador> jugadores = new ArrayList<>();
-        if (username1 != null) {
-            Jugador j = jugadorService.createJugadorByUsername(username1, true);
-            jugadores.add(j);
-        }
-        if (username2 != null) {
-            Jugador j = jugadorService.createJugadorByUsername(username2, false);
-            jugadores.add(j);
-        }
-        if (username3 != null) {
-            Jugador j = jugadorService.createJugadorByUsername(username3, false);
-            jugadores.add(j);
-        }
+
 
         // tabla.setJugadores(jugadorService.findAll());
 
@@ -179,14 +163,14 @@ public class TableroService {
     }
 
     @Transactional(readOnly = true)
-    public boolean puedoSerEspectador(Tablero table) {
+    public boolean puedoSerEspectador(Tablero table, User authenticatedUser) {
 
         if (!table.getJugadores().stream().map(j -> j.getUser()).toList()
-                .contains(userService.findAuthenticatedUser())) {
+                .contains(authenticatedUser)) {
             if (!table.getJugadores().stream().map(j -> j.getUser()).toList()
-                    .containsAll(invitacionAmistadService.findFriends(userService.findAuthenticatedUser()).stream()
+                    .containsAll(invitacioAmistadRepository.findByUserenvia(authenticatedUser).stream()
                             .map(j -> j.getUserrecibe()).toList())
-                    || invitacionAmistadService.findFriends(userService.findAuthenticatedUser()).isEmpty()) {
+                    || invitacioAmistadRepository.findByUserenvia(authenticatedUser).isEmpty()) {
                 return false;
             }
         }
@@ -465,8 +449,8 @@ public class TableroService {
     }
 
     @Transactional(readOnly = true)
-    public boolean isMyTurno(Tablero tablero) {
-        return userService.findAuthenticatedUser().getUsername().equals(tablero.getUsernameByTurno());
+    public boolean isMyTurno(Tablero tablero, User authenticatedUser) {
+        return authenticatedUser.getUsername().equals(tablero.getUsernameByTurno());
     }
 
     @Transactional

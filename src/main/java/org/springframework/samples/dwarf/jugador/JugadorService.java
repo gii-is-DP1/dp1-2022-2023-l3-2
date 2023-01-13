@@ -15,6 +15,7 @@
  */
 package org.springframework.samples.dwarf.jugador;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -86,4 +87,21 @@ public class JugadorService {
         jugadorRepository.delete(j);
     }
 
+    @Transactional
+    public List<Jugador> creacionLista(String username1, String username2, String username3) {
+        List<Jugador> jugadores = new ArrayList<>();
+        if (username1 != null) {
+            Jugador j = createJugadorByUsername(username1, true);
+            jugadores.add(j);
+        }
+        if (username2 != null) {
+            Jugador j = createJugadorByUsername(username2, false);
+            jugadores.add(j);
+        }
+        if (username3 != null) {
+            Jugador j = createJugadorByUsername(username3, false);
+            jugadores.add(j);
+        }
+        return jugadores;
+    }
 }

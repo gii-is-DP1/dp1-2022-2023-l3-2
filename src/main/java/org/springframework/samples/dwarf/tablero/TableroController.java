@@ -6,6 +6,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.samples.dwarf.jugador.Jugador;
 import org.springframework.samples.dwarf.jugador.JugadorService;
 import org.springframework.samples.dwarf.lobby.Lobby;
 import org.springframework.samples.dwarf.lobby.LobbyService;
@@ -68,8 +69,8 @@ public class TableroController {
         Lobby lobby = lobbyService.findById(lobbyId);
 
         lobbyService.setTableroId(lobby, lobbyId);
-
-        Tablero tabla = taservice.saveTableroFromProcess(name, username1, username2, username3);
+        List<Jugador> jugadores = jugadorService.creacionLista(username1, username2, username3);
+        Tablero tabla = taservice.saveTableroFromProcess(name, username1, username2, username3, jugadores);
 
         return "redirect:/partida/" + tabla.getId() + "/comienza";
 
@@ -102,11 +103,12 @@ public class TableroController {
     public String showTablero(@PathVariable("partidaId") Integer id, Model model, HttpServletResponse response) {
 
         Tablero table = taservice.findById(id);
+        User authenticatedUser = userService.findAuthenticatedUser();
 
-        if (!taservice.isMyTurno(table))
+        if (!taservice.isMyTurno(table, authenticatedUser))
             response.addHeader("Refresh", "3");
 
-        if (!taservice.puedoSerEspectador(table))
+        if (!taservice.puedoSerEspectador(table, authenticatedUser))
             return "redirect:/";
 
         List<Integer> mazosConEnanoEncima = table.mazosConEnanoEncima();
