@@ -4,9 +4,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="dwarf" tagdir="/WEB-INF/tags" %>
 
-<petclinic:layout pageName="user">
+<dwarf:layout pageName="user">
 
     <form:form modelAttribute="logro" class="form-horizontal" id="add-owner-form">
         <div class="form-group has-feedback">
@@ -23,4 +23,4 @@
             </div>
         </div>
     </form:form>
-</petclinic:layout>
+</dwarf:layout>

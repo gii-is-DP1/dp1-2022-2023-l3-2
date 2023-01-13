@@ -1,11 +1,11 @@
 <%@ page session="false" trimDirectiveWhitespaces="true" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
-<%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="dwarf" tagdir="/WEB-INF/tags" %>
 
-<petclinic:layout pageName="error">
+<dwarf:layout pageName="error">
 
     <spring:url value="/resources/images/saddwarf.jpg" var="dwarfImage"/>
-    
+
     <center>
     <img src="${dwarfImage}" width="200" height="300"/>
     </center>
@@ -15,4 +15,4 @@
 
     <p>${exception.message}</p>
 
-</petclinic:layout>
+</dwarf:layout>
