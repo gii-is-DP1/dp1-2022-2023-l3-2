@@ -1,6 +1,6 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags"%>
+<%@ taglib prefix="dwarf" tagdir="/WEB-INF/tags"%>
 <%@ taglib prefix="sec"
 	uri="http://www.springframework.org/security/tags"%>
 <!--  >%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%-->
@@ -22,29 +22,51 @@
 		<div class="navbar-collapse collapse" id="main-navbar">
 			<ul class="nav navbar-nav">
 
-				<petclinic:menuItem active="${name eq 'home'}" url="/"
+				<dwarf:menuItem active="${name eq 'home'}" url="/"
 					title="home page">
 					<span class="glyphicon glyphicon-home" aria-hidden="true"></span>
 					<span>Home</span>
-				</petclinic:menuItem>
+				</dwarf:menuItem>
 
-				<petclinic:menuItem active="${name eq 'owners'}" url="/owners/find"
-					title="find owners">
+				<sec:authorize access="isAuthenticated()">
+				<dwarf:menuItem active="${name eq 'usuario'}" url="/users?page=0"
+					title="home page">
+					<span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+					<span>Parte de usuario</span>
+				</dwarf:menuItem>
+				</sec:authorize>
+
+                <sec:authorize access="hasAuthority('admin')">
+				<dwarf:menuItem active="${name eq 'owners'}" url="/user/find"
+					title="Solo para administradores">
 					<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-					<span>Find owners</span>
-				</petclinic:menuItem>
-
-				<petclinic:menuItem active="${name eq 'vets'}" url="/vets"
-					title="veterinarians">
+					<span>Usuarios</span>
+				</dwarf:menuItem>
+                </sec:authorize>
+                <sec:authorize access="hasAuthority('admin')">
+				<dwarf:menuItem active="${name eq 'tablero'}" url="/partida/en-curso"
+					title="Partidas">
 					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
-					<span>Veterinarians</span>
-				</petclinic:menuItem>
+					<span>Partidas</span>
+				</dwarf:menuItem>
+				</sec:authorize>
+                <dwarf:menuItem active="${name eq 'lobby'}" url="/lobby/"
+					title="Lobby">
+					<span class="glyphicon glyphicon-globe" aria-hidden="true"></span>
+					<span>Lobbies</span>
+				</dwarf:menuItem>
 
-				<petclinic:menuItem active="${name eq 'error'}" url="/oups"
+                <dwarf:menuItem active="${name eq 'estadistica'}" url="/estadistica"
+					title="Estadistica">
+					<span class="glyphicon glyphicon-stats" aria-hidden="true"></span>
+					<span>Estadisticas</span>
+				</dwarf:menuItem>
+
+				<dwarf:menuItem active="${name eq 'error'}" url="/oups"
 					title="trigger a RuntimeException to see how it is handled">
 					<span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>
 					<span>Error</span>
-				</petclinic:menuItem>
+				</dwarf:menuItem>
 
 			</ul>
 
@@ -54,11 +76,11 @@
 			<ul class="nav navbar-nav navbar-right">
 				<sec:authorize access="!isAuthenticated()">
 					<li><a href="<c:url value="/login" />">Login</a></li>
-					<li><a href="<c:url value="/users/new" />">Register</a></li>
+					<li><a href="<c:url value="/usersnew" />">Register</a></li>
 				</sec:authorize>
 				<sec:authorize access="isAuthenticated()">
 					<li class="dropdown"><a href="#" class="dropdown-toggle"
-						data-toggle="dropdown"> <span class="glyphicon glyphicon-user"></span> 
+						data-toggle="dropdown">
 							<strong><sec:authentication property="name" /></strong> <span
 							class="glyphicon glyphicon-chevron-down"></span>
 					</a>
@@ -80,12 +102,15 @@
 													class="btn btn-primary btn-block btn-sm">Logout</a>
 											</p>
 										</div>
+
 									</div>
 								</div>
 							</li>
 							<li class="divider"></li>
-<!-- 							
-                            <li> 
+
+
+<!--
+                            <li>
 								<div class="navbar-login navbar-login-session">
 									<div class="row">
 										<div class="col-lg-12">
