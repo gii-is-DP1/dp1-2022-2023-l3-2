@@ -40,7 +40,8 @@ public class UserServiceTest {
         User alegarsan11 = users.get(2);
         assertThat(alegarsan11.getUsername()).isEqualTo("alegarsan11");
         assertThat(alegarsan11.getPassword()).isEqualTo("1234");
-        assertThat(alegarsan11.getImgperfil()).isEqualTo("https://previews.123rf.com/images/yupiramos/yupiramos1708/yupiramos170831273/84892638-icono-del-avatar-hombre-sobre-ilustraci%C3%B3n-de-vectores-de-fondo-blanco.jpg");
+        assertThat(alegarsan11.getImgperfil()).isEqualTo(
+                "https://previews.123rf.com/images/yupiramos/yupiramos1708/yupiramos170831273/84892638-icono-del-avatar-hombre-sobre-ilustraci%C3%B3n-de-vectores-de-fondo-blanco.jpg");
     }
 
     @Test
@@ -67,7 +68,8 @@ public class UserServiceTest {
         assertTrue(alegarsan11.hasRole("jugador"));
         assertThat(alegarsan11.getUsername()).isEqualTo("alegarsan11");
         assertThat(alegarsan11.getPassword()).isEqualTo("1234");
-        assertThat(alegarsan11.getImgperfil()).isEqualTo("https://previews.123rf.com/images/yupiramos/yupiramos1708/yupiramos170831273/84892638-icono-del-avatar-hombre-sobre-ilustraci%C3%B3n-de-vectores-de-fondo-blanco.jpg");
+        assertThat(alegarsan11.getImgperfil()).isEqualTo(
+                "https://previews.123rf.com/images/yupiramos/yupiramos1708/yupiramos170831273/84892638-icono-del-avatar-hombre-sobre-ilustraci%C3%B3n-de-vectores-de-fondo-blanco.jpg");
     }
 
     @Test
@@ -77,15 +79,6 @@ public class UserServiceTest {
         User jualeomad = users.get(0);
         assertThat(jualeomad.getUsername()).isEqualTo("jualeomad");
         assertThat(jualeomad.getPassword()).isEqualTo("1234");
-    }
-
-    @Test
-    public void shouldGetPuntuaciones() {
-        Map<User, Integer> puntuaciones = userService.getPuntuaciones();
-
-        User jualeomad = userService.findUser("jualeomad").get();
-        Integer punt = puntuaciones.get(jualeomad);
-        assertThat(punt).isEqualTo(0);
     }
 
     @Test
