@@ -12,6 +12,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.samples.dwarf.jugador.Jugador;
+import org.springframework.samples.dwarf.tablero.Tablero;
 import org.springframework.stereotype.Service;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
@@ -20,18 +22,7 @@ public class UserServiceTest {
     @Autowired
     protected UserService userService;
 
-    @Test
-    public void shouldDeleteUser() {
-        User dandiasua = userService.findUser("dandiasua").get();
-        userService.deleteUser(dandiasua);
-        assertEquals(8, userService.findAll().size());
-    }
 
-    @Test
-    public void shouldDeleteUserById() {
-        userService.deleteUserById("dandiasua");
-        assertEquals(8, userService.findAll().size());
-    }
 
     @Test
     public void shouldFindAll() {

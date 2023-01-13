@@ -22,12 +22,16 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.dwarf.jugador.Jugador;
+import org.springframework.samples.dwarf.jugador.JugadorRepository;
 import org.springframework.samples.dwarf.jugador.JugadorService;
+import org.springframework.samples.dwarf.lobby.InvitacioJuegoRepository;
 import org.springframework.samples.dwarf.lobby.InvitacionJuegoService;
+import org.springframework.samples.dwarf.lobby.LobbyRepository;
 import org.springframework.samples.dwarf.lobby.LobbyService;
+import org.springframework.samples.dwarf.tablero.Tablero;
+import org.springframework.samples.dwarf.tablero.TableroRepository;
 import org.springframework.samples.dwarf.tablero.TableroService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,28 +49,24 @@ import org.springframework.security.core.Authentication;
 public class UserService {
 
     private UserRepository userRepository;
-    private JugadorService jService;
-    private InvitacionAmistadService invitacionAmistadService;
-    private InvitacionJuegoService invitacionJuegoService;
-    private LobbyService lobbyService;
-    private TableroService taservice;
-    private EstadisticaService estadisticaService;
-    private AuthoritiesService authoritiesService;
+    private InvitacioAmistadRepository invitacioAmistadRepository;
+    private InvitacioJuegoRepository invitacioJuegoRepository;
+    private LobbyRepository lobbyRepository;
+    private TableroRepository tableroRepository;
+    private JugadorRepository jugadorRepository;
 
     @Autowired
-    public UserService(UserRepository userRepository, JugadorService jService,
-            InvitacionAmistadService invitacionAmistadService, LobbyService lobbyService,
-            TableroService taservice,
-            InvitacionJuegoService invitacionJuegoService, EstadisticaService estadisticaService,
-            @Lazy AuthoritiesService authoritiesService) {
+    public UserService(UserRepository userRepository, InvitacioAmistadRepository invitacioAmistadRepository,
+            InvitacioJuegoRepository invitacioJuegoRepository, LobbyRepository lobbyRepository,
+            JugadorRepository jugadorRepository,
+            TableroRepository tableroRepository) {
         this.userRepository = userRepository;
-        this.jService = jService;
-        this.invitacionAmistadService = invitacionAmistadService;
-        this.lobbyService = lobbyService;
-        this.taservice = taservice;
-        this.invitacionJuegoService = invitacionJuegoService;
-        this.estadisticaService = estadisticaService;
-        this.authoritiesService = authoritiesService;
+        this.invitacioAmistadRepository = invitacioAmistadRepository;
+        this.invitacioJuegoRepository = invitacioJuegoRepository;
+        this.lobbyRepository = lobbyRepository;
+        this.tableroRepository = tableroRepository;
+        this.jugadorRepository = jugadorRepository;
+
     }
 
     @Transactional
@@ -91,37 +91,37 @@ public class UserService {
     }
 
     @Transactional
-    public void deleteUser(User user) {
-        invitacionAmistadService.findInvitacionesByUser(user).stream()
-                .forEach(invi -> invitacionAmistadService.deleteInvitacionAmistad(invi));
+    public void deleteUser(User user, List<Tablero> tableroPorusuario) {
+        invitacioAmistadRepository.findInvitacionesByUser(user).stream()
+                .forEach(invi -> invitacioAmistadRepository.delete(invi));
 
-        invitacionJuegoService.findInvitacionesByUser(user).stream()
-                .forEach(invi -> invitacionJuegoService.delInvi(invi));
+        invitacioJuegoRepository.findInvitacionesByUser(user).stream()
+                .forEach(invi -> invitacioJuegoRepository.delete(invi));
 
-        lobbyService.findByUser(user).stream().forEach(lobby -> {
+        lobbyRepository.findByUser(user).stream().forEach(lobby -> {
             lobby.getUsuarios().clear();
             if (lobby.getAdmin().equals(user.getUsername())) {
-                lobbyService.deleteById(lobby.getId());
+                lobbyRepository.deleteById(lobby.getId());
             } else {
                 lobby.getUsuarios().remove(user);
                 lobby.setNumUsuarios(lobby.getNumUsuarios() - 1);
             }
         });
 
-        taservice.findByUser(user).stream().forEach(tab -> {
+        tableroPorusuario.stream().forEach(tab -> {
             tab.getJugadores().clear();
-            taservice.deleteById(tab.getId());
+            tableroRepository.deleteById(tab.getId());
         });
 
-        jService.findJugadorUser(user.getUsername()).stream().forEach(j -> jService.deleteJugador(j));
+        jugadorRepository.findByUserUsername(user.getUsername()).stream().forEach(j -> jugadorRepository.delete(j));
 
         userRepository.delete(user);
 
     }
 
     @Transactional
-    public void deleteUserById(String username) {
-        deleteUser(findUser(username).get());
+    public void deleteUserById(String username, List<Tablero> tableros) {
+        deleteUser(findUser(username).get(), tableros);
     }
 
     @Transactional(readOnly = true)
@@ -198,7 +198,7 @@ public class UserService {
 
             List<Integer> ls = new ArrayList<>();
             totalJugadores.put(u, ls);
-            for (Jugador j : jService.findJugadorUser(u.getUsername())) {
+            for (Jugador j : jugadorRepository.findByUserUsername(u.getUsername())) {
                 if (j.getPosicionFinal() != null)
                     totalJugadores.get(u).add(j.getPosicionFinal());
 
@@ -215,34 +215,5 @@ public class UserService {
             }
         }
         return acum;
-    }
-
-    @Transactional
-    public void createUser(User user) {
-        saveUser(user);
-        Estadistica estats = new Estadistica();
-        estats.setUsuario(user);
-        estats.setAcero(0);
-        estats.setHierro(0);
-        estats.setOro(0);
-        estats.setMedallas(0);
-        estats.setObjetos(0);
-        estats.setPuntos(0);
-        estats.setPartidasGanadas(0);
-        estats.setPartidasPerdidas(0);
-        estadisticaService.saveEstadistica(estats);
-        Authorities authority = new Authorities();
-        authority.setAuthority("jugador");
-        authority.setUser(user);
-        authoritiesService.saveAuthorities(authority);
-    }
-
-    @Transactional
-    public void modifyUser(User user) {
-        saveUser(user);
-        Authorities authority = new Authorities();
-        authority.setAuthority("jugador");
-        authority.setUser(user);
-        authoritiesService.saveAuthorities(authority);
     }
 }

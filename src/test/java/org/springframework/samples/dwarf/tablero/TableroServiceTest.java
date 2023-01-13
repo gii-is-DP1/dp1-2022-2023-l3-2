@@ -2,6 +2,7 @@ package org.springframework.samples.dwarf.tablero;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
@@ -40,12 +41,13 @@ public class TableroServiceTest {
 
     @Test
     public void shouldFindAll() {
+            List<Jugador> jugadores = jugadorService.creacionLista("alegarsan11", "rafgargal", null);
         tableroService.saveTableroFromProcess("Este es el tablero de prueba",
-                "alegarsan11", "rafgargal", null);
+                        "alegarsan11", "rafgargal", null, jugadores);
         tableroService.saveTableroFromProcess("Este es el tablero de prueba",
-                "alegarsan11", "rafgargal", null);
+                        "alegarsan11", "rafgargal", null, jugadores);
         tableroService.saveTableroFromProcess("Este es el tablero de prueba",
-                "alegarsan11", "rafgargal", null);
+                        "alegarsan11", "rafgargal", null, jugadores);
         List<Tablero> tabs = tableroService.findAll();
         assertThat(tabs.size()).isEqualTo(3);
     }
@@ -53,15 +55,13 @@ public class TableroServiceTest {
 
     @Test
     public void shouldFindAllFinished() {
+            List<Jugador> jugadores = jugadorService.creacionLista("alegarsan11", "rafgargal", null);
         Tablero ta = tableroService.saveTableroFromProcess("Este es el tablero de prueba",
-                "alegarsan11", "rafgargal",
-                null);
+                        "alegarsan11", "rafgargal", null, jugadores);
         Tablero ta2 = tableroService.saveTableroFromProcess("Este es el tablero de prueba",
-                "alegarsan11", "rafgargal",
-                null);
+                        "alegarsan11", "rafgargal", null, jugadores);
         Tablero ta3 = tableroService.saveTableroFromProcess("Este es el tablero de prueba",
-                "alegarsan11", "rafgargal",
-                null);
+                        "alegarsan11", "rafgargal", null, jugadores);
         ta.setFinishedAt(new Date());
         ta2.setFinishedAt(new Date());
         ta3.setFinishedAt(new Date());
@@ -70,34 +70,51 @@ public class TableroServiceTest {
 
     }
 
+    @Test
+    public void shouldFindAllNotFinished() {
+            List<Jugador> jugadores = jugadorService.creacionLista("alegarsan11", "rafgargal", null);
+            Tablero ta = tableroService.saveTableroFromProcess("Este es el tablero de prueba",
+                            "alegarsan11", "rafgargal", null, jugadores);
+            Tablero ta2 = tableroService.saveTableroFromProcess("Este es el tablero de prueba",
+                            "alegarsan11", "rafgargal", null, jugadores);
+            Tablero ta3 = tableroService.saveTableroFromProcess("Este es el tablero de prueba",
+                            "alegarsan11", "rafgargal", null, jugadores);
+
+            assertThat(tableroService.findAllNotFinished().size()).isEqualTo(3);
+
+    }
 
     @Test
     public void shouldFindById() {
-        tableroService.saveTableroFromProcess("Este es el tablero de prueba",
-                "alegarsan11", "rafgargal", null);
-        Tablero tab = tableroService.findById(1);
+            List<Jugador> jugadores = jugadorService.creacionLista("alegarsan11", "rafgargal", null);
+            Tablero ta = tableroService.saveTableroFromProcess("Este es el tablero de prueba",
+                            "alegarsan11", "rafgargal", null, jugadores);
+            Tablero tab = tableroService.findById(ta.getId());
         assertThat(tab.getName()).isEqualTo("Este es el tablero de prueba");
     }
 
     @Test
     public void saveTestSucessful() {
-        Tablero t = tableroService.saveTableroFromProcess("Este es el tablero de prueba",
-                "alegarsan11", "rafgargal", null);
+            List<Jugador> jugadores = jugadorService.creacionLista("alegarsan11", "rafgargal", null);
+            Tablero ta = tableroService.saveTableroFromProcess("Este es el tablero de prueba",
+                            "alegarsan11", "rafgargal", null, jugadores);
         assertEquals(tableroService.findAll().size(), 1);
 
     }
 
     @Test
     public void saveTestUnsucessful() {
-        tableroService.saveTableroFromProcess("Este es el tablero de prueba",
-                "alegarsan11", "rafgargal", null);
+            List<Jugador> jugadores = jugadorService.creacionLista("alegarsan11", "rafgargal", null);
+            Tablero ta = tableroService.saveTableroFromProcess("Este es el tablero de prueba",
+                            "alegarsan11", "rafgargal", null, jugadores);
         assertEquals(tableroService.findAll().size(), 1);
     }
 
     @Test
     public void shouldFindAllCartas() {
-        List<Carta> cartas = tableroService.findAllCartas();
-        assertEquals(cartas.size(), 66);
+            List<Jugador> jugadores = jugadorService.creacionLista("alegarsan11", "rafgargal", null);
+            Tablero ta = tableroService.saveTableroFromProcess("Este es el tablero de prueba",
+                            "alegarsan11", "rafgargal", null, jugadores);
     }
 
     @Test
@@ -118,35 +135,102 @@ public class TableroServiceTest {
     }
 
 
-
-    /*
-     * @Test
-     * public void shouldFindByUser() {
-     * List<Tablero> tabs = tableroService.findByUser(user1);
-     * assertThat(tabs.size()).isEqualTo(1);
-     * }
-     * 
-     * @Test
-     * public void shouldFindEnCursoByUser() {
-     * List<Tablero> tabs = tableroService.findEnCursoByUser(user1);
-     * assertThat(tabs.size()).isEqualTo(0);
-     * }
-     * 
-     * @Test
-     * public void shouldFindLastNGamesByUser() {
-     * List<Tablero> tabs = tableroService.findLastNGamesByUser(user1, 1);
-     * assertThat(tabs).isEqualTo(1);
-     * }
-     */
-
     @Test
     public void shouldFindLastNGame() {
-        Tablero tabla = tableroService.saveTableroFromProcess("Este es el tablero de prueba",
-                "alegarsan11",
-                "rafgargal", null);
-        tabla.setTerminada(true);
-        List<Tablero> tabs = tableroService.findLastNGames(1);
-        assertThat(tabs.size()).isEqualTo(1);
+            List<Jugador> jugadores = jugadorService.creacionLista("alegarsan11", "rafgargal", null);
+            Tablero ta = tableroService.saveTableroFromProcess("Este es el tablero de prueba",
+                            "alegarsan11", "rafgargal", null, jugadores);
+            ta.setTerminada(true);
+            List<Tablero> tabs = tableroService.findLastNGames(1);
+            assertThat(tabs.size()).isEqualTo(1);
+    }
+
+    @Test
+    public void shouldFindLastNGameByUser() {
+            List<Jugador> jugadores = jugadorService.creacionLista("alegarsan11", "rafgargal", null);
+            Tablero ta = tableroService.saveTableroFromProcess("Este es el tablero de prueba",
+                            "alegarsan11", "rafgargal", null, jugadores);
+            ta.setTerminada(true);
+            List<Tablero> tabs = tableroService.findLastNGamesByUser(userService.findUserByString("alegarsan11").get(0),
+                            1);
+            assertThat(tabs.size()).isEqualTo(1);
+    }
+
+    @Test
+    public void shouldSerEspectador() {
+            List<Jugador> jugadores = jugadorService.creacionLista("alegarsan11", "rafgargal", null);
+            Tablero ta = tableroService.saveTableroFromProcess("Este es el tablero de prueba",
+                            "alegarsan11", "rafgargal", null, jugadores);
+            ta.setTerminada(true);
+            Boolean tabs = tableroService.puedoSerEspectador(ta, userService.findUserByString("jualeomad").get(0));
+            assertThat(tabs).isEqualTo(false);
+    }
+
+    @Test
+    public void sacaycolocacartas() {
+            List<Jugador> jugadores = jugadorService.creacionLista("alegarsan11", "rafgargal", null);
+            Tablero ta = tableroService.saveTableroFromProcess("Este es el tablero de prueba",
+                            "alegarsan11", "rafgargal", null, jugadores);
+            ta.setTerminada(true);
+            tableroService.sacarYColocarCartasDeBaraja(ta);
+            assertTrue(ta.getMazos().get(12).getCartas().size() == 43
+                            || ta.getMazos().get(12).getCartas().size() == 42);
+    }
+
+    @Test
+    public void descolocarEnanos() {
+            List<Jugador> jugadores = jugadorService.creacionLista("alegarsan11", "rafgargal", null);
+            Tablero ta = tableroService.saveTableroFromProcess("Este es el tablero de prueba",
+                            "alegarsan11", "rafgargal", null, jugadores);
+            ta.setTerminada(true);
+            tableroService.descolocarEnanos(ta);
+
+            assertTrue(ta.getJugadores().stream().allMatch(j -> j.getEnano().get(0).getPosicion() == 12));
+    }
+
+    @Test
+    public void calcularPosiciones() {
+            List<Jugador> jugadores = jugadorService.creacionLista("alegarsan11", "rafgargal", null);
+            Tablero ta = tableroService.saveTableroFromProcess("Este es el tablero de prueba",
+                            "alegarsan11", "rafgargal", null, jugadores);
+            ta.setTerminada(true);
+            ta.getJugadores().get(0).setObjeto(4);
+            tableroService.calcularPosicionesFinales(ta);
+
+            assertEquals(jugadorService.findJugadorUser("alegarsan11").get(1).getPosicionFinal(), 1);
+    }
+
+    @Test
+    public void shouldDelete() {
+            List<Jugador> jugadores = jugadorService.creacionLista("alegarsan11", "rafgargal", null);
+            Tablero ta = tableroService.saveTableroFromProcess("Este es el tablero de prueba",
+                            "alegarsan11", "rafgargal", null, jugadores);
+            Tablero ta2 = tableroService.saveTableroFromProcess("Este es el tablero de prueba",
+                            "alegarsan11", "rafgargal", null, jugadores);
+            Tablero ta3 = tableroService.saveTableroFromProcess("Este es el tablero de prueba",
+                            "alegarsan11", "rafgargal", null, jugadores);
+
+            tableroService.deleteById(ta.getId());
+            List<Tablero> tabs = tableroService.findAll();
+            assertThat(tabs.size()).isEqualTo(2);
+    }
+
+    @Test
+    public void shouldFindByUser() {
+            List<Jugador> jugadores = jugadorService.creacionLista("alegarsan11", "rafgargal", null);
+            Tablero ta = tableroService.saveTableroFromProcess("Este es el tablero de prueba",
+                            "alegarsan11", "rafgargal", null, jugadores);
+            List<Tablero> t = tableroService.findByUser(userService.findUser("alegarsan11").get());
+            assertThat(t.size()).isEqualTo(1);
+    }
+
+    @Test
+    public void shouldFindByUserEnCurso() {
+            List<Jugador> jugadores = jugadorService.creacionLista("alegarsan11", "rafgargal", null);
+            Tablero ta = tableroService.saveTableroFromProcess("Este es el tablero de prueba",
+                            "alegarsan11", "rafgargal", null, jugadores);
+            List<Tablero> t = tableroService.findEnCursoByUser(userService.findUser("alegarsan11").get());
+            assertThat(t.size()).isEqualTo(1);
     }
 
 }

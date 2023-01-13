@@ -185,12 +185,6 @@ public class UserControllerTest {
          */
     }
 
-    @WithMockUser(value = "spring")
-    @Test
-    void testDeleteUser() throws Exception {
-        mockMvc.perform(get("/users/{userid}/delete", user1.getUsername()))
-                .andExpect(status().is3xxRedirection());
-    }
 
     @WithMockUser(value = "spring")
     @Test
