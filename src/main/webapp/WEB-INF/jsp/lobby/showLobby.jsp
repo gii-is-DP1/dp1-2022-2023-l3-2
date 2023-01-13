@@ -78,22 +78,24 @@
         </tbody>
     </table>
 
-    <h2>Anyadir usuarios</h2>
-    <form onsubmit="" action="/lobby/${lobbyId}/add-user" method="post"
-        class="form-horizontal" id="search-jugador-form">
-        <div class="form-group">
-            <div class="control-group" id="username">
-                <label class="col-sm-2 control-label">Username </label>
-                <div class="col-sm-10">
-                    <input  class="form-control" size="30"
-                        maxlength="80" id="user-input"/>
-                    <ul id="input-dropdown">
-                    </ul>
+    <c:if test="${isAdmin}">
+        <h2>Anyadir usuarios</h2>
+        <form onsubmit="" action="/lobby/${lobbyId}/add-user" method="post"
+            class="form-horizontal" id="search-jugador-form">
+            <div class="form-group">
+                <div class="control-group" id="username">
+                    <label class="col-sm-2 control-label">Username </label>
+                    <div class="col-sm-10">
+                        <input  class="form-control" size="30"
+                            maxlength="80" id="user-input"/>
+                        <ul id="input-dropdown">
+                        </ul>
+                    </div>
                 </div>
             </div>
-        </div>
 
-    </form>
+        </form>
+    </c:if>
 
     <c:if test="${usernames.size() == 1}">
         <div class="alert alert-warning" role="alert">
@@ -105,7 +107,7 @@
         <h2>Tablero</h2>
         <c:if test="${usernames.size() == 2}">
             <form:form modelAttribute="tablero" class="form-horizontal" id="add-owner-form"
-                action="/partida/?username1=${usernames.get(0)}&username2=${usernames.get(1)}"
+                action="/partida/?username1=${usernames.get(0)}&username2=${usernames.get(1)}&lobby-id=${lobbyId}"
                 method="POST">
                 <div class="form-group">
                     <div class="control-group" id="nombre">
@@ -120,7 +122,7 @@
         </c:if>
         <c:if test="${usernames.size() == 3 && isAdmin}">
             <form:form modelAttribute="tablero" class="form-horizontal" id="add-owner-form"
-                action="/partida/?username1=${usernames.get(0)}&username2=${usernames.get(1)}&username3=${usernames.get(2)}"
+                action="/partida/?username1=${usernames.get(0)}&username2=${usernames.get(1)}&username3=${usernames.get(2)}&lobby-id=${lobbyId}"
                 method="POST">
                 <div class="form-group">
                     <div class="control-group" id="nombre">
