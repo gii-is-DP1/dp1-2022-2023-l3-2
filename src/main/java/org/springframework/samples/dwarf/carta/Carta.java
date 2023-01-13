@@ -1,8 +1,6 @@
 package org.springframework.samples.dwarf.carta;
 
 import java.io.Serializable;
-import java.util.Arrays;
-import java.util.List;
 
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
@@ -15,7 +13,6 @@ import javax.persistence.Table;
 import org.springframework.samples.dwarf.jugador.Jugador;
 import org.springframework.samples.dwarf.model.BaseEntity;
 import org.springframework.samples.dwarf.tablero.Enano;
-import org.springframework.samples.dwarf.tablero.Mazo;
 import org.springframework.samples.dwarf.tablero.Tablero;
 
 import lombok.Getter;
@@ -28,10 +25,6 @@ import lombok.Setter;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "type")
 public class Carta extends BaseEntity implements CartaInterfaz, Serializable {
-    /*
-     * String descripcion;
-     * String accion;
-     */
 
     String imagen;
 

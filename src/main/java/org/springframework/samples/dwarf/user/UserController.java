@@ -1,18 +1,3 @@
-/*
- * Copyright 2002-2013 the original author or authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package org.springframework.samples.dwarf.user;
 
 import java.util.ArrayList;
@@ -24,7 +9,6 @@ import java.util.stream.IntStream;
 
 import javax.validation.Valid;
 
-import org.h2.expression.analysis.PartitionData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.dwarf.jugador.Jugador;
 import org.springframework.samples.dwarf.jugador.JugadorService;
@@ -37,7 +21,6 @@ import org.springframework.samples.dwarf.logro.LogroService;
 import org.springframework.samples.dwarf.tablero.Tablero;
 import org.springframework.samples.dwarf.tablero.TableroService;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -48,15 +31,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-/**
- * @author Juergen Hoeller
- * @author Ken Krebs
- * @author Arjen Poutsma
- * @author Michael Isvy
- */
 @Controller
 public class UserController {
 
@@ -178,7 +154,6 @@ public class UserController {
         if (result.hasErrors()) {
             return "redirect:/user";
         } else {
-            // creating owner, user, and authority
             List<User> usersSearched = userService.findUserByString(user.username);
             if (usersSearched.size() == 0) {
                 redatt.addFlashAttribute("mensaje", "No hay resultados para la busqueda");
@@ -188,7 +163,6 @@ public class UserController {
             if (usersSearched.size() == 1) {
                 return "redirect:/users/" + usersSearched.get(0).getUsername();
             }
-            // model.put("usuarios", userService.findUserByString(user.username));
             return "redirect:/user?page=0&search=" + user.username;
         }
     }
@@ -201,8 +175,6 @@ public class UserController {
                     .getPrincipal();
             return "redirect:/users/" + currentUser.getUsername();
         } else {
-            // creating owner, user, and authority
-
             String enviaUsername = "";
             User recibe = userService.findUser(user.username).get();
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -355,15 +327,6 @@ public class UserController {
             if (currentUser.getUsername().equals(id)
                     || userService.findAuthenticatedUser().getAuthorities().stream()
                             .anyMatch(a -> a.getAuthority().equals("admin"))) {
-                // if (user.getUsername().equals("")) {
-                // user.setUsername(userService.findUser(id).get().getUsername());
-                // }
-                // if (user.getPassword().equals("")) {
-                // user.setUsername(userService.findUser(id).get().getPassword());
-                // }
-                // if (user.getImgperfil().equals("")) {
-                // user.setUsername(userService.findUser(id).get().getImgperfil());
-                // }
                 userService.saveUser(user);
                 Authorities authority = new Authorities();
                 authority.setAuthority("jugador");
@@ -412,8 +375,6 @@ public class UserController {
     @GetMapping(value = "/users/{userid}/add-friend")
     public String processAddFriend(@PathVariable("userid") String id,
             @RequestParam("dest-username") String destUsername) {
-
-        // creating owner, user, and authority
 
         String enviaUsername = "";
         User recibe = userService.findUser(destUsername).get();
