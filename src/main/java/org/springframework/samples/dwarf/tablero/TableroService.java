@@ -1,12 +1,9 @@
 package org.springframework.samples.dwarf.tablero;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.samples.dwarf.carta.Carta;
 import org.springframework.samples.dwarf.jugador.Jugador;
-import org.springframework.samples.dwarf.jugador.JugadorService;
 import org.springframework.samples.dwarf.user.InvitacioAmistadRepository;
-import org.springframework.samples.dwarf.user.InvitacionAmistadService;
 import org.springframework.samples.dwarf.user.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -83,7 +80,6 @@ public class TableroService {
         return findByUser(user).stream().filter(tab -> !tab.isTerminada()).toList();
     }
 
-    // NO HECHO CON QUERY
     @Transactional(readOnly = true)
     public List<Tablero> findLastNGamesByUser(User user, Integer n) {
         return repo.findAll().stream()
@@ -139,9 +135,6 @@ public class TableroService {
         tabla.setRonda(1);
         tabla.setMazos(mazos);
         tabla.setTerminada(false);
-
-
-        // tabla.setJugadores(jugadorService.findAll());
 
         tabla.setJugadores(jugadores);
 

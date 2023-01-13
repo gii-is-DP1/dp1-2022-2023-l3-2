@@ -9,8 +9,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.samples.dwarf.user.User;
-import org.springframework.samples.dwarf.user.UserService;
 import org.springframework.samples.dwarf.util.EntityUtils;
 import org.springframework.stereotype.Service;
 

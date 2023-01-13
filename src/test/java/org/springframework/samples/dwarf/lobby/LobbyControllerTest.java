@@ -8,7 +8,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.samples.dwarf.configuration.SecurityConfiguration;
-import org.springframework.samples.dwarf.logro.LogroController;
 import org.springframework.samples.dwarf.user.Authorities;
 import org.springframework.samples.dwarf.user.AuthoritiesService;
 import org.springframework.samples.dwarf.user.InvitacionAmistad;
@@ -18,8 +17,6 @@ import org.springframework.samples.dwarf.user.UserService;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-
-import com.jayway.jsonpath.Option;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;

@@ -3,27 +3,14 @@ package org.springframework.samples.dwarf.carta;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.samples.dwarf.jugador.Jugador;
-import org.springframework.samples.dwarf.jugador.JugadorService;
-import org.springframework.samples.dwarf.tablero.ChatLine;
-import org.springframework.samples.dwarf.tablero.ChatLineService;
 import org.springframework.samples.dwarf.tablero.Enano;
 import org.springframework.samples.dwarf.tablero.Mazo;
-import org.springframework.samples.dwarf.tablero.MazoService;
 import org.springframework.samples.dwarf.tablero.Tablero;
-import org.springframework.samples.dwarf.tablero.TableroService;
-import org.springframework.samples.dwarf.user.Authorities;
-import org.springframework.samples.dwarf.user.AuthoritiesService;
-import org.springframework.samples.dwarf.user.EstadisticaService;
-import org.springframework.samples.dwarf.user.User;
-import org.springframework.samples.dwarf.user.UserService;
 
 @DataJpaTest
 public class CartaTest {

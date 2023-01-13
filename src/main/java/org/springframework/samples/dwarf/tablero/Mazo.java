@@ -1,11 +1,9 @@
 package org.springframework.samples.dwarf.tablero;
 
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
 
 import org.springframework.samples.dwarf.carta.Carta;
 import org.springframework.samples.dwarf.model.NamedEntity;

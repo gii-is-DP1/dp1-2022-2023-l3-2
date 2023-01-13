@@ -1,12 +1,9 @@
 package org.springframework.samples.dwarf.tablero;
 
-import static org.hamcrest.Matchers.hasProperty;
-import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.BDDMockito.given;
 
-import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +30,6 @@ import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
@@ -42,7 +38,6 @@ import java.util.Date;
 import java.util.List;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 
 @WebMvcTest(controllers = TableroController.class, excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class), excludeAutoConfiguration = SecurityConfiguration.class)
 public class TableroControllerTest {
@@ -81,9 +76,6 @@ public class TableroControllerTest {
 
     private Tablero tableroPrueba;
 
-    /**
-     *
-     */
     @BeforeEach
     void setup() {
         tableroPrueba = new Tablero();
@@ -239,7 +231,6 @@ public class TableroControllerTest {
         tableroPrueba.setDefensaTotal(false);
         tableroPrueba.setCreatedAt(new Date());
         tableroPrueba.setFinishedAt(new Date());
-        System.out.println(tableroPrueba.getMazos().stream().map(j -> j.getCartas()).toList());
         taService.saveTablero(tableroPrueba);
         given(this.taService.findById(1)).willReturn(tableroPrueba);
         invi.setUserrecibe(ale);
@@ -255,55 +246,12 @@ public class TableroControllerTest {
                 .andExpect(view().name("tablero/tablero"));
     }
 
-    /*
-     * @WithMockUser(value = "spring")
-     * Test de creacion no funciona porque es automatico ya tenemos creada la
-     * partida en el Setup
-     *
-     * @Test
-     * void testProcessTablero() throws Exception{
-     * mockMvc.perform(post("/partida/").with(csrf())
-     * .param("name", "Tablero de prueba"))
-     * .andExpect(status().is3xxRedirection());
-     * // NULL??? .andExpect(view().name("redirect:/partida/" + TEST_TABLERO_ID +
-     * "/comienza"));
-     * }
-     */
-    /*
-     * @WithMockUser(value = "alegarsan11")
-     *
-     * @Test
-     * void testShowTablero1() throws Exception {
-     * given(this.taService.findById(TEST_TABLERO_ID)).willReturn(tableroPrueba);
-     * mockMvc.perform(get("/partida/{partidaId}",
-     * TEST_TABLERO_ID)).andExpect(status().is(200))
-     * .andExpect(view().name("tablero/Showtablerocopy"));
-     *
-     * }
-     */
-
     @WithMockUser(value = "spring")
     @Test
     void testRondaPrincipio() throws Exception {
         mockMvc.perform(get("/partida/{partidaId}/comienza", TEST_TABLERO_ID)).andExpect(status().is(302))
                 .andExpect(view().name("redirect:/partida/" + TEST_TABLERO_ID));
     }
-
-    /*
-     * @WithMockUser(value = "spring")
-     *
-     * @Test
-     * void testRondaColoca() throws Exception {
-     * mockMvc.perform(get(
-     * "/partida/{partidaId}/coloca?username=alegarsan11&posicion=1",
-     * TEST_TABLERO_ID))
-     * .andExpect(status().is(302)).andExpect(view().name("redirect:/partida/1"));
-     * mockMvc.perform(get(
-     * "/partida/{partidaId}/coloca?username=rafgargal&posicion=11",
-     * TEST_TABLERO_ID))
-     * .andExpect(status().is(302)).andExpect(view().name("redirect:/partida/1"));
-     * }
-     */
 
     @WithMockUser(value = "spring")
     @Test

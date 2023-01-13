@@ -3,7 +3,6 @@ package org.springframework.samples.dwarf.tablero;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 import org.springframework.samples.dwarf.carta.Carta;
-import org.springframework.samples.dwarf.user.User;
 
 import java.util.List;
 
@@ -32,8 +31,6 @@ public interface TableroRepository extends Repository<Tablero, String> {
 
     @Query("SELECT carta FROM Carta carta WHERE carta.posicion=:posicion")
     List<Carta> findByPosicion(Integer posicion);
-
-    // List<Tablero> findLastNGamesByUser(User user);
 
     @Query("SELECT tablero FROM Tablero tablero ORDER BY tablero.finishedAt DESC")
     List<Tablero> findLastGames();
